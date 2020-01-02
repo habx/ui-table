@@ -4,7 +4,7 @@ const fs = require('fs')
 const { omit, pick } = require('lodash')
 const path = require('path')
 
-const PEER_DEPENDENCIES = ['react']
+const PEER_DEPENDENCIES = ['react', 'styled-components', '@habx/lib-design-system']
 
 const transfomPackageJSON = packageJSON => ({
   ...omit(packageJSON, ['scripts', 'devDependencies', 'jest']),

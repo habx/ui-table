@@ -1,7 +1,7 @@
 {
-  "name": "@habx/lib-template",
-  "version": "0.0.1",
-  "description": "Lib template",
+  "name": "@habx/ui-table",
+  "version": "0.4.0",
+  "description": "React Table components",
   "main": "./dist/index.js",
   "types": "./dist/typings/index.d.ts",
   "scripts": {
@@ -11,18 +11,22 @@
     "build:types": "tsc --emitDeclarationOnly",
     "postbuild": "node ./scripts/postbuild.js",
     "publish": "cd dist && npm publish && cd ..",
-    "lint": "eslint \"src/**\""
+    "lint": "eslint \"src/**\"",
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "storybook:build": "build-storybook -c .storybook -o .storybook-static",
+    "storybook:deploy": "storybook-to-ghpages -s storybook:build --ci -t=GITHUB_TOKEN",
+    "test": "echo TODO"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/habx/lib-template.git"
   },
-  "author": "Jean Dessane",
+  "author": "Flavien DELANGLE",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/habx/lib-template/issues"
+    "url": "https://github.com/habx/ui-table/issues"
   },
-  "homepage": "https://github.com/habx/lib-template#readme",
+  "homepage": "https://github.com/habx/ui-table#readme",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -35,16 +39,32 @@
     ]
   },
   "dependencies": {
-    "react": "^16.11.0"
+    "@habx/lib-design-system": "^1.41.6",
+    "lodash": "^4.17.15",
+    "react": "^16.11.0",
+    "react-table": "^7.0.0-rc.11",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
     "@habx/eslint-config-client": "^2.6.1",
+    "@storybook/addon-centered": "^5.2.8",
+    "@storybook/addon-knobs": "^5.2.8",
+    "@storybook/addon-viewport": "^5.2.8",
+    "@storybook/react": "^5.2.8",
+    "@storybook/storybook-deployer": "^2.8.1",
+    "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.11",
+    "@types/react-table": "^7.0.1",
+    "@types/styled-components": "^4.4.1",
+    "awesome-typescript-loader": "^5.2.1",
     "bili": "^4.7.4",
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
     "rimraf": "^3.0.0",
     "rollup-plugin-typescript2": "^0.25.2",
     "typescript": "^3.6.4"
+  },
+  "storybook-deployer": {
+    "commitMessage": "[SKIP CI] Deploy Storybook to GitHub Pages"
   }
 }
