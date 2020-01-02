@@ -1,0 +1,50 @@
+{
+  "name": "@habx/lib-template",
+  "version": "0.0.1",
+  "description": "Lib template",
+  "main": "./dist/index.js",
+  "types": "./dist/typings/index.d.ts",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "npm run clean && npm run build:types && bili",
+    "build:watch": "npm run clean && npm run build:types && bili --watch",
+    "build:types": "tsc --emitDeclarationOnly",
+    "postbuild": "node ./scripts/postbuild.js",
+    "publish": "cd dist && npm publish && cd ..",
+    "lint": "eslint \"src/**\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/habx/lib-template.git"
+  },
+  "author": "Jean Dessane",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/habx/lib-template/issues"
+  },
+  "homepage": "https://github.com/habx/lib-template#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "react": "^16.11.0"
+  },
+  "devDependencies": {
+    "@habx/eslint-config-client": "^2.6.1",
+    "@types/react": "^16.9.11",
+    "bili": "^4.7.4",
+    "husky": "^3.0.9",
+    "lint-staged": "^9.4.2",
+    "rimraf": "^3.0.0",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "typescript": "^3.6.4"
+  }
+}
