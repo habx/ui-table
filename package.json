@@ -42,7 +42,7 @@
     "@habx/lib-design-system": "^1.41.6",
     "lodash": "^4.17.15",
     "react": "^16.11.0",
-    "react-table": "^7.0.0-rc.11",
+    "react-table": "^7.0.0-rc.15",
     "styled-components": "^4.4.1"
   },
   "devDependencies": {
