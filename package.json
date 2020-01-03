@@ -54,7 +54,7 @@
     "@storybook/storybook-deployer": "^2.8.1",
     "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.11",
-    "@types/react-table": "^7.0.1",
+    "@types/react-table": "^7.0.2",
     "@types/styled-components": "^4.4.1",
     "awesome-typescript-loader": "^5.2.1",
     "bili": "^4.7.4",
