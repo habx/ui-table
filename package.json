@@ -58,7 +58,7 @@
     "@types/styled-components": "^4.4.2",
     "awesome-typescript-loader": "^5.2.1",
     "bili": "^4.7.4",
-    "husky": "^4.0.3",
+    "husky": "^4.0.5",
     "lint-staged": "^9.4.2",
     "rimraf": "^3.0.0",
     "rollup-plugin-typescript2": "^0.25.2",
