@@ -3,25 +3,10 @@ import { useTable } from 'react-table'
 
 import { Text } from '@habx/lib-design-system'
 
-import data from './Table.data'
 import TableProps from './Table.interface'
 import { TableContainer, TableHead, TableBody } from './Table.style'
 
-const columns = [
-  {
-    Header: 'Name',
-    accessor: 'name',
-  },
-  {
-    Header: 'Population',
-    accessor: 'population',
-    Cell: ({ cell: { value } }: { cell: { value: number } }) => (
-      <div>{value && value.toLocaleString()}</div>
-    ),
-  },
-]
-
-const Table: React.FunctionComponent<TableProps> = ({}) => {
+const Table: React.FunctionComponent<TableProps> = ({ data, columns }) => {
   const {
     getTableProps,
     getTableBodyProps,
