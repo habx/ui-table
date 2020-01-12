@@ -1,1 +1,1 @@
-export { default as Table, TableProps, Presets } from './Table'
+export { default as useTable } from './useTable'
