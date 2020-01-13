@@ -1,14 +1,9 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
-import { TableProps } from '../getTableComponent'
-
-export interface TableInstance<D extends object = {}>
-  extends ReactTable.TableInstance<D> {
-  TableComponent: React.FunctionComponent<TableProps<D>>
-}
-
-export interface Column<D extends object = {}> extends ReactTable.Column<D> {
+export interface Column<D extends object = {}>
+  extends ReactTable.Column<D>,
+    ReactTable.UseFiltersColumnOptions<D> {
   HeaderIcon?: React.ReactNode
 }
 

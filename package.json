@@ -39,7 +39,7 @@
     ]
   },
   "dependencies": {
-    "@habx/lib-design-system": "^1.42.3",
+    "@habx/lib-design-system": "^1.43.0",
     "react": "^16.11.0",
     "react-table": "^7.0.0-rc.15",
     "styled-components": "^4.4.1"
