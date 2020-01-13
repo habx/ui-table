@@ -1,16 +1,29 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
-import getTableComponent from '../getTableComponent'
+import TextFilter from '../filter/TextFilter'
+import getTableComponent, {
+  TableProps,
+  TableInstance,
+} from '../getTableComponent'
 import HeaderCell from '../getTableComponent/HeaderCell'
 
-import { TableInstance, TableOptions } from './useTable.interface'
+import { TableOptions, Column } from './useTable.interface'
+
+type InnerTableInstance<D extends object> = Omit<
+  TableInstance<D>,
+  'TableComponent'
+>
 
 const useTable = <D extends object = {}>(
   options: TableOptions<D>,
   ...plugins: Array<ReactTable.PluginHook<D>>
-): TableInstance<D> => {
-  const { columns: rawColumns, ...restOptions } = options
+): [React.FunctionComponent<TableProps<D>>, TableInstance<D>] => {
+  const {
+    columns: rawColumns,
+    defaultColumn: rawDefaultColumn,
+    ...restOptions
+  } = options
 
   const columns = React.useMemo<ReactTable.Column<D>[]>(
     () =>
@@ -27,12 +40,20 @@ const useTable = <D extends object = {}>(
     [rawColumns]
   )
 
-  const instance = ReactTable.useTable<D>(
-    { ...restOptions, columns },
-    ...plugins
+  const defaultColumn = React.useMemo<Partial<Column<D>>>(
+    () => ({
+      Filter: TextFilter,
+      ...rawDefaultColumn,
+    }),
+    [rawDefaultColumn]
   )
 
-  const instanceRef = React.useRef<ReactTable.TableInstance<D>>(instance)
+  const instance = (ReactTable.useTable<D>(
+    { ...restOptions, columns, defaultColumn },
+    ...plugins
+  ) as any) as InnerTableInstance<D>
+
+  const instanceRef = React.useRef<InnerTableInstance<D>>(instance)
   instanceRef.current = instance
 
   const TableComponent = React.useMemo(
@@ -40,10 +61,7 @@ const useTable = <D extends object = {}>(
     []
   )
 
-  return {
-    ...instance,
-    TableComponent,
-  }
+  return [TableComponent, instance]
 }
 
 export default useTable

@@ -1,5 +1,5 @@
 import useTable from './useTable'
 
-export { TableInstance } from './useTable.interface'
+export { Column } from './useTable.interface'
 
 export default useTable

@@ -1,22 +1,30 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
-import { Text } from '@habx/lib-design-system'
+import { Text, Icon } from '@habx/lib-design-system'
 
 import {
   TableContainer,
   TableContent,
   TableBody,
+  TableBodyRow,
   TableCell,
   TableHead,
   TableHeadCell,
+  TableHeadCellContent,
+  TableHeaderCellSort,
 } from '../useTable/useTable.style'
 
-import { TableProps } from './getTableComponent.interface'
+import {
+  TableProps,
+  TableInstance,
+  ColumnInstance,
+} from './getTableComponent.interface'
 import LoadingOverlay from './LoadingOverlay'
+import Pagination from './Pagination'
 
 const getTableComponent = <D extends object = {}>(
-  instance: ReactTable.TableInstance<D>
+  instance: TableInstance<D>
 ) => {
   const Table: React.FunctionComponent<TableProps<D>> = ({
     onRowClick,
@@ -27,6 +35,7 @@ const getTableComponent = <D extends object = {}>(
       getTableBodyProps,
       headerGroups,
       rows,
+      page,
       prepareRow,
     } = instance
 
@@ -39,6 +48,8 @@ const getTableComponent = <D extends object = {}>(
       }
     }
 
+    const hasPagination = !!instance.pageOptions
+
     return (
       <TableContainer>
         {loading && <LoadingOverlay />}
@@ -46,33 +57,60 @@ const getTableComponent = <D extends object = {}>(
           <TableHead>
             {headerGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <TableHeadCell {...column.getHeaderProps()}>
-                    <Text opacity={0.5}>{column.render('Header')}</Text>
-                  </TableHeadCell>
-                ))}
+                {headerGroup.headers.map(col => {
+                  const column = col as ColumnInstance<D>
+                  const headerProps = column.getHeaderProps(
+                    ...(column.getSortByToggleProps
+                      ? [column.getSortByToggleProps()]
+                      : [])
+                  )
+
+                  return (
+                    <TableHeadCell>
+                      <TableHeadCellContent opacity={0.5} {...headerProps}>
+                        {column.render('Header')}{' '}
+                        {column.isSorted && (
+                          <Icon
+                            icon={
+                              column.isSortedDesc
+                                ? 'chevron-south'
+                                : 'chevron-north'
+                            }
+                          />
+                        )}
+                      </TableHeadCellContent>
+                      {column.canFilter ? (
+                        <TableHeaderCellSort>
+                          {column.render('Filter')}
+                        </TableHeaderCellSort>
+                      ) : null}
+                    </TableHeadCell>
+                  )
+                })}
               </tr>
             ))}
           </TableHead>
           <TableBody {...getTableBodyProps()}>
-            {rows.map(row => {
+            {(hasPagination ? page : rows).map(row => {
               prepareRow(row)
 
               return (
-                <tr
+                <TableBodyRow
                   {...row.getRowProps()}
                   onClick={e => handleRowClick(row, e)}
+                  data-clickable={!!onRowClick}
                 >
                   {row.cells.map(cell => (
                     <TableCell {...cell.getCellProps()}>
                       <Text>{cell.render('Cell')}</Text>
                     </TableCell>
                   ))}
-                </tr>
+                </TableBodyRow>
               )
             })}
           </TableBody>
         </TableContent>
+        {hasPagination && <Pagination instance={instance} />}
       </TableContainer>
     )
   }
