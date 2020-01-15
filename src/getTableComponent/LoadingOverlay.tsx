@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@habx/lib-design-system'
+import { Loader } from '@habx/ui-core'
 
 export const LoadingContainer = styled.div`
   position: absolute;

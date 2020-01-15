@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { palette, Text } from '@habx/lib-design-system'
+import { palette, Text } from '@habx/ui-core'
 
 export const TableContainer = styled.div`
   position: relative;

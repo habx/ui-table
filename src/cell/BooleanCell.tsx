@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as ReactTable from 'react-table'
 import styled from 'styled-components'
 
-import { Icon, theme } from '@habx/lib-design-system'
+import { Icon, theme } from '@habx/ui-core'
 
 const IconContainer = styled.div`
   font-size: 32px;
