@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { TextInput } from '@habx/lib-design-system'
+import { TextInput } from '@habx/ui-core'
 
 import { ColumnInstance } from '../getTableComponent'
 

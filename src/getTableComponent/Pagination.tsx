@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Icon, palette } from '@habx/lib-design-system'
+import { Icon, palette } from '@habx/ui-core'
 
 import { TableInstance } from './getTableComponent.interface'
 

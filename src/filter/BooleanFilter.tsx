@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Select } from '@habx/lib-design-system'
+import { Select } from '@habx/ui-core'
 
 import { ColumnInstance } from '../getTableComponent'
 

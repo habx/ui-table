@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
-import { Text, Icon } from '@habx/lib-design-system'
+import { Text, Icon } from '@habx/ui-core'
 
 import {
   TableContainer,
