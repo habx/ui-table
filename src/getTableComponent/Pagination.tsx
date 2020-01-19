@@ -62,7 +62,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
           />
         </PagesChevrons>
         <PagesPagination>
-          {(instance.state as any).pageIndex + 1} - {instance.pageCount}
+          {instance.state.pageIndex + 1} - {instance.pageCount}
         </PagesPagination>
       </React.Fragment>
     )}
