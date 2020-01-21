@@ -1,14 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Text, Icon, palette } from '@habx/ui-core'
+import { Text, Icon, Select, palette } from '@habx/ui-core'
 
-import { TableInstance } from './getTableComponent.interface'
+import { TableInstance } from '../types/Table'
 
 export const PaginationContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
-  font-size: 24px;
+  align-items: center;
   padding: 8px 12px;
 `
 
@@ -21,6 +20,7 @@ export const PagesChevrons = styled.div`
   width: 64px;
   justify-content: space-between;
   margin-right: 36px;
+  font-size: 24px;
 `
 
 export const PaginationIcon = styled(Icon)`
@@ -38,9 +38,15 @@ export const PaginationIcon = styled(Icon)`
   }
 `
 
+const PageSizeContainer = styled.div`
+  margin-left: 36px;
+`
+
+const PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50]
+
 const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
   <PaginationContainer>
-    {instance.pageCount > 0 && (
+    {instance.pageCount > 1 && (
       <React.Fragment>
         <PagesChevrons>
           <PaginationIcon
@@ -57,6 +63,15 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
         <PagesPagination>
           {instance.state.pageIndex + 1} - {instance.pageCount}
         </PagesPagination>
+        <PageSizeContainer>
+          <Select
+            small
+            canReset={false}
+            value={instance.state.pageSize}
+            onChange={size => instance.setPageSize(size as number)}
+            options={PAGE_SIZE_OPTIONS}
+          />
+        </PageSizeContainer>
       </React.Fragment>
     )}
   </PaginationContainer>

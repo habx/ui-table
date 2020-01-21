@@ -6,7 +6,9 @@ import { useFilters, usePagination, useSortBy } from 'react-table'
 import styled from 'styled-components'
 
 import BooleanCell from '../cell/BooleanCell'
-import useTable, { Column } from '../useTable'
+import useDensity from '../plugin/useDensity/useDensity'
+import { Column } from '../types/Table'
+import useTable from '../useTable'
 
 const Container = styled.div`
   height: 100vh;
@@ -67,6 +69,22 @@ storiesOf('Table', module)
       </Container>
     )
   })
+  .add('Pagination + Density', () => {
+    const [TableComponent] = useTable<Faker.Card>(
+      {
+        data: FAKE_DATA,
+        columns: COLUMNS,
+      },
+      usePagination,
+      useDensity
+    )
+
+    return (
+      <Container>
+        <TableComponent />
+      </Container>
+    )
+  })
   .add('Sort by', () => {
     const [TableComponent] = useTable<Faker.Card>(
       {
@@ -105,7 +123,8 @@ storiesOf('Table', module)
       },
       useFilters,
       useSortBy,
-      usePagination
+      usePagination,
+      useDensity
     )
 
     return (
