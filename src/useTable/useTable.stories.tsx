@@ -2,16 +2,22 @@ import { storiesOf } from '@storybook/react'
 import faker from 'faker'
 import { range } from 'lodash'
 import * as React from 'react'
+import { useFilters, usePagination, useSortBy } from 'react-table'
 import styled from 'styled-components'
 
-import GetTableComponent from '../getTableComponent/Table'
+import BooleanCell from '../cell/BooleanCell'
+import useTable, { Column } from '../useTable'
 
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
 `
 
-const columns = [
+const COLUMNS: Column<Faker.Card>[] = [
+  {
+    Header: 'Username',
+    accessor: el => el.username,
+  },
   {
     Header: 'Name',
     accessor: 'name',
@@ -20,20 +26,91 @@ const columns = [
     Header: 'Email',
     accessor: 'email',
   },
+  {
+    Header: 'Email has digit',
+    accessor: el => el.email.match(/[0-9]/),
+    Cell: BooleanCell,
+  },
+  {
+    Header: 'City',
+    accessor: 'address.city',
+  },
 ]
 
-const fakeData = range(50).map(i => {
-  const card = faker.helpers.createCard()
+const FAKE_DATA = range(50).map(() => faker.helpers.createCard())
 
-  return {
-    id: i,
-    name: card.name,
-    email: card.email,
-  }
-})
+storiesOf('Table', module)
+  .add('Basic example', () => {
+    const [TableComponent] = useTable<Faker.Card>({
+      data: FAKE_DATA,
+      columns: COLUMNS,
+    })
 
-storiesOf('Table', module).add('Basic example', () => (
-  <Container>
-    <GetTableComponent data={fakeData} columns={columns} />
-  </Container>
-))
+    return (
+      <Container>
+        <TableComponent />
+      </Container>
+    )
+  })
+  .add('Pagination', () => {
+    const [TableComponent] = useTable<Faker.Card>(
+      {
+        data: FAKE_DATA,
+        columns: COLUMNS,
+      },
+      usePagination
+    )
+
+    return (
+      <Container>
+        <TableComponent />
+      </Container>
+    )
+  })
+  .add('Sort by', () => {
+    const [TableComponent] = useTable<Faker.Card>(
+      {
+        data: FAKE_DATA,
+        columns: COLUMNS,
+      },
+      useSortBy
+    )
+
+    return (
+      <Container>
+        <TableComponent />
+      </Container>
+    )
+  })
+  .add('Filters', () => {
+    const [TableComponent] = useTable<Faker.Card>(
+      {
+        data: FAKE_DATA,
+        columns: COLUMNS,
+      },
+      useFilters
+    )
+
+    return (
+      <Container>
+        <TableComponent />
+      </Container>
+    )
+  })
+  .add('Full example', () => {
+    const [TableComponent] = useTable<Faker.Card>(
+      {
+        data: FAKE_DATA,
+        columns: COLUMNS,
+      },
+      useFilters,
+      useSortBy,
+      usePagination
+    )
+
+    return (
+      <Container>
+        <TableComponent />
+      </Container>
+    )
+  })
