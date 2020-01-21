@@ -3,6 +3,10 @@ import * as ReactTable from 'react-table'
 
 import { Text, Icon } from '@habx/ui-core'
 
+import { TableInstance, ColumnInstance } from '../types/Table'
+
+import Density from './Density'
+import { TableProps } from './getTableComponent.interface'
 import {
   TableContainer,
   TableContent,
@@ -13,13 +17,8 @@ import {
   TableHeadCell,
   TableHeadCellContent,
   TableHeaderCellSort,
-} from '../useTable/useTable.style'
-
-import {
-  TableProps,
-  TableInstance,
-  ColumnInstance,
-} from './getTableComponent.interface'
+  TableOptionBar,
+} from './getTableComponent.style'
 import LoadingOverlay from './LoadingOverlay'
 import Pagination from './Pagination'
 
@@ -49,6 +48,7 @@ const getTableComponent = <D extends object = {}>(
     }
 
     const hasPagination = !!instance.pageOptions
+    const hasDensity = !!instance.setDensity
 
     return (
       <TableContainer>
@@ -101,7 +101,10 @@ const getTableComponent = <D extends object = {}>(
                   data-clickable={!!onRowClick}
                 >
                   {row.cells.map(cell => (
-                    <TableCell {...cell.getCellProps()}>
+                    <TableCell
+                      data-density={instance.state.density}
+                      {...cell.getCellProps()}
+                    >
                       <Text>{cell.render('Cell')}</Text>
                     </TableCell>
                   ))}
@@ -110,7 +113,10 @@ const getTableComponent = <D extends object = {}>(
             })}
           </TableBody>
         </TableContent>
-        {hasPagination && <Pagination instance={instance} />}
+        <TableOptionBar>
+          {hasPagination && <Pagination instance={instance} />}
+          {hasDensity && <Density instance={instance} />}
+        </TableOptionBar>
       </TableContainer>
     )
   }

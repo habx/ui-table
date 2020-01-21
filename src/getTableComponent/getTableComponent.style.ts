@@ -4,6 +4,8 @@ import { palette, Text } from '@habx/ui-core'
 
 export const TableContainer = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
 `
 
 export const TableContent = styled.table`
@@ -34,6 +36,14 @@ export const TableBodyRow = styled.tr`
 
 export const TableCell = styled.td`
   padding: 12px;
+
+  &[data-density='low'] {
+    padding: 18px 12px;
+  }
+
+  &[data-density='high'] {
+    padding: 6px 12px;
+  }
 `
 
 export const TableHeadCellContent = styled(Text)`
@@ -48,4 +58,10 @@ export const TableHeadCellContent = styled(Text)`
 
 export const TableHeaderCellSort = styled.div`
   margin-top: 6px;
+`
+
+export const TableOptionBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `

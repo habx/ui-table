@@ -2,13 +2,9 @@ import * as React from 'react'
 import * as ReactTable from 'react-table'
 
 import TextFilter from '../filter/TextFilter'
-import getTableComponent, {
-  TableProps,
-  TableInstance,
-} from '../getTableComponent'
+import getTableComponent, { TableProps } from '../getTableComponent'
 import HeaderCell from '../getTableComponent/HeaderCell'
-
-import { TableOptions, Column } from './useTable.interface'
+import { TableOptions, Column, TableInstance } from '../types/Table'
 
 type InnerTableInstance<D extends object> = Omit<
   TableInstance<D>,

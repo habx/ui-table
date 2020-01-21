@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Select } from '@habx/ui-core'
 
-import { ColumnInstance } from '../getTableComponent'
+import { ColumnInstance } from '../types/Table'
 
 const OPTIONS = [
   { label: 'Tout', value: null },
