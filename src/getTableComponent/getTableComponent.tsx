@@ -18,6 +18,7 @@ import {
   TableHeadCellContent,
   TableHeaderCellSort,
   TableOptionBar,
+  TableHeadRow,
 } from './getTableComponent.style'
 import LoadingOverlay from './LoadingOverlay'
 import Pagination from './Pagination'
@@ -28,6 +29,7 @@ const getTableComponent = <D extends object = {}>(
   const Table: React.FunctionComponent<TableProps<D>> = ({
     onRowClick,
     loading,
+    style = {},
   }) => {
     const {
       getTableProps,
@@ -36,6 +38,7 @@ const getTableComponent = <D extends object = {}>(
       rows,
       page,
       prepareRow,
+      columns,
     } = instance
 
     const handleRowClick = (
@@ -49,6 +52,17 @@ const getTableComponent = <D extends object = {}>(
 
     const hasPagination = !!instance.pageOptions
     const hasDensity = !!instance.setDensity
+    const rowStyle = React.useMemo(
+      () => ({
+        gridTemplateColumns: `${columns
+          .map(
+            ({ minWidth = '0', maxWidth }) =>
+              `minmax(${minWidth}, ${maxWidth ? `${maxWidth}px` : '1fr'})`
+          )
+          .join(' ')}`,
+      }),
+      [columns]
+    )
 
     return (
       <TableContainer>
@@ -56,7 +70,10 @@ const getTableComponent = <D extends object = {}>(
         <TableContent {...getTableProps()}>
           <TableHead>
             {headerGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <TableHeadRow
+                {...headerGroup.getHeaderGroupProps()}
+                style={rowStyle}
+              >
                 {headerGroup.headers.map(col => {
                   const column = col as ColumnInstance<D>
                   const headerProps = column.getHeaderProps(
@@ -87,7 +104,7 @@ const getTableComponent = <D extends object = {}>(
                     </TableHeadCell>
                   )
                 })}
-              </tr>
+              </TableHeadRow>
             ))}
           </TableHead>
           <TableBody {...getTableBodyProps()}>
@@ -97,6 +114,8 @@ const getTableComponent = <D extends object = {}>(
               return (
                 <TableBodyRow
                   {...row.getRowProps()}
+                  style={rowStyle}
+                  data-striped={style.striped}
                   onClick={e => handleRowClick(row, e)}
                   data-clickable={!!onRowClick}
                 >

@@ -1,6 +1,10 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
+export interface TableStyle {
+  striped?: boolean
+}
+
 export interface TableProps<D extends object> {
   onRowClick?: (
     row: ReactTable.Row<D>,
@@ -8,4 +12,5 @@ export interface TableProps<D extends object> {
   ) => void
   loading?: boolean
   noDataText?: React.ReactNode
+  style?: TableStyle
 }
