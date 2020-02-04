@@ -33,9 +33,14 @@ export const TableHeadCell = styled.th`
 `
 
 export const TableBody = styled.tbody`
-  display: block;
-  height: 100%;
-  overflow-y: auto;
+  display: flex;
+ 
+  // https://stackoverflow.com/questions/14962468/how-can-i-combine-flexbox-and-vertical-scroll-in-a-full-height-app
+    height: 0px; 
+    overflow-y: auto;
+    flex: 1 1 auto;
+    flex-direction: column;
+}
 `
 
 export const TableBodyRow = styled.tr`
