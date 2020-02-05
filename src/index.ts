@@ -15,3 +15,7 @@ export {
   ColumnInstance,
   FilterProps,
 } from './types/Table'
+
+// Plugins
+export { default as useDensity } from './plugin/useDensity'
+export { default as useExpanded } from './plugin/useExpanded'

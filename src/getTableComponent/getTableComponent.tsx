@@ -1,9 +1,8 @@
 import * as React from 'react'
-import * as ReactTable from 'react-table'
 
 import { Text, Icon } from '@habx/ui-core'
 
-import { TableInstance, ColumnInstance } from '../types/Table'
+import { TableInstance, ColumnInstance, Row } from '../types/Table'
 
 import Density from './Density'
 import { TableProps } from './getTableComponent.interface'
@@ -19,6 +18,7 @@ import {
   TableHeaderCellSort,
   TableOptionBar,
   TableHeadRow,
+  ExpandToggleContainer,
 } from './getTableComponent.style'
 import LoadingOverlay from './LoadingOverlay'
 import Pagination from './Pagination'
@@ -42,7 +42,7 @@ const getTableComponent = <D extends object = {}>(
     } = instance
 
     const handleRowClick = (
-      row: ReactTable.Row<D>,
+      row: Row<D>,
       event: React.MouseEvent<HTMLTableRowElement>
     ) => {
       if (onRowClick) {
@@ -81,7 +81,6 @@ const getTableComponent = <D extends object = {}>(
                       ? [column.getSortByToggleProps()]
                       : [])
                   )
-
                   return (
                     <TableHeadCell>
                       <TableHeadCellContent opacity={0.5} {...headerProps}>
@@ -115,18 +114,61 @@ const getTableComponent = <D extends object = {}>(
                 <TableBodyRow
                   {...row.getRowProps()}
                   style={rowStyle}
-                  data-striped={style.striped}
-                  onClick={e => handleRowClick(row, e)}
-                  data-clickable={!!onRowClick}
+                  data-striped={!row.isGrouped && style.striped}
+                  onClick={e => !row.isGrouped && handleRowClick(row, e)}
+                  data-clickable={!row.isGrouped && !!onRowClick}
+                  data-section={row.isExpanded}
                 >
-                  {row.cells.map(cell => (
-                    <TableCell
-                      data-density={instance.state.density}
-                      {...cell.getCellProps()}
-                    >
-                      <Text>{cell.render('Cell')}</Text>
-                    </TableCell>
-                  ))}
+                  {row.cells.map(cell => {
+                    const expandedToggleProps = row.getExpandedToggleProps
+                      ? row.getExpandedToggleProps()
+                      : {}
+                    if (cell.isGrouped) {
+                      return (
+                        <TableCell
+                          data-section="true"
+                          data-density={instance.state.density}
+                          {...cell.getCellProps()}
+                        >
+                          <ExpandToggleContainer {...expandedToggleProps}>
+                            {row.isExpanded ? (
+                              <Icon icon="chevron-south" />
+                            ) : (
+                              <Icon icon="chevron-east" />
+                            )}
+                          </ExpandToggleContainer>
+                          <Text>{cell.render('Cell')}</Text>
+                        </TableCell>
+                      )
+                    }
+                    if (cell.isAggregated) {
+                      return (
+                        <TableCell
+                          data-section="true"
+                          data-density={instance.state.density}
+                          {...cell.getCellProps()}
+                        >
+                          {cell.render('Aggregated')}
+                        </TableCell>
+                      )
+                    }
+                    if (cell.isRepeatedValue) {
+                      return (
+                        <TableCell
+                          data-density={instance.state.density}
+                          {...cell.getCellProps()}
+                        />
+                      )
+                    }
+                    return (
+                      <TableCell
+                        data-density={instance.state.density}
+                        {...cell.getCellProps()}
+                      >
+                        <Text>{cell.render('Cell')}</Text>
+                      </TableCell>
+                    )
+                  })}
                 </TableBodyRow>
               )
             })}

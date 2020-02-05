@@ -2,11 +2,12 @@ import { storiesOf } from '@storybook/react'
 import faker from 'faker'
 import { range } from 'lodash'
 import * as React from 'react'
-import { useFilters, usePagination, useSortBy } from 'react-table'
+import { useFilters, useGroupBy, usePagination, useSortBy } from 'react-table'
 import styled from 'styled-components'
 
 import BooleanCell from '../cell/BooleanCell'
-import useDensity from '../plugin/useDensity/useDensity'
+import useDensity from '../plugin/useDensity'
+import useExpanded from '../plugin/useExpanded'
 import { Column } from '../types/Table'
 import useTable from '../useTable'
 
@@ -32,6 +33,7 @@ const COLUMNS: Column<Faker.Card>[] = [
     Header: 'Email has digit',
     accessor: el => el.email.match(/[0-9]/),
     Cell: BooleanCell,
+    Aggregated: () => '',
   },
   {
     Header: 'City',
@@ -39,7 +41,11 @@ const COLUMNS: Column<Faker.Card>[] = [
   },
 ]
 
-const FAKE_DATA = range(50).map(() => faker.helpers.createCard())
+const GROUPS = ['A', 'B', 'C']
+const FAKE_DATA = range(50).map(() => ({
+  ...faker.helpers.createCard(),
+  group: GROUPS[Math.floor(Math.random() * Math.floor(3))],
+}))
 
 storiesOf('Table', module)
   .add('Basic example', () => {
@@ -107,6 +113,35 @@ storiesOf('Table', module)
         columns: COLUMNS,
       },
       useFilters
+    )
+
+    return (
+      <Container>
+        <TableComponent />
+      </Container>
+    )
+  })
+  .add('Sections', () => {
+    const [TableComponent] = useTable<Faker.Card>(
+      {
+        data: FAKE_DATA,
+        columns: [
+          {
+            Header: 'Group',
+            accessor: 'group',
+            Cell: ({ row: { groupByVal } }) => {
+              return groupByVal
+            },
+          },
+          ...COLUMNS,
+        ],
+        expandAll: true,
+        initialState: {
+          groupBy: ['group'],
+        },
+      },
+      useGroupBy,
+      useExpanded
     )
 
     return (

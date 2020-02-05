@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { palette, Text } from '@habx/ui-core'
+import { palette, Text, theme } from '@habx/ui-core'
 
 export const TableContainer = styled.div`
   position: relative;
@@ -58,10 +58,19 @@ export const TableBodyRow = styled.tr`
       background-color: ${palette.darkBlue[200]};
     }
   }
+
+  &[data-section='true'] {
+    position: sticky;
+    top: 0;
+    background-color: ${theme.color('background')};
+    border-bottom: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
+  }
 `
 
 export const TableCell = styled.td`
   padding: 12px;
+  display: flex;
+  overflow: hidden;
 
   &[data-density='low'] {
     padding: 18px 12px;
@@ -90,4 +99,11 @@ export const TableOptionBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`
+
+export const ExpandToggleContainer = styled.span`
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
