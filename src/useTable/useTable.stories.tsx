@@ -137,7 +137,6 @@ storiesOf('Table', module)
         ],
         expandAll: true,
         initialState: {
-          // @ts-ignore
           groupBy: ['group'],
         },
       },

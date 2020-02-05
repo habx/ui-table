@@ -50,7 +50,9 @@ export interface TableState<D extends object>
     ReactTable.UsePaginationState<D>,
     ReactTable.UseSortByState<D>,
     UseExpandedState<D>,
-    UseDensityState<D> {}
+    UseDensityState<D> {
+  groupBy: string[]
+}
 
 export interface TableInstance<D extends object = {}>
   extends Omit<ReactTable.TableInstance<D>, 'state' | 'initialState'>,
