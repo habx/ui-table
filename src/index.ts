@@ -18,3 +18,4 @@ export {
 
 // Plugins
 export { default as useDensity } from './plugin/useDensity'
+export { default as useExpanded } from './plugin/useExpanded'
