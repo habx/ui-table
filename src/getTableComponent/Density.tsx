@@ -23,6 +23,7 @@ const DensityIcon = styled(Icon)`
 const DensityContainer = styled.div`
   display: flex;
   padding-right: 120px;
+  padding: 8px 12px;
 `
 
 const Density: React.FunctionComponent<DensityProps> = ({ instance }) => {
