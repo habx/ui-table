@@ -70,6 +70,7 @@ export const TableBodyRow = styled.tr`
 export const TableCell = styled.td`
   padding: 12px;
   display: flex;
+  overflow: hidden;
 
   &[data-density='low'] {
     padding: 18px 12px;

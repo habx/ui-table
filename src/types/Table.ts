@@ -94,4 +94,5 @@ export interface Row<D extends object = {}>
   canExpand?: boolean
   subRows: Array<Row<D>>
   groupByVal?: string
+  isGrouped?: boolean
 }

@@ -129,9 +129,12 @@ const useInstance = <D extends {}>(
     }
   }, [dispatch, data])
 
-  const toggleExpanded = (id: string, expanded: boolean) => {
-    dispatch({ type: actions.toggleExpanded, id, expanded })
-  }
+  const toggleExpanded = React.useCallback(
+    (id: string, expanded: boolean) => {
+      dispatch({ type: actions.toggleExpanded, id, expanded })
+    },
+    [dispatch]
+  )
 
   // use reference to avoid memory leak in #1608
   const getInstance = useGetLatest(instance)
@@ -173,7 +176,7 @@ const useInstance = <D extends {}>(
         return toggleExpanded(id, true)
       })
     }
-  }, [expandAll]) // eslint-disable-line
+  }, [expandAll, data, toggleExpanded]) // eslint-disable-line
 
   Object.assign(instance, {
     preExpandedRows: rows,

@@ -114,9 +114,9 @@ const getTableComponent = <D extends object = {}>(
                 <TableBodyRow
                   {...row.getRowProps()}
                   style={rowStyle}
-                  data-striped={style.striped}
-                  onClick={e => handleRowClick(row, e)}
-                  data-clickable={!!onRowClick}
+                  data-striped={!row.isGrouped && style.striped}
+                  onClick={e => !row.isGrouped && handleRowClick(row, e)}
+                  data-clickable={!row.isGrouped && !!onRowClick}
                   data-section={row.isExpanded}
                 >
                   {row.cells.map(cell => {
