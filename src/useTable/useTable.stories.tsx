@@ -121,6 +121,25 @@ storiesOf('Table', module)
       </Container>
     )
   })
+  .add('Horizontal scroll', () => {
+    const [TableComponent] = useTable<Faker.Card>({
+      data: FAKE_DATA,
+      columns: [
+        ...COLUMNS,
+        ...new Array(40).fill(0).map(() => ({
+          Header: `column`,
+          accessor: () => 'cell',
+          id: `${Math.random()}`,
+        })),
+      ],
+    })
+
+    return (
+      <Container>
+        <TableComponent style={{ striped: true }} />
+      </Container>
+    )
+  })
   .add('Sections', () => {
     const [TableComponent] = useTable<Faker.Card>(
       {

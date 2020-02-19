@@ -2,9 +2,7 @@ import * as React from 'react'
 import {
   actions,
   functionalUpdate,
-  makePropGetter,
   default as ReactTable,
-  useConsumeHookGetter,
   useGetLatest,
   useMountedLayoutEffect,
   IdType,
@@ -22,7 +20,7 @@ actions.setExpanded = 'setExpanded'
 actions.resetExpanded = 'resetExpanded'
 
 export const useExpanded = (hooks: ReactTable.Hooks<any>) => {
-  hooks.getExpandedToggleProps = [defaultGetExpandedToggleProps]
+  hooks.getToggleRowExpandedProps = [defaultGetExpandedToggleProps]
   hooks.stateReducers.push(reducer)
   hooks.useInstance.push(useInstance)
 }
@@ -113,7 +111,6 @@ const useInstance = <D extends {}>(
     manualExpandedKey = 'expanded',
     paginateExpandedRows = true,
     expandSubRows = true,
-    hooks,
     autoResetExpanded = true,
     state: { expanded },
     dispatch,
@@ -135,28 +132,6 @@ const useInstance = <D extends {}>(
     },
     [dispatch]
   )
-
-  // use reference to avoid memory leak in #1608
-  const getInstance = useGetLatest(instance)
-
-  const getExpandedTogglePropsHooks = useConsumeHookGetter(
-    getInstance().hooks,
-    'getExpandedToggleProps'
-  )
-
-  hooks.prepareRow.push(rawRow => {
-    const row = (rawRow as unknown) as Row<D>
-    row.toggleExpanded = (set?: boolean) =>
-      instance.toggleExpanded(
-        (row.id as unknown) as IdType<D>[],
-        set as boolean
-      )
-
-    row.getExpandedToggleProps = makePropGetter(getExpandedTogglePropsHooks(), {
-      instance: getInstance(),
-      row,
-    })
-  })
 
   const expandedRows = React.useMemo(() => {
     if (paginateExpandedRows) {

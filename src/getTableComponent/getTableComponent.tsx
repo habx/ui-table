@@ -23,6 +23,8 @@ import {
 import LoadingOverlay from './LoadingOverlay'
 import Pagination from './Pagination'
 
+const DEFAULT_COLUMN_WIDTH = 100
+
 const getTableComponent = <D extends object = {}>(
   instance: TableInstance<D>
 ) => {
@@ -56,8 +58,10 @@ const getTableComponent = <D extends object = {}>(
       () => ({
         gridTemplateColumns: `${columns
           .map(
-            ({ minWidth = '0', maxWidth }) =>
-              `minmax(${minWidth}, ${maxWidth ? `${maxWidth}px` : '1fr'})`
+            ({ minWidth, maxWidth }) =>
+              `minmax(${minWidth || `${DEFAULT_COLUMN_WIDTH}px`}, ${
+                maxWidth ? `${maxWidth}px` : '1fr'
+              })`
           )
           .join(' ')}`,
       }),
@@ -106,7 +110,7 @@ const getTableComponent = <D extends object = {}>(
               </TableHeadRow>
             ))}
           </TableHead>
-          <TableBody {...getTableBodyProps()}>
+          <TableBody {...getTableBodyProps()} data-pagination={hasPagination}>
             {(hasPagination ? page : rows).map(row => {
               prepareRow(row)
 
@@ -120,8 +124,8 @@ const getTableComponent = <D extends object = {}>(
                   data-section={row.isExpanded}
                 >
                   {row.cells.map(cell => {
-                    const expandedToggleProps = row.getExpandedToggleProps
-                      ? row.getExpandedToggleProps()
+                    const expandedToggleProps = row.getToggleRowExpandedProps
+                      ? row.getToggleRowExpandedProps()
                       : {}
                     if (cell.isGrouped) {
                       return (
@@ -152,7 +156,7 @@ const getTableComponent = <D extends object = {}>(
                         </TableCell>
                       )
                     }
-                    if (cell.isRepeatedValue) {
+                    if (cell.isPlaceholder) {
                       return (
                         <TableCell
                           data-density={instance.state.density}
