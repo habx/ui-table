@@ -82,12 +82,12 @@ export interface Cell<D extends object = {}> extends ReactTable.Cell<D> {
   groupedIndex?: number
   toggleGroupBy?: () => void
   isAggregated?: boolean
-  isRepeatedValue?: boolean
+  isPlaceholder?: boolean
 }
 
 export interface Row<D extends object = {}>
   extends Omit<ReactTable.Row<D>, 'cells'> {
-  getExpandedToggleProps?: () => object
+  getToggleRowExpandedProps?: () => object
   cells: Array<Cell<D>>
   isExpanded?: boolean
   toggleExpanded: (isExpanded?: boolean) => void
