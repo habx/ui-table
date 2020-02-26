@@ -14,6 +14,9 @@ export {
   TableOptions,
   ColumnInstance,
   FilterProps,
+  Row,
+  Cell,
+  CellProps,
 } from './types/Table'
 
 // Plugins

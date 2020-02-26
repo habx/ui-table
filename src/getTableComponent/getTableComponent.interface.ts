@@ -1,5 +1,6 @@
 import * as React from 'react'
-import * as ReactTable from 'react-table'
+
+import { Row } from '../types/Table'
 
 export interface TableStyle {
   striped?: boolean
@@ -7,7 +8,7 @@ export interface TableStyle {
 
 export interface TableProps<D extends object> {
   onRowClick?: (
-    row: ReactTable.Row<D>,
+    row: Row<D>,
     event: React.MouseEvent<HTMLTableRowElement>
   ) => void
   loading?: boolean
