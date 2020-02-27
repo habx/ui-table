@@ -10,6 +10,7 @@ export const TableContainer = styled.div`
   overflow: hidden;
 
   height: 100%;
+  width: 100%;
 `
 
 export const TableContent = styled.table`
@@ -113,4 +114,14 @@ export const ExpandToggleContainer = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+export const NoDataContainer = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
 `

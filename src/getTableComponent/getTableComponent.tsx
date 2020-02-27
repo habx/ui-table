@@ -19,6 +19,7 @@ import {
   TableOptionBar,
   TableHeadRow,
   ExpandToggleContainer,
+  NoDataContainer,
 } from './getTableComponent.style'
 import LoadingOverlay from './LoadingOverlay'
 import Pagination from './Pagination'
@@ -32,6 +33,7 @@ const getTableComponent = <D extends object = {}>(
     onRowClick,
     loading,
     style = {},
+    noDataComponent: NoDataComponent,
   }) => {
     const {
       getTableProps,
@@ -68,6 +70,13 @@ const getTableComponent = <D extends object = {}>(
       [columns]
     )
 
+    if (rows.length === 0 && NoDataComponent) {
+      return (
+        <NoDataContainer>
+          <NoDataComponent />
+        </NoDataContainer>
+      )
+    }
     return (
       <TableContainer>
         {loading && <LoadingOverlay />}

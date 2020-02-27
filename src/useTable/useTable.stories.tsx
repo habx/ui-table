@@ -5,6 +5,8 @@ import * as React from 'react'
 import { useFilters, useGroupBy, usePagination, useSortBy } from 'react-table'
 import styled from 'styled-components'
 
+import { Text } from '@habx/ui-core'
+
 import BooleanCell from '../cell/BooleanCell'
 import useDensity from '../plugin/useDensity'
 import useExpanded from '../plugin/useExpanded'
@@ -184,6 +186,18 @@ storiesOf('Table', module)
     return (
       <Container>
         <TableComponent />
+      </Container>
+    )
+  })
+  .add('No Data', () => {
+    const [TableComponent] = useTable<Faker.Card>({
+      data: [],
+      columns: COLUMNS,
+    })
+
+    return (
+      <Container>
+        <TableComponent noDataComponent={() => <Text>No data</Text>} />
       </Container>
     )
   })

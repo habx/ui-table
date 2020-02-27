@@ -14,4 +14,5 @@ export interface TableProps<D extends object> {
   loading?: boolean
   noDataText?: React.ReactNode
   style?: TableStyle
+  noDataComponent?: React.ComponentType
 }
