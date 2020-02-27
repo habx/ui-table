@@ -19,6 +19,8 @@ export {
   CellProps,
 } from './types/Table'
 
+export { TableProps } from './getTableComponent/getTableComponent.interface'
+
 // Plugins
 export { default as useDensity } from './plugin/useDensity'
 export { default as useExpanded } from './plugin/useExpanded'
