@@ -64,7 +64,7 @@ const GlobalStyle = createGlobalStyle`
 
 `
 
-export default (storyFn: Function) => (
+export default (storyFn) => (
   <React.Fragment>
     <GlobalStyle />
     {storyFn()}

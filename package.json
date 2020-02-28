@@ -44,10 +44,13 @@
     "styled-components": "^5.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@habx/eslint-config-client": "^2.6.1",
     "@storybook/addon-centered": "^5.2.8",
     "@storybook/addon-knobs": "^5.2.8",
     "@storybook/addon-viewport": "^5.2.8",
+    "@storybook/preset-typescript": "^1.2.0",
     "@storybook/react": "^5.2.8",
     "@storybook/storybook-deployer": "^2.8.1",
     "@types/faker": "^4.1.9",
@@ -56,13 +59,17 @@
     "@types/react-table": "^7.0.2",
     "@types/styled-components": "^5.0.0",
     "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.6",
     "bili": "^4.7.4",
     "faker": "^4.1.0",
+    "fork-ts-checker-webpack-plugin": "^4.0.5",
     "husky": "^4.0.6",
     "lint-staged": "^10.0.0",
     "lodash": "^4.17.15",
+    "react-docgen-typescript-loader": "^3.6.0",
     "rimraf": "^3.0.0",
     "rollup-plugin-typescript2": "^0.26.0",
+    "ts-loader": "^6.2.1",
     "typescript": "^3.6.4"
   },
   "storybook-deployer": {
