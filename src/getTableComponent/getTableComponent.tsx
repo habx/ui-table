@@ -94,9 +94,14 @@ const getTableComponent = <D extends object = {}>(
                       ? [column.getSortByToggleProps()]
                       : [])
                   )
+
                   return (
                     <TableHeadCell>
-                      <TableHeadCellContent opacity={0.5} {...headerProps}>
+                      <TableHeadCellContent
+                        opacity={0.5}
+                        {...headerProps}
+                        data-align={column.align ?? 'flex-start'}
+                      >
                         {column.render('Header')}{' '}
                         {column.isSorted && (
                           <Icon
@@ -136,13 +141,18 @@ const getTableComponent = <D extends object = {}>(
                     const expandedToggleProps = row.getToggleRowExpandedProps
                       ? row.getToggleRowExpandedProps()
                       : {}
+
+                    const column = cell.column as ColumnInstance<D>
+
+                    const cellProps = {
+                      ...cell.getCellProps(),
+                      'data-density': instance.state.density,
+                      'data-align': column.align ?? 'flex-start',
+                    }
+
                     if (cell.isGrouped) {
                       return (
-                        <TableCell
-                          data-section="true"
-                          data-density={instance.state.density}
-                          {...cell.getCellProps()}
-                        >
+                        <TableCell data-section="true" {...cellProps}>
                           <ExpandToggleContainer {...expandedToggleProps}>
                             {row.isExpanded ? (
                               <Icon icon="chevron-south" />
@@ -154,30 +164,21 @@ const getTableComponent = <D extends object = {}>(
                         </TableCell>
                       )
                     }
+
                     if (cell.isAggregated) {
                       return (
-                        <TableCell
-                          data-section="true"
-                          data-density={instance.state.density}
-                          {...cell.getCellProps()}
-                        >
+                        <TableCell data-section="true" {...cellProps}>
                           {cell.render('Aggregated')}
                         </TableCell>
                       )
                     }
+
                     if (cell.isPlaceholder) {
-                      return (
-                        <TableCell
-                          data-density={instance.state.density}
-                          {...cell.getCellProps()}
-                        />
-                      )
+                      return <TableCell {...cellProps} />
                     }
+
                     return (
-                      <TableCell
-                        data-density={instance.state.density}
-                        {...cell.getCellProps()}
-                      >
+                      <TableCell {...cellProps}>
                         <Text>{cell.render('Cell')}</Text>
                       </TableCell>
                     )

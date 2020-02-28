@@ -30,6 +30,7 @@ export interface Column<D extends object = {}>
   HeaderIcon?: React.ReactNode
   Filter?: ReactTable.Renderer<FilterProps<D>>
   Cell?: ReactTable.Renderer<CellProps<D>>
+  align?: 'left' | 'right' | 'center'
 }
 
 export interface TableOptions<D extends object = {}>
@@ -70,7 +71,8 @@ export interface TableInstance<D extends object = {}>
 }
 
 export interface ColumnInstance<D extends object = {}>
-  extends ReactTable.ColumnInstance<D>,
+  extends Omit<Column<D>, 'id' | 'columns'>,
+    ReactTable.UseTableColumnProps<D>,
     ReactTable.UseFiltersColumnProps<D>,
     ReactTable.UseSortByColumnProps<D>,
     ReactTable.UseGroupByColumnProps<D>,

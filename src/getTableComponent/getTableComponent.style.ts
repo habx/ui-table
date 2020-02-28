@@ -1,6 +1,20 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { palette, Text, theme } from '@habx/ui-core'
+
+const alignItems = css`
+  &[data-align='center'] {
+    justify-content: center;
+  }
+
+  &[data-align='left'] {
+    justify-content: flex-start;
+  }
+
+  &[data-align='right'] {
+    justify-content: flex-end;
+  }
+`
 
 export const TableContainer = styled.div`
   position: relative;
@@ -86,6 +100,8 @@ export const TableCell = styled.td`
   &[data-density='high'] {
     padding: 6px 12px;
   }
+
+  ${alignItems};
 `
 
 export const TableHeadCellContent = styled(Text)`
@@ -96,6 +112,8 @@ export const TableHeadCellContent = styled(Text)`
   & > span:last-child {
     margin-left: 8px;
   }
+
+  ${alignItems}
 `
 
 export const TableHeaderCellSort = styled.div`
