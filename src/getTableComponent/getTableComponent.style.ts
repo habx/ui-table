@@ -56,6 +56,7 @@ export const TableBody = styled.tbody`
     display: flex;
     flex-direction: column;
     height: 0;
+    min-width: 100%;
     width: fit-content;
     overflow-x: hidden;
     overflow-y: auto;
