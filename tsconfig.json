@@ -1,20 +1,23 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "rootDirs": ["./src"],
+    "rootDirs": ["./src", "./.storybook"],
     "outDir": "./dist",
     "declarationDir": "./dist/typings",
-    "lib": ["es7", "dom"],
+    "lib": ["dom"],
     "moduleResolution": "node",
     "removeComments": true,
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "target": "esnext",
+    "strict": true,
+    "target": "ES2018",
+    "allowSyntheticDefaultImports": true,
     "module": "commonjs",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": true
+    "baseUrl": "typings",
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "files": ["./src/index.ts"]
 }
