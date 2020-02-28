@@ -59,12 +59,14 @@ const getTableComponent = <D extends object = {}>(
     const rowStyle = React.useMemo(
       () => ({
         gridTemplateColumns: `${columns
-          .map(
-            ({ minWidth, maxWidth }) =>
-              `minmax(${minWidth || `${DEFAULT_COLUMN_WIDTH}px`}, ${
-                maxWidth ? `${maxWidth}px` : '1fr'
-              })`
-          )
+          .map(({ minWidth, maxWidth }) => {
+            const screenWidth =
+              typeof window === 'object' ? window.innerWidth : 10000
+            const realMaxWidth =
+              maxWidth && maxWidth > screenWidth ? '1fr' : `${maxWidth}px`
+            return `minmax(${minWidth ||
+              `${DEFAULT_COLUMN_WIDTH}px`}, ${realMaxWidth})`
+          })
           .join(' ')}`,
       }),
       [columns]
