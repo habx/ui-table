@@ -31,6 +31,7 @@ export interface Column<D extends object = {}>
   Filter?: ReactTable.Renderer<FilterProps<D>>
   Cell?: ReactTable.Renderer<CellProps<D>>
   align?: 'left' | 'right' | 'center'
+  meta?: { [key: string]: any }
 }
 
 export interface TableOptions<D extends object = {}>
