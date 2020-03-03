@@ -24,6 +24,10 @@ update_configs:
           dependency_name: "@types/*"
       - match:
           dependency_name: "@habx/*"
+          update_type: "in_range"
+      - match:
+          dependency_name: "@habx/*"
+          update_type: "semver:minor"
       - match:
           dependency_name: "lint-staged"
       - match:
