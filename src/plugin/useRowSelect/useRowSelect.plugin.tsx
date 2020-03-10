@@ -4,7 +4,7 @@ import { Checkbox } from '@habx/ui-core'
 
 import { Hooks } from '../..'
 
-const SelectRowPlugin = (hooks: Hooks<any>) => {
+const rowSelectPlugin = (hooks: Hooks<any>) => {
   hooks.visibleColumns.push(columns => [
     {
       id: 'selection',
@@ -23,4 +23,4 @@ const SelectRowPlugin = (hooks: Hooks<any>) => {
   ])
 }
 
-export default SelectRowPlugin
+export default rowSelectPlugin

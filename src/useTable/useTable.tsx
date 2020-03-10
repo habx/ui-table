@@ -4,7 +4,7 @@ import * as ReactTable from 'react-table'
 import TextFilter from '../filter/TextFilter'
 import getTableComponent, { TableProps } from '../getTableComponent'
 import HeaderCell from '../getTableComponent/HeaderCell'
-import { SelectRowPlugin } from '../plugin/useSelectRow'
+import { UseRowSelectPlugin } from '../plugin/useRowSelect'
 import { TableOptions, Column, TableInstance } from '../types/Table'
 
 type InnerTableInstance<D extends object> = Omit<
@@ -45,7 +45,7 @@ const useTable = <D extends object = {}>(
     [rawDefaultColumn]
   )
   if (plugins.find(plugin => plugin.pluginName === 'useRowSelect')) {
-    plugins.push(SelectRowPlugin)
+    plugins.push(UseRowSelectPlugin)
   }
   const instance = (ReactTable.useTable<D>(
     { ...restOptions, columns, defaultColumn },

@@ -11,7 +11,6 @@ import {
   UseExpandedInstanceProps,
   UseExpandedState,
 } from '../plugin/useExpanded'
-import { UseRowSelectColumnProps } from '../plugin/useRowSelect'
 
 export interface FilterProps<D extends object>
   extends Omit<ReactTable.FilterType<D>, 'column'> {
@@ -84,8 +83,7 @@ export interface ColumnInstance<D extends object = {}>
     ReactTable.UseFiltersColumnProps<D>,
     ReactTable.UseSortByColumnProps<D>,
     ReactTable.UseGroupByColumnProps<D>,
-    UseDensityColumnProps<D>,
-    UseRowSelectColumnProps<D> {}
+    UseDensityColumnProps<D> {}
 
 export interface Cell<D extends object = {}> extends ReactTable.Cell<D> {
   canGroupBy?: boolean
