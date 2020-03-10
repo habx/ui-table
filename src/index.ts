@@ -17,6 +17,7 @@ export {
   Row,
   Cell,
   CellProps,
+  Hooks,
 } from './types/Table'
 
 export { TableProps } from './getTableComponent/getTableComponent.interface'
