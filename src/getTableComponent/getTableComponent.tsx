@@ -56,9 +56,12 @@ const getTableComponent = <D extends object = {}>(
 
     const hasPagination = !!instance.pageOptions
     const hasDensity = !!instance.setDensity
+    const hasRowSelect = !!instance.plugins.find(
+      plugin => plugin.pluginName === 'useRowSelect'
+    )
     const rowStyle = React.useMemo(
       () => ({
-        gridTemplateColumns: `${columns
+        gridTemplateColumns: `${hasRowSelect ? '40px' : ''} ${columns
           .map(({ minWidth, maxWidth }) => {
             const screenWidth =
               typeof window === 'object' ? window.innerWidth : 10000
@@ -69,7 +72,7 @@ const getTableComponent = <D extends object = {}>(
           })
           .join(' ')}`,
       }),
-      [columns]
+      [columns, hasRowSelect]
     )
 
     if (rows.length === 0 && NoDataComponent) {
@@ -84,12 +87,13 @@ const getTableComponent = <D extends object = {}>(
         {loading && <LoadingOverlay />}
         <TableContent {...getTableProps()}>
           <TableHead>
-            {headerGroups.map(headerGroup => (
+            {headerGroups.map((headerGroup, index) => (
               <TableHeadRow
+                key={`header-${index}`}
                 {...headerGroup.getHeaderGroupProps()}
                 style={rowStyle}
               >
-                {headerGroup.headers.map(col => {
+                {headerGroup.headers.map((col, index) => {
                   const column = col as ColumnInstance<D>
                   const headerProps = column.getHeaderProps(
                     ...(column.getSortByToggleProps
@@ -98,13 +102,13 @@ const getTableComponent = <D extends object = {}>(
                   )
 
                   return (
-                    <TableHeadCell>
+                    <TableHeadCell key={`headerCell-${index}`}>
                       <TableHeadCellContent
                         opacity={0.5}
                         {...headerProps}
                         data-align={column.align ?? 'flex-start'}
                       >
-                        {column.render('Header')}{' '}
+                        {column.render('Header')}
                         {column.isSorted && (
                           <Icon
                             icon={
@@ -127,19 +131,20 @@ const getTableComponent = <D extends object = {}>(
             ))}
           </TableHead>
           <TableBody {...getTableBodyProps()} data-pagination={hasPagination}>
-            {(hasPagination ? page : rows).map(row => {
+            {(hasPagination ? page : rows).map((row, index) => {
               prepareRow(row)
 
               return (
                 <TableBodyRow
                   {...row.getRowProps()}
+                  key={`row-${index}`}
                   style={rowStyle}
                   data-striped={!row.isGrouped && style.striped}
                   onClick={e => !row.isGrouped && handleRowClick(row, e)}
                   data-clickable={!row.isGrouped && !!onRowClick}
                   data-section={row.isExpanded}
                 >
-                  {row.cells.map(cell => {
+                  {row.cells.map((cell, index) => {
                     const expandedToggleProps = row.getToggleRowExpandedProps
                       ? row.getToggleRowExpandedProps()
                       : {}
@@ -154,7 +159,11 @@ const getTableComponent = <D extends object = {}>(
 
                     if (cell.isGrouped) {
                       return (
-                        <TableCell data-section="true" {...cellProps}>
+                        <TableCell
+                          data-section="true"
+                          {...cellProps}
+                          key={`cell-${index}`}
+                        >
                           <ExpandToggleContainer {...expandedToggleProps}>
                             {row.isExpanded ? (
                               <Icon icon="chevron-south" />
@@ -169,7 +178,11 @@ const getTableComponent = <D extends object = {}>(
 
                     if (cell.isAggregated) {
                       return (
-                        <TableCell data-section="true" {...cellProps}>
+                        <TableCell
+                          data-section="true"
+                          {...cellProps}
+                          key={`cell-${index}`}
+                        >
                           {cell.render('Aggregated')}
                         </TableCell>
                       )

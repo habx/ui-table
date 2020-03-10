@@ -1,7 +1,13 @@
 import faker from 'faker'
 import { range } from 'lodash'
 import * as React from 'react'
-import { useFilters, useGroupBy, usePagination, useSortBy } from 'react-table'
+import {
+  useFilters,
+  useGroupBy,
+  usePagination,
+  useSortBy,
+  useRowSelect,
+} from 'react-table'
 import styled from 'styled-components'
 
 import { Text } from '@habx/ui-core'
@@ -180,6 +186,22 @@ export const Sections = () => {
   )
 }
 
+export const SelectRow = () => {
+  const [TableComponent] = useTable<Faker.Card>(
+    {
+      data: FAKE_DATA,
+      columns: COLUMNS,
+    },
+    useRowSelect
+  )
+
+  return (
+    <Container>
+      <TableComponent />
+    </Container>
+  )
+}
+
 export const FullExample = () => {
   const [TableComponent] = useTable<Faker.Card>(
     {
@@ -189,7 +211,8 @@ export const FullExample = () => {
     useFilters,
     useSortBy,
     usePagination,
-    useDensity
+    useDensity,
+    useRowSelect
   )
 
   return (

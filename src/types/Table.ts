@@ -11,6 +11,7 @@ import {
   UseExpandedInstanceProps,
   UseExpandedState,
 } from '../plugin/useExpanded'
+import { UseRowSelectColumnProps } from '../plugin/useRowSelect'
 
 export interface FilterProps<D extends object>
   extends Omit<ReactTable.FilterType<D>, 'column'> {
@@ -22,6 +23,10 @@ export interface CellProps<D extends object = {}>
   row: Row<D>
 }
 
+export type HeaderProps<D extends object> = TableInstance<D> & {
+  column: ColumnInstance<D>
+}
+
 export interface Column<D extends object = {}>
   extends ReactTable.Column<D>,
     ReactTable.UseFiltersColumnOptions<D>,
@@ -30,6 +35,7 @@ export interface Column<D extends object = {}>
   HeaderIcon?: React.ReactNode
   Filter?: ReactTable.Renderer<FilterProps<D>>
   Cell?: ReactTable.Renderer<CellProps<D>>
+  Header?: ReactTable.Renderer<HeaderProps<D>>
   align?: 'left' | 'right' | 'center'
   meta?: { [key: string]: any }
 }
@@ -61,6 +67,7 @@ export interface TableInstance<D extends object = {}>
     ReactTable.UseFiltersInstanceProps<D>,
     ReactTable.UsePaginationInstanceProps<D>,
     ReactTable.UseSortByInstanceProps<D>,
+    ReactTable.UseRowSelectInstanceProps<D>,
     ReactTable.UseGroupByInstanceProps<D>,
     UseExpandedInstanceProps<D>,
     UseDensityInstanceProps<D> {
@@ -77,7 +84,8 @@ export interface ColumnInstance<D extends object = {}>
     ReactTable.UseFiltersColumnProps<D>,
     ReactTable.UseSortByColumnProps<D>,
     ReactTable.UseGroupByColumnProps<D>,
-    UseDensityColumnProps<D> {}
+    UseDensityColumnProps<D>,
+    UseRowSelectColumnProps<D> {}
 
 export interface Cell<D extends object = {}> extends ReactTable.Cell<D> {
   canGroupBy?: boolean
@@ -86,6 +94,7 @@ export interface Cell<D extends object = {}> extends ReactTable.Cell<D> {
   toggleGroupBy?: () => void
   isAggregated?: boolean
   isPlaceholder?: boolean
+  row: Row<D>
 }
 
 export interface Row<D extends object = {}>
@@ -98,4 +107,20 @@ export interface Row<D extends object = {}>
   subRows: Array<Row<D>>
   groupByVal?: string
   isGrouped?: boolean
+  getToggleRowSelectedProps?: Function
+}
+
+export interface Hooks<D extends object> extends ReactTable.Hooks<D> {
+  columns: Array<
+    (columns: Array<Column<D>>, meta: ReactTable.Meta<D>) => Array<Column<D>>
+  >
+  columnsDeps: Array<(deps: any[], meta: ReactTable.Meta<D>) => any[]>
+  allColumns: Array<
+    (allColumns: Array<Column<D>>, meta: ReactTable.Meta<D>) => Array<Column<D>>
+  >
+  allColumnsDeps: Array<(deps: any[], meta: ReactTable.Meta<D>) => any[]>
+  visibleColumns: Array<
+    (allColumns: Array<Column<D>>, meta: ReactTable.Meta<D>) => Array<Column<D>>
+  >
+  visibleColumnsDeps: Array<(deps: any[], meta: ReactTable.Meta<D>) => any[]>
 }
