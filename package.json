@@ -1,6 +1,6 @@
 {
   "name": "@habx/ui-table",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "React Table components",
   "main": "./dist/index.js",
   "types": "./dist/typings/index.d.ts",
