@@ -12,6 +12,8 @@ type InnerTableInstance<D extends object> = Omit<
   'TableComponent'
 >
 
+const EMPTY_DATA: any[] = []
+
 const useTable = <D extends object = {}>(
   options: TableOptions<D>,
   ...plugins: Array<ReactTable.PluginHook<D>>
@@ -19,8 +21,11 @@ const useTable = <D extends object = {}>(
   const {
     columns: rawColumns,
     defaultColumn: rawDefaultColumn,
+    data: rawData,
     ...restOptions
   } = options
+
+  const data: typeof rawData = rawData?.length > 0 ? rawData : EMPTY_DATA
 
   const columns = React.useMemo<ReactTable.Column<D>[]>(
     () =>
@@ -48,7 +53,7 @@ const useTable = <D extends object = {}>(
     plugins.push(UseRowSelectPlugin)
   }
   const instance = (ReactTable.useTable<D>(
-    { ...restOptions, columns, defaultColumn },
+    { ...restOptions, data, columns, defaultColumn },
     ...plugins
   ) as any) as InnerTableInstance<D>
 
