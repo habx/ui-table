@@ -2,21 +2,25 @@
   "name": "@habx/ui-table",
   "version": "0.18.0",
   "description": "React Table components",
-  "main": "./dist/index.js",
+  "sideEffects": false,
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/esm/index.js",
   "types": "./dist/typings/index.d.ts",
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "npm run clean && npm run build:types && bili",
-    "build:watch": "npm run clean && npm run build:types && bili --watch",
-    "build:types": "tsc --emitDeclarationOnly",
-    "postbuild": "node ./scripts/postbuild.js",
-    "publish": "cd dist && npm publish && cd ..",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "bili",
+    "build:watch": "npm run clean && tsc --watch",
     "lint": "eslint \"src/**\"",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o .storybook-static",
     "storybook:deploy": "storybook-to-ghpages -s storybook:build --ci -t=GITHUB_TOKEN",
     "test": "echo TODO"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/habx/lib-template.git"
