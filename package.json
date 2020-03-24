@@ -50,7 +50,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
     "@babel/plugin-proposal-optional-chaining": "^7.8.3",
-    "@habx/eslint-config-client": "^2.6.1",
+    "@habx/eslint-config-client": "^3.0.1",
     "@storybook/addon-centered": "^5.2.8",
     "@storybook/addon-knobs": "^5.2.8",
     "@storybook/addon-viewport": "^5.2.8",
