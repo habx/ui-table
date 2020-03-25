@@ -16,11 +16,12 @@ const TextFilter: React.FunctionComponent<{ column: ColumnInstance<any> }> = ({
     setLiveValue(value)
     handleSetFilter(value)
   }
+
   return (
     <TextInput
       small
       value={liveValue}
-      onChange={e => handleSetValue(e.target.value || undefined)}
+      onChange={(e) => handleSetValue(e.target.value || undefined)}
       placeholder="Filtrer"
     />
   )
