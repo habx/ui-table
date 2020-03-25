@@ -1,0 +1,27 @@
+import styled, { css } from 'styled-components'
+
+import { Text, theme } from '@habx/ui-core'
+
+export const IconCellContainer = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const IconContainer = styled.div<{ color?: string }>`
+  &[data-large='true'] {
+    font-size: 24px;
+  }
+
+  ${({ color }) =>
+    color
+      ? css`
+          color: ${color};
+        `
+      : css`
+          color: ${theme.textColor({ opacity: 0.72 })};
+        `};
+`
+
+export const LabelContainer = styled(Text)`
+  margin-left: 8px;
+`

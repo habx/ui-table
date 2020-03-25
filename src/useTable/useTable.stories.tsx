@@ -12,7 +12,7 @@ import styled from 'styled-components'
 
 import { Text } from '@habx/ui-core'
 
-import BooleanCell from '../cell/BooleanCell'
+import BooleanCell from '../cell/BooleanCell/BooleanCell'
 import useDensity from '../plugin/useDensity'
 import useExpanded from '../plugin/useExpanded'
 import { Column } from '../types/Table'
@@ -26,7 +26,7 @@ const Container = styled.div`
 const COLUMNS: Column<Faker.Card>[] = [
   {
     Header: 'Username',
-    accessor: el => el.username,
+    accessor: (el) => el.username,
   },
   {
     Header: 'Name',
@@ -38,7 +38,7 @@ const COLUMNS: Column<Faker.Card>[] = [
   },
   {
     Header: 'Email has digit',
-    accessor: el => el.email.match(/[0-9]/),
+    accessor: (el) => el.email.match(/[0-9]/),
     Cell: BooleanCell,
     Aggregated: () => '',
   },
