@@ -1,6 +1,5 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
-import { Meta } from 'react-table'
 
 import {
   UseDensityInstanceProps,
