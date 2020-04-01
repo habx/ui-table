@@ -2,9 +2,9 @@ import * as React from 'react'
 
 import { Checkbox } from '@habx/ui-core'
 
-import { Hooks } from '../..'
+import { Hooks } from '../../types/Table'
 
-const rowSelectPlugin = (hooks: Hooks<any>) => {
+const rowSelectPlugin = <D extends object>(hooks: Hooks<D>) => {
   hooks.visibleColumns.push((columns) => [
     {
       id: 'selection',
