@@ -57,7 +57,7 @@ const getTableComponent = <D extends object = {}>(
     const hasPagination = !!instance.pageOptions
     const hasDensity = !!instance.setDensity
     const hasRowSelect = !!instance.plugins.find(
-      plugin => plugin.pluginName === 'useRowSelect'
+      (plugin) => plugin.pluginName === 'useRowSelect'
     )
     const rowStyle = React.useMemo(
       () => ({
@@ -67,8 +67,9 @@ const getTableComponent = <D extends object = {}>(
               typeof window === 'object' ? window.innerWidth : 10000
             const realMaxWidth =
               maxWidth && maxWidth > screenWidth ? '1fr' : `${maxWidth}px`
-            return `minmax(${minWidth ||
-              `${DEFAULT_COLUMN_WIDTH}px`}, ${realMaxWidth})`
+            return `minmax(${
+              minWidth || `${DEFAULT_COLUMN_WIDTH}px`
+            }, ${realMaxWidth})`
           })
           .join(' ')}`,
       }),
@@ -87,13 +88,13 @@ const getTableComponent = <D extends object = {}>(
         {loading && <LoadingOverlay />}
         <TableContent {...getTableProps()}>
           <TableHead>
-            {headerGroups.map((headerGroup, index) => (
+            {headerGroups.map((headerGroup, headerGroupIndex) => (
               <TableHeadRow
-                key={`header-${index}`}
+                key={`header-${headerGroupIndex}`}
                 {...headerGroup.getHeaderGroupProps()}
                 style={rowStyle}
               >
-                {headerGroup.headers.map((col, index) => {
+                {headerGroup.headers.map((col, headerCellIndex) => {
                   const column = col as ColumnInstance<D>
                   const headerProps = column.getHeaderProps(
                     ...(column.getSortByToggleProps
@@ -102,7 +103,7 @@ const getTableComponent = <D extends object = {}>(
                   )
 
                   return (
-                    <TableHeadCell key={`headerCell-${index}`}>
+                    <TableHeadCell key={`headerCell-${headerCellIndex}`}>
                       <TableHeadCellContent
                         opacity={0.5}
                         {...headerProps}
@@ -131,20 +132,20 @@ const getTableComponent = <D extends object = {}>(
             ))}
           </TableHead>
           <TableBody {...getTableBodyProps()} data-pagination={hasPagination}>
-            {(hasPagination ? page : rows).map((row, index) => {
+            {(hasPagination ? page : rows).map((row, rowIndex) => {
               prepareRow(row)
 
               return (
                 <TableBodyRow
                   {...row.getRowProps()}
-                  key={`row-${index}`}
+                  key={`row-${rowIndex}`}
                   style={rowStyle}
                   data-striped={!row.isGrouped && style.striped}
-                  onClick={e => !row.isGrouped && handleRowClick(row, e)}
+                  onClick={(e) => !row.isGrouped && handleRowClick(row, e)}
                   data-clickable={!row.isGrouped && !!onRowClick}
                   data-section={row.isExpanded}
                 >
-                  {row.cells.map((cell, index) => {
+                  {row.cells.map((cell, cellIndex) => {
                     const expandedToggleProps = row.getToggleRowExpandedProps
                       ? row.getToggleRowExpandedProps()
                       : {}
@@ -162,7 +163,7 @@ const getTableComponent = <D extends object = {}>(
                         <TableCell
                           data-section="true"
                           {...cellProps}
-                          key={`cell-${index}`}
+                          key={`cell-${cellIndex}`}
                         >
                           <ExpandToggleContainer {...expandedToggleProps}>
                             {row.isExpanded ? (
@@ -181,7 +182,7 @@ const getTableComponent = <D extends object = {}>(
                         <TableCell
                           data-section="true"
                           {...cellProps}
-                          key={`cell-${index}`}
+                          key={`cell-${cellIndex}`}
                         >
                           {cell.render('Aggregated')}
                         </TableCell>

@@ -52,12 +52,12 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
           <PaginationIcon
             icon="chevron-west"
             data-disabled={!instance.canPreviousPage}
-            onClick={() => instance.gotoPage(page => page - 1)}
+            onClick={() => instance.gotoPage((page) => page - 1)}
           />
           <PaginationIcon
             icon="chevron-east"
             data-disabled={!instance.canNextPage}
-            onClick={() => instance.gotoPage(page => page + 1)}
+            onClick={() => instance.gotoPage((page) => page + 1)}
           />
         </PagesChevrons>
         <PagesPagination>
@@ -68,7 +68,7 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
             small
             canReset={false}
             value={instance.state.pageSize}
-            onChange={size => instance.setPageSize(size as number)}
+            onChange={(size) => instance.setPageSize(size as number)}
             options={PAGE_SIZE_OPTIONS}
           />
         </PageSizeContainer>

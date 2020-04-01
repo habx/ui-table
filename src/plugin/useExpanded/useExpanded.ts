@@ -127,8 +127,8 @@ const useInstance = <D extends {}>(
   }, [dispatch, data])
 
   const toggleExpanded = React.useCallback(
-    (id: string, expanded: boolean) => {
-      dispatch({ type: actions.toggleExpanded, id, expanded })
+    (id: string, newExpanded: boolean) => {
+      dispatch({ type: actions.toggleExpanded, id, expanded: newExpanded })
     },
     [dispatch]
   )
@@ -167,7 +167,7 @@ const findExpandedDepth = <D extends object>(
 ) => {
   let maxDepth = 0
 
-  Object.keys(expanded).forEach(id => {
+  Object.keys(expanded).forEach((id) => {
     const splitId = id.split('.')
     maxDepth = Math.max(maxDepth, splitId.length)
   })

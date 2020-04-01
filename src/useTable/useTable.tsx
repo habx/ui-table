@@ -49,7 +49,7 @@ const useTable = <D extends object = {}>(
     }),
     [rawDefaultColumn]
   )
-  if (plugins.find(plugin => plugin.pluginName === 'useRowSelect')) {
+  if (plugins.find((plugin) => plugin.pluginName === 'useRowSelect')) {
     plugins.push(UseRowSelectPlugin)
   }
   const instance = (ReactTable.useTable<D>(
