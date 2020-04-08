@@ -1,18 +1,20 @@
+import { isEqual } from 'lodash'
 import * as ReactTable from 'react-table'
 
 import { TableInstance, TableState } from '../../types/Table'
 
+const EMPTY_FILTERS: any[] = []
+
 const useControlledState = <D extends {}>(
-  state: ReactTable.TableState<D>,
+  rawState: ReactTable.TableState<D>,
   meta: ReactTable.MetaBase<D>
 ) => {
   const instance = meta.instance as TableInstance<D>
-
-  const { pagination } = instance
-
+  const state = rawState as TableState<D>
+  const { filters } = instance
   return {
     ...state,
-    ...pagination,
+    filters: filters ?? EMPTY_FILTERS,
   }
 }
 
@@ -26,25 +28,18 @@ const reducer = <D extends {}>(
   const prevState = rawPrevState as TableState<D>
 
   const instance = rawInstance as TableInstance<D>
-  if (
-    prevState?.pageIndex !== state.pageIndex ||
-    prevState?.pageSize !== state.pageSize
-  ) {
-    instance.onPaginationChange &&
-      instance.onPaginationChange({
-        pageIndex: state.pageIndex,
-        pageSize: state.pageSize,
-      })
+  if (!isEqual(prevState?.filters, state.filters)) {
+    instance.onFiltersChange && instance.onFiltersChange(state.filters)
   }
 
   return state
 }
 
-const useControlledPagination = (hooks: ReactTable.Hooks<any>) => {
+const useControlledFilters = (hooks: ReactTable.Hooks<any>) => {
   hooks.stateReducers.push(reducer)
   hooks.useControlledState.push(useControlledState)
 }
 
-useControlledPagination.pluginName = 'useControlledPagination'
+useControlledFilters.pluginName = 'useControlledFilters'
 
-export default useControlledPagination
+export default useControlledFilters

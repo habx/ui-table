@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { Text, Icon } from '@habx/ui-core'
 
-import usePaginationEffect from '../plugin/useControlledPagination/usePaginationEffect'
 import { TableInstance, ColumnInstance, Row } from '../types/Table'
 
 import Density from './Density'
@@ -35,7 +34,6 @@ const getTableComponent = <D extends object = {}>(
     loading,
     style = {},
     noDataComponent: NoDataComponent,
-    pagination,
   }) => {
     const {
       getTableProps,
@@ -46,8 +44,6 @@ const getTableComponent = <D extends object = {}>(
       prepareRow,
       columns,
     } = instance
-
-    usePaginationEffect(instance, pagination)
 
     const handleRowClick = React.useCallback(
       (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => {

@@ -2,6 +2,10 @@ import * as React from 'react'
 import * as ReactTable from 'react-table'
 
 import {
+  UseControlledFiltersInstanceProps,
+  UseControlledFiltersOptions,
+} from '../plugin/useControlledFilters/useControlledFilters.interface'
+import {
   UseControlledPaginationInstanceProps,
   UseControlledPaginationOptions,
 } from '../plugin/useControlledPagination/useControlledPagination.interface'
@@ -50,7 +54,8 @@ export interface TableOptions<D extends object = {}>
     ReactTable.UseSortByOptions<D>,
     ReactTable.UseGroupByOptions<D>,
     UseDensityOptions<D>,
-    UseControlledPaginationOptions<D> {
+    UseControlledPaginationOptions<D>,
+    UseControlledFiltersOptions<D> {
   columns: Array<Column<D>>
   initialState?: Partial<TableState<D>>
   expandAll?: boolean
@@ -75,7 +80,8 @@ export interface TableInstance<D extends object = {}>
     ReactTable.UseGroupByInstanceProps<D>,
     UseExpandedInstanceProps<D>,
     UseDensityInstanceProps<D>,
-    UseControlledPaginationInstanceProps<D> {
+    UseControlledPaginationInstanceProps<D>,
+    UseControlledFiltersInstanceProps<D> {
   state: TableState<D>
   initialState: TableState<D>
   rows: Array<Row<D>>
