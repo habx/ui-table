@@ -1,4 +1,5 @@
 export { default as useTable } from './useTable'
+export { default as Table } from './Table'
 
 export { default as BooleanFilter } from './filter/BooleanFilter'
 export { default as TextFilter } from './filter/TextFilter'
@@ -21,7 +22,7 @@ export {
   Hooks,
 } from './types/Table'
 
-export { TableProps } from './getTableComponent/getTableComponent.interface'
+export { TableProps } from './Table/Table.interface'
 
 // Plugins
 export { default as useDensity } from './plugin/useDensity'

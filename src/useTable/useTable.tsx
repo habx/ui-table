@@ -2,22 +2,18 @@ import * as React from 'react'
 import * as ReactTable from 'react-table'
 
 import TextFilter from '../filter/TextFilter'
-import getTableComponent, { TableProps } from '../getTableComponent'
-import HeaderCell from '../getTableComponent/HeaderCell'
+import useControlledFilters from '../plugin/useControlledFilters/useControlledFilters'
+import useControlledPagination from '../plugin/useControlledPagination/useControlledPagination'
 import { UseRowSelectPlugin } from '../plugin/useRowSelect'
+import HeaderCell from '../Table/HeaderCell'
 import { TableOptions, Column, TableInstance } from '../types/Table'
-
-type InnerTableInstance<D extends object> = Omit<
-  TableInstance<D>,
-  'TableComponent'
->
 
 const EMPTY_DATA: any[] = []
 
 const useTable = <D extends object = {}>(
   options: TableOptions<D>,
   ...plugins: Array<ReactTable.PluginHook<D>>
-): [React.FunctionComponent<TableProps<D>>, TableInstance<D>] => {
+) => {
   const {
     columns: rawColumns,
     defaultColumn: rawDefaultColumn,
@@ -49,23 +45,23 @@ const useTable = <D extends object = {}>(
     }),
     [rawDefaultColumn]
   )
+
   if (plugins.find((plugin) => plugin.pluginName === 'useRowSelect')) {
     plugins.push((UseRowSelectPlugin as unknown) as ReactTable.PluginHook<D>)
   }
-  const instance = (ReactTable.useTable<D>(
+  if (options.manualPagination) {
+    plugins.push(
+      (useControlledPagination as unknown) as ReactTable.PluginHook<D>
+    )
+  }
+  if (options.manualFilters) {
+    plugins.push((useControlledFilters as unknown) as ReactTable.PluginHook<D>)
+  }
+
+  return (ReactTable.useTable<D>(
     { ...restOptions, data, columns, defaultColumn },
     ...plugins
-  ) as any) as InnerTableInstance<D>
-
-  const instanceRef = React.useRef<InnerTableInstance<D>>(instance)
-  instanceRef.current = instance
-
-  const TableComponent = React.useMemo(
-    () => getTableComponent(instanceRef.current),
-    []
-  )
-
-  return [TableComponent, instance]
+  ) as any) as TableInstance<D>
 }
 
 export default useTable

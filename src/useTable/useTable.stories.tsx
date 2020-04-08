@@ -15,6 +15,7 @@ import { Text } from '@habx/ui-core'
 import BooleanCell from '../cell/BooleanCell/BooleanCell'
 import useDensity from '../plugin/useDensity'
 import useExpanded from '../plugin/useExpanded'
+import Table from '../Table'
 import { Column } from '../types/Table'
 import useTable from '../useTable'
 
@@ -59,20 +60,20 @@ export default {
 }
 
 export const BasicExample = () => {
-  const [TableComponent] = useTable<Faker.Card>({
+  const tableInstance = useTable<Faker.Card>({
     data: FAKE_DATA,
     columns: COLUMNS,
   })
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const Pagination = () => {
-  const [TableComponent] = useTable<Faker.Card>(
+  const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
       columns: COLUMNS,
@@ -82,13 +83,13 @@ export const Pagination = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const PaginationAndDensity = () => {
-  const [TableComponent] = useTable<Faker.Card>(
+  const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
       columns: COLUMNS,
@@ -99,13 +100,13 @@ export const PaginationAndDensity = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const SortBy = () => {
-  const [TableComponent] = useTable<Faker.Card>(
+  const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
       columns: COLUMNS,
@@ -115,13 +116,13 @@ export const SortBy = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const Filters = () => {
-  const [TableComponent] = useTable<Faker.Card>(
+  const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
       columns: COLUMNS,
@@ -131,13 +132,13 @@ export const Filters = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const HorizontalScroll = () => {
-  const [TableComponent] = useTable<Faker.Card>({
+  const tableInstance = useTable<Faker.Card>({
     data: FAKE_DATA,
     columns: [
       ...COLUMNS,
@@ -151,25 +152,29 @@ export const HorizontalScroll = () => {
 
   return (
     <Container>
-      <TableComponent style={{ striped: true }} />
+      <Table instance={tableInstance} style={{ striped: true }} />
     </Container>
   )
 }
 
 export const Sections = () => {
-  const [TableComponent] = useTable<Faker.Card>(
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Group',
+        accessor: 'group',
+        Cell: ({ row: { groupByVal } }) => {
+          return groupByVal
+        },
+      },
+      ...COLUMNS,
+    ],
+    []
+  )
+  const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
-      columns: [
-        {
-          Header: 'Group',
-          accessor: 'group',
-          Cell: ({ row: { groupByVal } }) => {
-            return groupByVal
-          },
-        },
-        ...COLUMNS,
-      ],
+      columns,
       expandAll: true,
       initialState: {
         groupBy: ['group'],
@@ -181,13 +186,13 @@ export const Sections = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const SelectRow = () => {
-  const [TableComponent] = useTable<Faker.Card>(
+  const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
       columns: COLUMNS,
@@ -197,13 +202,13 @@ export const SelectRow = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const FullExample = () => {
-  const [TableComponent] = useTable<Faker.Card>(
+  const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
       columns: COLUMNS,
@@ -217,20 +222,23 @@ export const FullExample = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={tableInstance} />
     </Container>
   )
 }
 
 export const NoData = () => {
-  const [TableComponent] = useTable<Faker.Card>({
+  const tableInstance = useTable<Faker.Card>({
     data: [],
     columns: COLUMNS,
   })
 
   return (
     <Container>
-      <TableComponent noDataComponent={() => <Text>No data</Text>} />
+      <Table
+        instance={tableInstance}
+        noDataComponent={() => <Text>No data</Text>}
+      />
     </Container>
   )
 }

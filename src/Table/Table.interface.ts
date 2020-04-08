@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Row } from '../types/Table'
+import { Row, TableInstance } from '../types/Table'
 
 export interface TableStyle {
   striped?: boolean
@@ -15,4 +15,5 @@ export interface TableProps<D extends object> {
   noDataText?: React.ReactNode
   style?: TableStyle
   noDataComponent?: React.ComponentType
+  instance: TableInstance<D>
 }
