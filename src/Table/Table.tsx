@@ -129,7 +129,11 @@ const Table = <D extends {}>({
             </TableHeadRow>
           ))}
         </TableHead>
-        <TableBody {...getTableBodyProps()} data-pagination={hasPagination}>
+        <TableBody
+          {...getTableBodyProps()}
+          data-pagination={hasPagination}
+          data-scrollable={style.scrollable ?? !hasPagination}
+        >
           {(hasPagination ? page : rows).map((row, rowIndex) => {
             prepareRow(row)
 

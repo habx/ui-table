@@ -4,6 +4,7 @@ import { Row, TableInstance } from '../types/Table'
 
 export interface TableStyle {
   striped?: boolean
+  scrollable?: boolean
 }
 
 export interface TableProps<D extends object> {

@@ -51,7 +51,11 @@ export const TableHeadCell = styled.th`
 `
 
 export const TableBody = styled.tbody`
-  &[data-pagination='false'] {
+  &[data-scrollable='true'] {
+    height: 100%;
+    overflow: auto;
+  }
+  &[data-scrollable='true'][data-pagination='false'] {
     // https://stackoverflow.com/questions/14962468/how-can-i-combine-flexbox-and-vertical-scroll-in-a-full-height-app
     display: flex;
     flex-direction: column;
