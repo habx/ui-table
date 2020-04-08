@@ -78,7 +78,6 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
 )
 
 interface PaginationProps {
-  test?: any
   instance: TableInstance<any>
 }
 
