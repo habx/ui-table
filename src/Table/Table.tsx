@@ -5,7 +5,9 @@ import { Text, Icon } from '@habx/ui-core'
 import { ColumnInstance, Row } from '../types/Table'
 
 import Density from './Density'
-import { TableProps } from './getTableComponent.interface'
+import LoadingOverlay from './LoadingOverlay'
+import Pagination from './Pagination'
+import { TableProps } from './Table.interface'
 import {
   TableContainer,
   TableContent,
@@ -20,9 +22,7 @@ import {
   TableHeadRow,
   ExpandToggleContainer,
   NoDataContainer,
-} from './getTableComponent.style'
-import LoadingOverlay from './LoadingOverlay'
-import Pagination from './Pagination'
+} from './Table.style'
 
 const DEFAULT_COLUMN_WIDTH = 100
 

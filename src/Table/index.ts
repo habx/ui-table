@@ -1,5 +1,5 @@
 import Table from './Table'
 
-export { TableProps } from './getTableComponent.interface'
+export { TableProps } from './Table.interface'
 
 export default Table
