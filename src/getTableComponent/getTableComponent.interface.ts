@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { Pagination } from '../plugin/useControlledPagination/useControlledPagination.interface'
 import { Row } from '../types/Table'
 
 export interface TableStyle {
@@ -15,4 +16,5 @@ export interface TableProps<D extends object> {
   noDataText?: React.ReactNode
   style?: TableStyle
   noDataComponent?: React.ComponentType
+  pagination?: Pagination
 }
