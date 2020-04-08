@@ -45,6 +45,12 @@ const getTableComponent = <D extends object = {}>(
       columns,
     } = instance
 
+    // needed to rerender children component that take instance as prop
+    const instanceProp = {
+      key: Math.random(),
+      ...instance,
+    }
+
     const handleRowClick = React.useCallback(
       (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => {
         if (onRowClick) {
@@ -205,8 +211,8 @@ const getTableComponent = <D extends object = {}>(
           </TableBody>
         </TableContent>
         <TableOptionBar>
-          {hasPagination && <Pagination instance={instance} />}
-          {hasDensity && <Density instance={instance} />}
+          {hasPagination && <Pagination instance={instanceProp} />}
+          {hasDensity && <Density instance={instanceProp} />}
         </TableOptionBar>
       </TableContainer>
     )
