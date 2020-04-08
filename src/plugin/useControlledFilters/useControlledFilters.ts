@@ -28,7 +28,8 @@ const reducer = <D extends {}>(
   const prevState = rawPrevState as TableState<D>
 
   const instance = rawInstance as TableInstance<D>
-  if (!isEqual(prevState?.filters, state.filters)) {
+  const initialized = !(!prevState?.filters && instance.filters)
+  if (initialized && !isEqual(prevState?.filters, state.filters)) {
     instance.onFiltersChange && instance.onFiltersChange(state.filters)
   }
 

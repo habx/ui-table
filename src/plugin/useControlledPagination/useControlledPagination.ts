@@ -26,9 +26,11 @@ const reducer = <D extends {}>(
   const prevState = rawPrevState as TableState<D>
 
   const instance = rawInstance as TableInstance<D>
+  const initialized = !(!prevState?.filters && instance.pagination)
   if (
-    prevState?.pageIndex !== state.pageIndex ||
-    prevState?.pageSize !== state.pageSize
+    initialized &&
+    (prevState?.pageIndex !== state.pageIndex ||
+      prevState?.pageSize !== state.pageSize)
   ) {
     instance.onPaginationChange &&
       instance.onPaginationChange({
