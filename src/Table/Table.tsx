@@ -1,6 +1,7 @@
+import { isString } from 'lodash'
 import * as React from 'react'
 
-import { Text, Icon } from '@habx/ui-core'
+import { Text, Icon, Tooltip } from '@habx/ui-core'
 
 import { ColumnInstance, Row } from '../types/Table'
 
@@ -22,6 +23,7 @@ import {
   TableHeadRow,
   ExpandToggleContainer,
   NoDataContainer,
+  TableHeaderCellContainer,
 } from './Table.style'
 
 const DEFAULT_COLUMN_WIDTH = 100
@@ -57,22 +59,27 @@ const Table = <D extends {}>({
   const hasRowSelect = !!instance.plugins.find(
     (plugin) => plugin.pluginName === 'useRowSelect'
   )
-  const rowStyle = React.useMemo(
-    () => ({
-      gridTemplateColumns: `${hasRowSelect ? '40px' : ''} ${columns
-        .map(({ minWidth, maxWidth }) => {
-          const screenWidth =
-            typeof window === 'object' ? window.innerWidth : 10000
-          const realMaxWidth =
-            maxWidth && maxWidth > screenWidth ? '1fr' : `${maxWidth}px`
-          return `minmax(${
-            minWidth || `${DEFAULT_COLUMN_WIDTH}px`
-          }, ${realMaxWidth})`
-        })
-        .join(' ')}`,
-    }),
-    [columns, hasRowSelect]
-  )
+
+  const gridTemplateColumns = React.useMemo(() => {
+    const flatColumns = columns.flatMap((column) => column?.columns ?? column)
+    return `${hasRowSelect ? '40px' : ''} ${flatColumns
+      .map(({ minWidth, maxWidth }) => {
+        const screenWidth =
+          typeof window === 'object' ? window.innerWidth : 10000
+        const realMaxWidth =
+          maxWidth && maxWidth > screenWidth ? '1fr' : `${maxWidth}px`
+        return `minmax(${
+          minWidth
+            ? `${minWidth}px`
+            : `${
+                maxWidth && maxWidth < DEFAULT_COLUMN_WIDTH
+                  ? maxWidth
+                  : DEFAULT_COLUMN_WIDTH
+              }px`
+        }, ${realMaxWidth})`
+      })
+      .join(' ')}`
+  }, [columns, hasRowSelect])
 
   if (rows.length === 0 && NoDataComponent) {
     return (
@@ -82,7 +89,13 @@ const Table = <D extends {}>({
     )
   }
   return (
-    <TableContainer>
+    <TableContainer
+      style={
+        {
+          '--table-grid-template-columns': gridTemplateColumns,
+        } as React.CSSProperties
+      }
+    >
       {loading && <LoadingOverlay />}
       <TableContent {...getTableProps()}>
         <TableHead>
@@ -90,7 +103,6 @@ const Table = <D extends {}>({
             <TableHeadRow
               key={`header-${headerGroupIndex}`}
               {...headerGroup.getHeaderGroupProps()}
-              style={rowStyle}
             >
               {headerGroup.headers.map((col, headerCellIndex) => {
                 const column = col as ColumnInstance<D>
@@ -99,25 +111,37 @@ const Table = <D extends {}>({
                     ? [column.getSortByToggleProps()]
                     : [])
                 )
-
+                const renderHeader = column.render('Header')
+                const isBig =
+                  headerGroups.length > 1 &&
+                  headerGroupIndex < headerGroups.length - 1
                 return (
-                  <TableHeadCell key={`headerCell-${headerCellIndex}`}>
-                    <TableHeadCellContent
-                      opacity={0.5}
-                      {...headerProps}
-                      data-align={column.align ?? 'flex-start'}
+                  <TableHeadCell
+                    data-big={isBig}
+                    key={`headerCell-${headerCellIndex}`}
+                    size={column.columns?.length ?? 1}
+                  >
+                    <Tooltip
+                      title={renderHeader as string}
+                      disabled={!isString(renderHeader) || isBig}
                     >
-                      {column.render('Header')}
-                      {column.isSorted && (
-                        <Icon
-                          icon={
-                            column.isSortedDesc
-                              ? 'chevron-south'
-                              : 'chevron-north'
-                          }
-                        />
-                      )}
-                    </TableHeadCellContent>
+                      <TableHeaderCellContainer
+                        data-align={column.align ?? 'flex-start'}
+                      >
+                        <TableHeadCellContent opacity={0.5} {...headerProps}>
+                          {renderHeader}
+                        </TableHeadCellContent>
+                        {column.isSorted && (
+                          <Icon
+                            icon={
+                              column.isSortedDesc
+                                ? 'chevron-south'
+                                : 'chevron-north'
+                            }
+                          />
+                        )}
+                      </TableHeaderCellContainer>
+                    </Tooltip>
                     {column.canFilter ? (
                       <TableHeaderCellSort>
                         {column.render('Filter')}
@@ -141,7 +165,6 @@ const Table = <D extends {}>({
               <TableBodyRow
                 {...row.getRowProps()}
                 key={`row-${rowIndex}`}
-                style={rowStyle}
                 data-striped={!row.isGrouped && style.striped}
                 onClick={(e) => !row.isGrouped && handleRowClick(row, e)}
                 data-clickable={!row.isGrouped && !!onRowClick}
