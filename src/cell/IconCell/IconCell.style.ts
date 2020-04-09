@@ -5,6 +5,8 @@ import { Text, theme } from '@habx/ui-core'
 export const IconCellContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
 `
 
 export const IconContainer = styled.div<{ color?: string }>`

@@ -25,6 +25,8 @@ export const TableContainer = styled.div`
 
   height: 100%;
   width: 100%;
+
+  --table-grid-gap: 0 12px;
 `
 
 export const TableContent = styled.table`
@@ -43,11 +45,24 @@ export const TableHead = styled.thead`
 
 export const TableHeadRow = styled.tr`
   display: grid;
+  grid-template-columns: var(--table-grid-template-columns);
+  grid-gap: var(--table-grid-gap);
 `
 
-export const TableHeadCell = styled.th`
+export const TableHeadCell = styled.th<{ size: number }>`
   text-align: left;
   padding: 12px;
+  grid-column-end: span ${({ size }) => size};
+
+  --table-header-font-size: 12px;
+  --table-header-color: ${palette.darkBlue[400]};
+
+  &[data-big='true'] {
+    font-size: 16px;
+    border-bottom: solid 1px ${palette.darkBlue[300]};
+    --table-header-font-size: 16px;
+    --table-header-color: ${palette.darkBlue[900]};
+  }
 `
 
 export const TableBody = styled.tbody`
@@ -70,6 +85,9 @@ export const TableBody = styled.tbody`
 
 export const TableBodyRow = styled.tr`
   display: grid;
+
+  grid-template-columns: var(--table-grid-template-columns);
+  grid-gap: var(--table-grid-gap);
 
   transition: background-color 50ms ease-in-out;
 
@@ -107,18 +125,46 @@ export const TableCell = styled.td`
   }
 
   ${alignItems};
+
+  > div {
+    font-size: 16px;
+    color: ${palette.darkBlue[700]};
+    width: 100%;
+  }
 `
 
-export const TableHeadCellContent = styled(Text)`
+export const TableHeaderCellContainer = styled.div`
   display: flex;
   align-items: center;
   user-select: none;
+  width: 100%;
+  min-width: 0;
 
-  & > span:last-child {
-    margin-left: 8px;
-  }
+  font-size: var(--table-header-font-size);
+  color: var(--table-header-color);
 
   ${alignItems}
+`
+
+export const TableHeadCellContent = styled(Text)`
+  user-select: none;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  position: relative;
+
+  > * {
+    display: inline-flex;
+  }
+
+  & > span:last-child {
+    padding-left: 8px;
+  }
+
+  font-size: var(--table-header-font-size);
+  color: var(--table-header-color);
 `
 
 export const TableHeaderCellSort = styled.div`
