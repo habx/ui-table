@@ -28,6 +28,12 @@ const useInstance = <D extends {}>(
         pageSize: instance.state.pageSize,
       })
     }
+    instance.setPageSize = (pageSize: number) => {
+      onPaginationChange({
+        pageIndex: instance.state.pageIndex,
+        pageSize,
+      })
+    }
   }
 }
 
