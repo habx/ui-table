@@ -25,12 +25,13 @@ const useTable = <D extends object = {}>(
 
   const columns = React.useMemo<ReactTable.Column<D>[]>(
     () =>
-      rawColumns.map(({ HeaderIcon, Header, ...restColumn }) => {
+      rawColumns.map(({ HeaderIcon, Header, id, ...restColumn }) => {
         const column: ReactTable.Column<D> = {
-          ...restColumn,
+          ...(restColumn as ReactTable.Column<D>),
+          id: (id ?? restColumn.accessor) as ReactTable.IdType<D>,
           Header: HeaderIcon
             ? () => <HeaderCell icon={HeaderIcon} content={Header} />
-            : Header,
+            : (Header as ReactTable.Renderer<ReactTable.HeaderProps<D>>),
         }
 
         return column
