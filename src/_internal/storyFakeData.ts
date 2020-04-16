@@ -10,7 +10,7 @@ export const FAKE_DATA = range(50).map(() => ({
 export const BASIC_COLUMNS: Column<Faker.Card>[] = [
   {
     Header: 'Username',
-    accessor: (el) => el.username,
+    accessor: (el) => el.name,
   },
   {
     Header: 'Name',
@@ -18,6 +18,6 @@ export const BASIC_COLUMNS: Column<Faker.Card>[] = [
   },
   {
     Header: 'City',
-    accessor: 'address.city',
+    accessor: (el) => el.address.city,
   },
 ]

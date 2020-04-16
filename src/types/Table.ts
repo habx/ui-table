@@ -32,20 +32,26 @@ export interface CellProps<D extends object = {}>
 
 export type HeaderProps<D extends object> = TableInstance<D> & {
   column: ColumnInstance<D>
+  getToggleAllRowsSelectedProps?: () => object
 }
 
-export interface Column<D extends object = {}>
-  extends ReactTable.Column<D>,
-    ReactTable.UseFiltersColumnOptions<D>,
-    ReactTable.UseGroupByColumnOptions<D>,
-    ReactTable.UseSortByColumnOptions<D> {
-  HeaderIcon?: React.ReactNode
-  Filter?: ReactTable.Renderer<FilterProps<D>>
-  Cell?: ReactTable.Renderer<CellProps<D>>
-  Header?: ReactTable.Renderer<HeaderProps<D>>
+type CustomColumnFields<Meta = {}> = {
   align?: 'left' | 'right' | 'center'
-  meta?: { [key: string]: any }
+  meta?: Meta & { [key: string]: any }
 }
+
+export type Column<
+  D extends { [key: string]: any } = any,
+  Meta = {}
+> = ReactTable.Column<D> &
+  ReactTable.UseFiltersColumnOptions<D> &
+  ReactTable.UseGroupByColumnOptions<D> &
+  ReactTable.UseSortByColumnOptions<D> & {
+    HeaderIcon?: React.ReactNode
+    Filter?: ReactTable.Renderer<FilterProps<D>>
+    Cell?: ReactTable.Renderer<CellProps<D>>
+    Header?: ReactTable.Renderer<HeaderProps<D>>
+  } & CustomColumnFields<Meta>
 
 export interface TableOptions<D extends object = {}>
   extends Omit<ReactTable.TableOptions<D>, 'columns' | 'initialState'>,
@@ -89,13 +95,16 @@ export interface TableInstance<D extends object = {}>
   expandAll?: boolean
 }
 
-export interface ColumnInstance<D extends object = {}>
-  extends Omit<Column<D>, 'id' | 'columns'>,
-    ReactTable.UseTableColumnProps<D>,
-    ReactTable.UseFiltersColumnProps<D>,
-    ReactTable.UseSortByColumnProps<D>,
-    ReactTable.UseGroupByColumnProps<D>,
-    UseDensityColumnProps<D> {}
+export type ColumnInstance<D extends object = {}> = ReactTable.ColumnInstance<
+  D
+> &
+  ReactTable.UseTableColumnProps<D> &
+  ReactTable.UseFiltersColumnProps<D> &
+  ReactTable.UseSortByColumnProps<D> &
+  ReactTable.UseGroupByColumnProps<D> &
+  UseDensityColumnProps<D> & {
+    getToggleAllRowsSelectedProps: Function
+  } & CustomColumnFields
 
 export interface Cell<D extends object = {}> extends ReactTable.Cell<D> {
   canGroupBy?: boolean
@@ -132,5 +141,7 @@ export interface Hooks<D extends object> extends ReactTable.Hooks<D> {
   visibleColumns: Array<
     (allColumns: Array<Column<D>>, meta: ReactTable.Meta<D>) => Array<Column<D>>
   >
-  visibleColumnsDeps: Array<(deps: any[], meta: ReactTable.Meta<D>) => any[]>
+  visibleColumnsDeps: Array<
+    (deps: any[], meta: ReactTable.Meta<D>) => Array<Column<D>>
+  >
 }
