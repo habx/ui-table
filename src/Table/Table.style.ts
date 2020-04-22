@@ -95,12 +95,24 @@ export const TableBodyRow = styled.tr`
     background-color: ${palette.darkBlue[100]};
   }
 
-  &[data-clickable='true'] {
-    cursor: pointer;
+  &[data-active='true'] {
+    background-color: ${palette.blue[100]};
 
+    &[data-clickable='true'] {
+      &:hover {
+        background-color: ${palette.blue[200]};
+      }
+    }
+  }
+
+  &:not([data-active='true'])[data-clickable='true'] {
     &:hover {
       background-color: ${palette.darkBlue[200]};
     }
+  }
+
+  &[data-clickable='true'] {
+    cursor: pointer;
   }
 
   &[data-section='true'] {

@@ -8,7 +8,7 @@ import { ColumnInstance, Row } from '../types/Table'
 import Density from './Density'
 import LoadingOverlay from './LoadingOverlay'
 import Pagination from './Pagination'
-import { TableProps } from './Table.interface'
+import { RowCharacteristics, TableProps } from './Table.interface'
 import {
   TableContainer,
   TableContent,
@@ -27,6 +27,7 @@ import {
 } from './Table.style'
 
 const DEFAULT_COLUMN_WIDTH = 100
+const DEFAULT_ROW_CHARACTERISTICS_GETTER = () => ({})
 
 const Table = <D extends {}>({
   onRowClick,
@@ -34,6 +35,7 @@ const Table = <D extends {}>({
   style = {},
   noDataComponent: NoDataComponent,
   instance,
+  getRowCharacteristics = DEFAULT_ROW_CHARACTERISTICS_GETTER,
 }: React.PropsWithChildren<TableProps<D>>) => {
   const {
     getTableProps,
@@ -161,14 +163,22 @@ const Table = <D extends {}>({
           {(hasPagination ? page : rows).map((row, rowIndex) => {
             prepareRow(row)
 
+            const {
+              isActive = false,
+              isInteractive = true,
+            } = getRowCharacteristics
+              ? getRowCharacteristics(row)
+              : ({} as Partial<RowCharacteristics>)
+
             return (
               <TableBodyRow
                 {...row.getRowProps()}
                 key={`row-${rowIndex}`}
-                data-striped={!row.isGrouped && style.striped}
                 onClick={(e) => !row.isGrouped && handleRowClick(row, e)}
-                data-clickable={!row.isGrouped && !!onRowClick}
+                data-striped={!row.isGrouped && style.striped}
+                data-clickable={!row.isGrouped && !!onRowClick && isInteractive}
                 data-section={row.isExpanded}
+                data-active={isActive}
               >
                 {row.cells.map((cell, cellIndex) => {
                   const expandedToggleProps = row.getToggleRowExpandedProps
