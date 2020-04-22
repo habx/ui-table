@@ -12,9 +12,15 @@ export interface TableProps<D extends object> {
     row: Row<D>,
     event: React.MouseEvent<HTMLTableRowElement>
   ) => void
+  getRowCharacteristics?: (row: Row<D>) => Partial<RowCharacteristics>
   loading?: boolean
   noDataText?: React.ReactNode
   style?: TableStyle
   noDataComponent?: React.ComponentType
   instance: TableInstance<D>
+}
+
+export type RowCharacteristics = {
+  isActive: boolean
+  isInteractive: boolean
 }

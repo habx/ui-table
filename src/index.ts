@@ -22,7 +22,7 @@ export {
   Hooks,
 } from './types/Table'
 
-export { TableProps } from './Table/Table.interface'
+export { TableProps, RowCharacteristics } from './Table/Table.interface'
 
 // Plugins
 export { default as useDensity } from './plugin/useDensity'
