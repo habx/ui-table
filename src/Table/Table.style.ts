@@ -118,6 +118,7 @@ export const TableBodyRow = styled.tr`
   &[data-section='true'] {
     position: sticky;
     top: 0;
+    z-index: 1;
     background-color: ${theme.color('background')};
     border-bottom: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
   }

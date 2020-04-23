@@ -9,19 +9,19 @@ import {
   LabelContainer,
 } from './IconCell.style'
 
-const IconCell: React.FunctionComponent<IconCellProps> = ({
-  icon,
-  color,
-  label,
-  large = false,
-  ...props
-}) => (
-  <IconCellContainer {...props}>
-    <IconContainer color={color} data-large={large}>
-      <Icon icon={icon} />
-    </IconContainer>
-    {label && <LabelContainer>{label}</LabelContainer>}
-  </IconCellContainer>
+const IconCell = React.forwardRef<HTMLDivElement, IconCellProps>(
+  (props, ref) => {
+    const { icon, color, label, large = false, ...rest } = props
+
+    return (
+      <IconCellContainer {...rest} ref={ref}>
+        <IconContainer color={color} data-large={large}>
+          <Icon icon={icon} />
+        </IconContainer>
+        {label && <LabelContainer>{label}</LabelContainer>}
+      </IconCellContainer>
+    )
+  }
 )
 
 export default IconCell
