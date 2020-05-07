@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { createGlobalStyle } from 'styled-components'
 
-const FONT_ROOT = 'https://cdn.habx.fr/assets/fonts'
+const FONT_ROOT = 'https://cdn.habx.com/assets/fonts'
 
 const GlobalStyle = createGlobalStyle`
   html {
