@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { palette } from '@habx/ui-core'
 
 import { FAKE_DATA, BASIC_COLUMNS } from '../../_internal/storyFakeData'
+import Table from '../../Table'
 import useTable from '../../useTable'
 
 import IconCell from './IconCell'
@@ -18,7 +19,7 @@ export default {
 }
 
 export const BasicExample = () => {
-  const [TableComponent] = useTable<Faker.Card>({
+  const instance = useTable<Faker.Card>({
     data: FAKE_DATA,
     columns: [
       {
@@ -35,13 +36,13 @@ export const BasicExample = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={instance} />
     </Container>
   )
 }
 
 export const WithLabel = () => {
-  const [TableComponent] = useTable<Faker.Card>({
+  const instance = useTable<Faker.Card>({
     data: FAKE_DATA,
     columns: [
       {
@@ -61,13 +62,13 @@ export const WithLabel = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={instance} />
     </Container>
   )
 }
 
 export const WithCustomColor = () => {
-  const [TableComponent] = useTable<Faker.Card>({
+  const instance = useTable<Faker.Card>({
     data: FAKE_DATA,
     columns: [
       {
@@ -87,7 +88,7 @@ export const WithCustomColor = () => {
 
   return (
     <Container>
-      <TableComponent />
+      <Table instance={instance} />
     </Container>
   )
 }
