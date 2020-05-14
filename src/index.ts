@@ -6,8 +6,10 @@ export { default as TextFilter } from './filter/TextFilter'
 
 export { default as BooleanCell } from './cell/BooleanCell'
 export { default as IconCell } from './cell/IconCell'
+export { default as ArrayCell } from './cell/ArrayCell'
 
 export { default as booleanFilter } from './filterMethod/booleanFilter'
+export { default as arrayFilter } from './filterMethod/arrayFilter'
 
 export {
   Column,
@@ -27,3 +29,6 @@ export { TableProps, RowCharacteristics } from './Table/Table.interface'
 // Plugins
 export { default as useDensity } from './plugin/useDensity'
 export { default as useExpanded } from './plugin/useExpanded'
+
+// factories
+export { default as selectFilterFactory } from './filterFactory/selectFilterFactory'

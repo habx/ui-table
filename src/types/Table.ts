@@ -45,6 +45,7 @@ export type Column<
   Meta = {}
 > = ReactTable.Column<D> &
   ReactTable.UseFiltersColumnOptions<D> &
+  Partial<ReactTable.UseFiltersColumnProps<D>> &
   ReactTable.UseGroupByColumnOptions<D> &
   ReactTable.UseSortByColumnOptions<D> & {
     HeaderIcon?: React.ReactNode
