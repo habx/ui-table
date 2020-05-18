@@ -42,7 +42,10 @@ const PageSizeContainer = styled.div`
   margin-left: 36px;
 `
 
-const PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50]
+const PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50].map((value) => ({
+  value,
+  label: `${value}`,
+}))
 
 const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
   <PaginationContainer>
