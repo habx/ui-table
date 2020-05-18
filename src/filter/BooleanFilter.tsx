@@ -18,7 +18,6 @@ const BooleanFilter: React.FunctionComponent<BooleanFilterProps> = ({
     small
     canReset={false}
     value={column?.filterValue ?? BooleanFilterValues.All}
-    valueFormat="simple"
     onChange={(newValue) => column.setFilter(newValue)}
     options={OPTIONS}
   />
