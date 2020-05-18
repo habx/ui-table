@@ -47,40 +47,38 @@ const PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50].map((value) => ({
   label: `${value}`,
 }))
 
-const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => {
-  return (
-    <PaginationContainer>
-      {instance.pageCount > 1 && (
-        <React.Fragment>
-          <PagesChevrons>
-            <PaginationIcon
-              icon="chevron-west"
-              data-disabled={!instance.canPreviousPage}
-              onClick={() => instance.gotoPage((page) => page - 1)}
-            />
-            <PaginationIcon
-              icon="chevron-east"
-              data-disabled={!instance.canNextPage}
-              onClick={() => instance.gotoPage((page) => page + 1)}
-            />
-          </PagesChevrons>
-          <PagesPagination>
-            {instance.state.pageIndex + 1} - {instance.pageCount}
-          </PagesPagination>
-          <PageSizeContainer>
-            <Select
-              small
-              canReset={false}
-              value={instance.state.pageSize}
-              onChange={(size) => instance.setPageSize(size as number)}
-              options={PAGE_SIZE_OPTIONS}
-            />
-          </PageSizeContainer>
-        </React.Fragment>
-      )}
-    </PaginationContainer>
-  )
-}
+const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
+  <PaginationContainer>
+    {instance.pageCount > 1 && (
+      <React.Fragment>
+        <PagesChevrons>
+          <PaginationIcon
+            icon="chevron-west"
+            data-disabled={!instance.canPreviousPage}
+            onClick={() => instance.gotoPage((page) => page - 1)}
+          />
+          <PaginationIcon
+            icon="chevron-east"
+            data-disabled={!instance.canNextPage}
+            onClick={() => instance.gotoPage((page) => page + 1)}
+          />
+        </PagesChevrons>
+        <PagesPagination>
+          {instance.state.pageIndex + 1} - {instance.pageCount}
+        </PagesPagination>
+        <PageSizeContainer>
+          <Select
+            small
+            canReset={false}
+            value={instance.state.pageSize}
+            onChange={(size) => instance.setPageSize(size as number)}
+            options={PAGE_SIZE_OPTIONS}
+          />
+        </PageSizeContainer>
+      </React.Fragment>
+    )}
+  </PaginationContainer>
+)
 
 interface PaginationProps {
   instance: TableInstance<any>
