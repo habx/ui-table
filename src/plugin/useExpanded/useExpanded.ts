@@ -51,7 +51,7 @@ const reducer = <D extends {}>(
   _prevState?: ReactTable.TableState<D>,
   rawInstance?: ReactTable.TableInstance<D>
 ) => {
-  const state = rawState as TableState<D>
+  const state = rawState as Partial<TableState<D>>
   const instance = rawInstance as TableInstance<D>
   if (action.type === actions.init) {
     return {
@@ -70,13 +70,13 @@ const reducer = <D extends {}>(
   if (action.type === actions.setExpanded) {
     return {
       ...state,
-      expanded: functionalUpdate(action.expanded, state.expanded),
+      expanded: functionalUpdate(action.expanded, state.expanded ?? {}),
     }
   }
 
   if (action.type === actions.toggleExpanded) {
     const { id, expanded: setExpanded } = action
-    const exists = state.expanded[id]
+    const exists = state.expanded?.[id]
 
     const shouldExist =
       typeof setExpanded !== 'undefined' ? setExpanded : !exists
@@ -90,7 +90,7 @@ const reducer = <D extends {}>(
         },
       }
     } else if (exists && !shouldExist) {
-      const { [id]: _, ...rest } = state.expanded
+      const { [id as ReactTable.IdType<D>]: _, ...rest } = state.expanded
       return {
         ...state,
         expanded: rest,
