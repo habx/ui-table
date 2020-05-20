@@ -102,10 +102,7 @@ const Table = <D extends {}>({
       <TableContent {...getTableProps()}>
         <TableHead>
           {headerGroups.map((headerGroup, headerGroupIndex) => (
-            <TableHeadRow
-              key={`header-${headerGroupIndex}`}
-              {...headerGroup.getHeaderGroupProps()}
-            >
+            <TableHeadRow {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((col, headerCellIndex) => {
                 const column = col as ColumnInstance<D>
                 const headerProps = column.getHeaderProps(
