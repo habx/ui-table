@@ -30,13 +30,10 @@ export const TableContainer = styled.div`
 `
 
 export const TableContent = styled.table`
-  display: flex;
-  flex-direction: column;
+  display: grid;
 
+  overflow-y: hidden;
   overflow-x: auto;
-
-  height: 100%;
-  width: 100%;
 `
 
 export const TableHead = styled.thead`
@@ -66,21 +63,14 @@ export const TableHeadCell = styled.th<{ size: number }>`
 `
 
 export const TableBody = styled.tbody`
-  &[data-scrollable='true'] {
-    height: 100%;
-    overflow: auto;
-  }
-  &[data-scrollable='true'][data-pagination='false'] {
-    // https://stackoverflow.com/questions/14962468/how-can-i-combine-flexbox-and-vertical-scroll-in-a-full-height-app
-    display: flex;
-    flex-direction: column;
-    height: 0;
-    min-width: 100%;
-    width: fit-content;
-    overflow-x: hidden;
-    overflow-y: auto;
-    flex: 1 1 auto;
-  }
+  // https://stackoverflow.com/questions/14962468/how-can-i-combine-flexbox-and-vertical-scroll-in-a-full-height-app
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 100%;
+  width: fit-content;
+  overflow-x: hidden;
+  overflow-y: auto;
 `
 
 export const TableBodyRow = styled.tr`
