@@ -72,7 +72,12 @@ const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
             canReset={false}
             value={instance.state.pageSize}
             onChange={(size) => instance.setPageSize(size as number)}
-            options={PAGE_SIZE_OPTIONS}
+            options={
+              instance.pageSizeOptions?.map((value) => ({
+                value,
+                label: `${value}`,
+              })) ?? PAGE_SIZE_OPTIONS
+            }
           />
         </PageSizeContainer>
       </React.Fragment>

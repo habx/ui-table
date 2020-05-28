@@ -1,3 +1,5 @@
+import { action } from '@storybook/addon-actions'
+import { withKnobs, number, select } from '@storybook/addon-knobs'
 import faker from 'faker'
 import { range } from 'lodash'
 import * as React from 'react'
@@ -57,6 +59,7 @@ const FAKE_DATA = range(50).map(() => ({
 
 export default {
   title: 'Table',
+  decorators: [withKnobs],
 }
 
 export const BasicExample = () => {
@@ -77,6 +80,30 @@ export const Pagination = () => {
     {
       data: FAKE_DATA,
       columns: COLUMNS,
+      pageSizeOptions: [5, 10, 15, 20],
+    },
+    usePagination
+  )
+
+  return (
+    <Container>
+      <Table instance={tableInstance} />
+    </Container>
+  )
+}
+
+export const ControlledPagination = () => {
+  const tableInstance = useTable<Faker.Card>(
+    {
+      data: FAKE_DATA,
+      columns: COLUMNS,
+      manualPagination: true,
+      onPaginationChange: action('Pagination changed'),
+      pageCount: number('Page Count', 10),
+      pagination: {
+        pageSize: select('Page Size', [10, 20, 30, 40, 50], 10),
+        pageIndex: number('Page Index', 0),
+      },
     },
     usePagination
   )
