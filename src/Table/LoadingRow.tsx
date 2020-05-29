@@ -39,7 +39,7 @@ const Loader = styled.div`
   }
 `
 
-const LoadingRow: React.FunctionComponent<{ instance: TableInstance }> = ({
+const LoadingRow: React.FunctionComponent<{ instance: TableInstance<any> }> = ({
   instance,
 }) => {
   return (
