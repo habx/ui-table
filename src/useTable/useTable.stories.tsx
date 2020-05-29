@@ -17,6 +17,7 @@ import { Text } from '@habx/ui-core'
 import BooleanCell from '../cell/BooleanCell/BooleanCell'
 import useDensity from '../plugin/useDensity'
 import useExpanded from '../plugin/useExpanded'
+import useInfiniteScroll from '../plugin/useInfiniteScroll/useInfiniteScroll'
 import Table from '../Table'
 import { Column } from '../types/Table'
 import useTable from '../useTable'
@@ -67,7 +68,6 @@ export const BasicExample = () => {
     data: FAKE_DATA,
     columns: COLUMNS,
   })
-
   return (
     <Container>
       <Table instance={tableInstance} />
@@ -88,6 +88,45 @@ export const Pagination = () => {
   return (
     <Container>
       <Table instance={tableInstance} />
+    </Container>
+  )
+}
+
+export const Virtualized = () => {
+  const tableInstance = useTable<Faker.Card>({
+    data: new Array(10).fill(0).flatMap(() => FAKE_DATA),
+    columns: COLUMNS,
+  })
+
+  return (
+    <Container>
+      <Table instance={tableInstance} virtualized />
+    </Container>
+  )
+}
+
+export const InfiniteScroll = () => {
+  const [data, setData] = React.useState(FAKE_DATA)
+  const tableInstance = useTable<Faker.Card>(
+    {
+      data,
+      columns: COLUMNS,
+      loadMore: () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setData((currentData) => [...currentData, ...FAKE_DATA])
+            resolve()
+          }, 5000)
+        })
+      },
+      total: 1000,
+    },
+    useInfiniteScroll
+  )
+
+  return (
+    <Container>
+      <Table instance={tableInstance} virtualized />
     </Container>
   )
 }

@@ -18,6 +18,7 @@ export interface TableProps<D extends object> {
   style?: TableStyle
   noDataComponent?: React.ComponentType
   instance: TableInstance<D>
+  virtualized?: boolean
 }
 
 export type RowCharacteristics = {
