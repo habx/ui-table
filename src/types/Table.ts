@@ -4,11 +4,11 @@ import * as ReactTable from 'react-table'
 import {
   UseControlledFiltersInstanceProps,
   UseControlledFiltersOptions,
-} from '../plugin/useControlledFilters/useControlledFilters.interface'
+} from '../plugin/useControlledFilters'
 import {
   UseControlledPaginationInstanceProps,
   UseControlledPaginationOptions,
-} from '../plugin/useControlledPagination/useControlledPagination.interface'
+} from '../plugin/useControlledPagination'
 import {
   UseDensityInstanceProps,
   UseDensityOptions,
@@ -19,6 +19,10 @@ import {
   UseExpandedInstanceProps,
   UseExpandedState,
 } from '../plugin/useExpanded'
+import {
+  UseInfiniteScrollInstanceProps,
+  UseInfiniteScrollOptions,
+} from '../plugin/useInfiniteScroll'
 
 export interface FilterProps<D extends object>
   extends Omit<ReactTable.FilterType<D>, 'column'> {
@@ -61,6 +65,7 @@ export interface TableOptions<D extends object = {}>
     ReactTable.UseSortByOptions<D>,
     ReactTable.UseGroupByOptions<D>,
     UseDensityOptions<D>,
+    UseInfiniteScrollOptions<D>,
     UseControlledPaginationOptions<D>,
     UseControlledFiltersOptions<D> {
   columns: Array<Column<D>>
@@ -88,7 +93,8 @@ export interface TableInstance<D extends object = {}>
     UseExpandedInstanceProps<D>,
     UseDensityInstanceProps<D>,
     UseControlledPaginationInstanceProps<D>,
-    UseControlledFiltersInstanceProps<D> {
+    UseControlledFiltersInstanceProps<D>,
+    UseInfiniteScrollInstanceProps<D> {
   state: TableState<D>
   initialState: TableState<D>
   rows: Array<Row<D>>

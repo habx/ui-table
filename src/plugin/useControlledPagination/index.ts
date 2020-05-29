@@ -1,5 +1,8 @@
 import useControlledPagination from './useControlledPagination'
 
-export { UseControlledPaginationInstanceProps } from './useControlledPagination.interface'
+export {
+  UseControlledPaginationInstanceProps,
+  UseControlledPaginationOptions,
+} from './useControlledPagination.interface'
 
 export default useControlledPagination
