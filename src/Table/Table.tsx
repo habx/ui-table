@@ -142,7 +142,7 @@ const Table = <D extends {}>({
           {headerGroups.map((headerGroup, headerGroupIndex) => (
             <TableHeadRow {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((col, headerCellIndex) => {
-                const column = col as ColumnInstance<D>
+                const column = (col as unknown) as ColumnInstance<D>
                 const headerProps = column.getHeaderProps(
                   ...(column.getSortByToggleProps
                     ? [column.getSortByToggleProps()]
