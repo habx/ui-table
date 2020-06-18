@@ -4,7 +4,7 @@ import { Checkbox } from '@habx/ui-core'
 
 import { CellProps, HeaderProps, Hooks } from '../../types/Table'
 
-const rowSelectPlugin = <D extends object>(hooks: Hooks<D>) => {
+const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
   hooks.visibleColumns.push((columns) => [
     {
       id: 'selection',
@@ -23,4 +23,4 @@ const rowSelectPlugin = <D extends object>(hooks: Hooks<D>) => {
   ])
 }
 
-export default rowSelectPlugin
+export default useRowSelect

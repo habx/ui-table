@@ -4,7 +4,7 @@ import * as ReactTable from 'react-table'
 import TextFilter from '../filter/TextFilter'
 import useControlledFilters from '../plugin/useControlledFilters/useControlledFilters'
 import useControlledPagination from '../plugin/useControlledPagination/useControlledPagination'
-import { UseRowSelectPlugin } from '../plugin/useRowSelect'
+import { useRowSelect } from '../plugin/useRowSelect'
 import HeaderCell from '../Table/HeaderCell'
 import { TableOptions, Column, TableInstance } from '../types/Table'
 
@@ -48,7 +48,7 @@ const useTable = <D extends object = {}>(
   )
 
   if (plugins.find((plugin) => plugin.pluginName === 'useRowSelect')) {
-    plugins.push((UseRowSelectPlugin as unknown) as ReactTable.PluginHook<D>)
+    plugins.push((useRowSelect as unknown) as ReactTable.PluginHook<D>)
   }
   if (options.manualPagination) {
     plugins.push(
@@ -60,7 +60,12 @@ const useTable = <D extends object = {}>(
   }
 
   return (ReactTable.useTable<D>(
-    { ...restOptions, data, columns, defaultColumn },
+    {
+      ...restOptions,
+      data,
+      columns,
+      defaultColumn: defaultColumn as Partial<ReactTable.Column<D>>,
+    },
     ...plugins
   ) as any) as TableInstance<D>
 }
