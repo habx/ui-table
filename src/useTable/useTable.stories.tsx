@@ -242,7 +242,6 @@ export const Sections = () => {
     {
       data: FAKE_DATA,
       columns,
-      expandAll: true,
       initialState: {
         groupBy: ['group'],
       },
