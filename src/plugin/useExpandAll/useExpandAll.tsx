@@ -1,18 +1,19 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
+import { ensurePluginOrder } from 'react-table'
 
 import { TableInstance } from '../../types/Table'
 
 const useInstance = <D extends {}>(instance: TableInstance<D>) => {
-  const { expandAll, data, toggleRowExpanded, expandedRows } = instance
+  const { data, toggleRowExpanded, expandedRows, plugins } = instance
 
   React.useLayoutEffect(() => {
-    if (expandAll) {
-      expandedRows.map(({ id }) => {
-        return toggleRowExpanded(id as any, true)
-      })
-    }
-  }, [expandAll, data, toggleRowExpanded]) // eslint-disable-line
+    expandedRows.map(({ id }) => {
+      return toggleRowExpanded(id as any, true)
+    })
+  }, [ data, toggleRowExpanded]) // eslint-disable-line
+
+  ensurePluginOrder(plugins, ['useExpanded'], 'useExpandAll')
 }
 
 const useExpandAll = (hooks: ReactTable.Hooks<any>) => {

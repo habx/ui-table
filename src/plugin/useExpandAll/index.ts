@@ -1,8 +1,3 @@
-import useExpandedAll from './useExpandedAll'
-
-export {
-  UseExpandAllTableOptions,
-  UseExpandAllTableInstance,
-} from './useExpandAll.interface'
+import useExpandedAll from './useExpandAll'
 
 export default useExpandedAll
