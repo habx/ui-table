@@ -21,10 +21,6 @@ import {
   UseDensityState,
 } from '../plugin/useDensity'
 import {
-  UseExpandAllTableOptions,
-  UseExpandAllTableInstance,
-} from '../plugin/useExpandAll'
-import {
   UseInfiniteScrollInstanceProps,
   UseInfiniteScrollOptions,
 } from '../plugin/useInfiniteScroll'
@@ -88,8 +84,7 @@ export interface TableOptions<D extends object = {}>
     UseDensityOptions<D>,
     UseInfiniteScrollOptions<D>,
     UseControlledPaginationOptions<D>,
-    UseControlledFiltersOptions<D>,
-    UseExpandAllTableOptions<D> {
+    UseControlledFiltersOptions<D> {
   columns: Array<Column<D>>
   defaultColumn?: Partial<Column<D>>
   initialState?: Partial<TableState<D>>
@@ -118,8 +113,7 @@ export interface TableInstance<D extends object = {}>
     UseDensityInstanceProps<D>,
     UseControlledPaginationInstanceProps<D>,
     UseControlledFiltersInstanceProps<D>,
-    UseInfiniteScrollInstanceProps<D>,
-    UseExpandAllTableInstance<D> {
+    UseInfiniteScrollInstanceProps<D> {
   state: TableState<D>
   initialState: TableState<D>
   rows: Array<Row<D>>
