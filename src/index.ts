@@ -28,7 +28,7 @@ export { TableProps, RowCharacteristics } from './Table/Table.interface'
 
 // Plugins
 export { default as useDensity } from './plugin/useDensity'
-export { default as useExpanded } from './plugin/useExpanded'
+export { default as useExpandAll } from './plugin/useExpandAll'
 
 // factories
 export { default as selectFilterFactory } from './filterFactory/selectFilterFactory'

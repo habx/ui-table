@@ -36,6 +36,7 @@ const Table = <D extends {}>({
   loading,
   style = {},
   noDataComponent: NoDataComponent,
+  renderRowSubComponent,
   instance,
   getRowCharacteristics = DEFAULT_ROW_CHARACTERISTICS_GETTER,
   virtualized = false,
@@ -106,6 +107,7 @@ const Table = <D extends {}>({
     style: rawStyle,
   }: ListChildComponentProps) => {
     const row = currentRows[rowIndex]
+
     if (!row) {
       return (
         <div key={`loadingRow-${rowIndex}`} style={rawStyle}>
@@ -113,6 +115,7 @@ const Table = <D extends {}>({
         </div>
       )
     }
+
     return (
       <TableRow
         tableStyle={style}
@@ -123,6 +126,7 @@ const Table = <D extends {}>({
         onClick={handleRowClick}
         style={rawStyle}
         prepareRow={prepareRow}
+        renderRowSubComponent={renderRowSubComponent}
         key={`row-${rowIndex}`}
       />
     )
@@ -142,13 +146,15 @@ const Table = <D extends {}>({
           {headerGroups.map((headerGroup, headerGroupIndex) => (
             <TableHeadRow {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((col, headerCellIndex) => {
-                const column = col as ColumnInstance<D>
+                const column = (col as unknown) as ColumnInstance<D>
+
                 const headerProps = column.getHeaderProps(
                   ...(column.getSortByToggleProps
                     ? [column.getSortByToggleProps()]
                     : [])
                 )
-                const renderHeader = column.render('Header')
+
+                const renderHeader = column.Header && column.render('Header')
                 const isBig =
                   headerGroups.length > 1 &&
                   headerGroupIndex < headerGroups.length - 1
@@ -158,27 +164,29 @@ const Table = <D extends {}>({
                     key={`headerCell-${headerCellIndex}`}
                     size={column.columns?.length ?? 1}
                   >
-                    <Tooltip
-                      title={renderHeader as string}
-                      disabled={!isString(renderHeader) || isBig}
-                    >
-                      <TableHeaderCellContainer
-                        data-align={column.align ?? 'flex-start'}
+                    {renderHeader && (
+                      <Tooltip
+                        title={renderHeader as string}
+                        disabled={!isString(renderHeader) || isBig}
                       >
-                        <TableHeadCellContent opacity={0.5} {...headerProps}>
-                          {renderHeader}
-                        </TableHeadCellContent>
-                        {column.isSorted && (
-                          <Icon
-                            icon={
-                              column.isSortedDesc
-                                ? 'chevron-south'
-                                : 'chevron-north'
-                            }
-                          />
-                        )}
-                      </TableHeaderCellContainer>
-                    </Tooltip>
+                        <TableHeaderCellContainer
+                          data-align={column.align ?? 'flex-start'}
+                        >
+                          <TableHeadCellContent opacity={0.5} {...headerProps}>
+                            {renderHeader}
+                          </TableHeadCellContent>
+                          {column.isSorted && (
+                            <Icon
+                              icon={
+                                column.isSortedDesc
+                                  ? 'chevron-south'
+                                  : 'chevron-north'
+                              }
+                            />
+                          )}
+                        </TableHeaderCellContainer>
+                      </Tooltip>
+                    )}
                     {column.canFilter ? (
                       <TableHeaderCellSort>
                         {column.render('Filter')}
@@ -223,6 +231,7 @@ const Table = <D extends {}>({
                 onClick={handleRowClick}
                 tableStyle={style}
                 prepareRow={prepareRow}
+                renderRowSubComponent={renderRowSubComponent}
                 ref={rowIndex === 0 ? virtualState.firstItemRef : undefined}
                 key={`row-${rowIndex}`}
               />

@@ -9,6 +9,7 @@ import {
   usePagination,
   useSortBy,
   useRowSelect,
+  useExpanded,
 } from 'react-table'
 import styled from 'styled-components'
 
@@ -16,7 +17,7 @@ import { Text } from '@habx/ui-core'
 
 import BooleanCell from '../cell/BooleanCell/BooleanCell'
 import useDensity from '../plugin/useDensity'
-import useExpanded from '../plugin/useExpanded'
+import useExpandAll from '../plugin/useExpandAll'
 import useInfiniteScroll from '../plugin/useInfiniteScroll/useInfiniteScroll'
 import Table from '../Table'
 import { Column } from '../types/Table'
@@ -241,13 +242,13 @@ export const Sections = () => {
     {
       data: FAKE_DATA,
       columns,
-      expandAll: true,
       initialState: {
         groupBy: ['group'],
       },
     },
     useGroupBy,
-    useExpanded
+    useExpanded,
+    useExpandAll
   )
 
   return (
