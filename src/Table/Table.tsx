@@ -68,7 +68,7 @@ const Table = <D extends {}>({
 
   const gridTemplateColumns = React.useMemo(() => {
     const flatColumns = columns.flatMap((column) => column?.columns ?? column)
-    return `${hasRowSelect ? '40px' : ''} ${flatColumns
+    return `${hasRowSelect ? '45px' : ''} ${flatColumns
       .map(({ minWidth, maxWidth }) => {
         const screenWidth =
           typeof window === 'object' ? window.innerWidth : 10000
