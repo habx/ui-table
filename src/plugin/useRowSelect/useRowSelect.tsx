@@ -1,22 +1,30 @@
 import * as React from 'react'
 
-import { Checkbox } from '@habx/ui-core'
+import { Checkbox, Tooltip } from '@habx/ui-core'
 
 import { CellProps, HeaderProps, Hooks } from '../../types/Table'
+
+import { CheckboxContainer } from './useRowSelect.style'
 
 const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
   hooks.visibleColumns.push((columns) => [
     {
       id: 'selection',
       Header: ({ getToggleAllRowsSelectedProps }: HeaderProps<D>) => (
-        <Checkbox {...getToggleAllRowsSelectedProps()} />
+        <Tooltip title="Tout sélectionner">
+          <CheckboxContainer>
+            <Checkbox {...getToggleAllRowsSelectedProps()} />
+          </CheckboxContainer>
+        </Tooltip>
       ),
       Cell: ({ row }: CellProps<D>) => (
-        <Checkbox
-          {...(row.getToggleRowSelectedProps
-            ? row.getToggleRowSelectedProps()
-            : {})}
-        />
+        <CheckboxContainer>
+          <Checkbox
+            {...(row.getToggleRowSelectedProps
+              ? row.getToggleRowSelectedProps()
+              : {})}
+          />
+        </CheckboxContainer>
       ),
     },
     ...columns,
