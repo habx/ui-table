@@ -12,13 +12,13 @@ const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
       id: 'selection',
       Header: ({ getToggleAllRowsSelectedProps }: HeaderProps<D>) => (
         <Tooltip title="Tout sélectionner">
-          <CheckboxContainer>
+          <CheckboxContainer onClick={(e) => e.stopPropagation()}>
             <Checkbox {...getToggleAllRowsSelectedProps()} />
           </CheckboxContainer>
         </Tooltip>
       ),
       Cell: ({ row }: CellProps<D>) => (
-        <CheckboxContainer>
+        <CheckboxContainer onClick={(e) => e.stopPropagation()}>
           <Checkbox
             {...(row.getToggleRowSelectedProps
               ? row.getToggleRowSelectedProps()
