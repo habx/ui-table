@@ -138,7 +138,7 @@ export const TableCell = styled.td`
 
 export const TableHeaderCellContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   user-select: none;
   width: 100%;
   height: 100%;
