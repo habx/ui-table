@@ -81,7 +81,7 @@ export const TableBodyRow = styled.tr`
 
   transition: background-color 50ms ease-in-out;
 
-  &[data-striped='true']:nth-child(2n) {
+  &[data-striped='true']:nth-child(2n + 1) {
     background-color: ${palette.darkBlue[100]};
   }
 
