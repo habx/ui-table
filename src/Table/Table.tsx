@@ -94,14 +94,6 @@ const Table = <D extends {}>({
   const currentRows = hasPagination ? page : rows
   const isItemLoaded = (index: number) => !!currentRows[index]
 
-  if (rows.length === 0 && NoDataComponent) {
-    return (
-      <NoDataContainer>
-        <NoDataComponent />
-      </NoDataContainer>
-    )
-  }
-
   const VirtualRow = ({
     index: rowIndex,
     style: rawStyle,
@@ -198,6 +190,11 @@ const Table = <D extends {}>({
             </TableHeadRow>
           ))}
         </TableHead>
+        {!loading && NoDataComponent && rows.length === 0 && (
+          <NoDataContainer>
+            <NoDataComponent />
+          </NoDataContainer>
+        )}
         <TableBody
           {...getTableBodyProps()}
           ref={virtualState.scrollContainerRef}
