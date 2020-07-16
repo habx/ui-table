@@ -192,9 +192,14 @@ export const ExpandToggleContainer = styled.span`
 export const NoDataContainer = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 200px;
 
+  flex: 1 1 auto;
+  flex-direction: column;
   display: flex;
 
   justify-content: center;
   align-items: center;
+
+  position: relative;
 `
