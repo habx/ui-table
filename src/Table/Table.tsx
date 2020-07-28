@@ -5,7 +5,7 @@ import InfiniteLoader from 'react-window-infinite-loader'
 
 import { Icon, Tooltip } from '@habx/ui-core'
 
-import { ColumnInstance, Row } from '../types/Table'
+import { ColumnInstance } from '../types/Table'
 
 import Density from './Density'
 import LoadingOverlay from './LoadingOverlay'
@@ -50,15 +50,6 @@ const Table = <D extends {}>({
     prepareRow,
     columns,
   } = instance
-
-  const handleRowClick = React.useCallback(
-    (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => {
-      if (onRowClick) {
-        onRowClick(row, event)
-      }
-    },
-    [onRowClick]
-  )
 
   const hasPagination = !!instance.pageOptions //&& !infiniteScroll
   const hasDensity = !!instance.setDensity
@@ -115,7 +106,7 @@ const Table = <D extends {}>({
         row={row}
         getRowCharacteristics={getRowCharacteristics}
         instance={instance}
-        onClick={handleRowClick}
+        onClick={onRowClick}
         style={rawStyle}
         prepareRow={prepareRow}
         renderRowSubComponent={renderRowSubComponent}
@@ -225,7 +216,7 @@ const Table = <D extends {}>({
                 row={row}
                 getRowCharacteristics={getRowCharacteristics}
                 instance={instance}
-                onClick={handleRowClick}
+                onClick={onRowClick}
                 tableStyle={style}
                 prepareRow={prepareRow}
                 renderRowSubComponent={renderRowSubComponent}
