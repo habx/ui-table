@@ -7,7 +7,7 @@ import { ColumnInstance, Row, TableInstance } from '../types/Table'
 import { RowCharacteristics, TableStyle } from './Table.interface'
 import { ExpandToggleContainer, TableBodyRow, TableCell } from './Table.style'
 
-const TableRow = React.forwardRef<HTMLTableRowElement, TableRowInterface<any>>(
+const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
   (props, ref) => {
     const {
       prepareRow,
@@ -49,7 +49,9 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowInterface<any>>(
           style={style}
           ref={ref}
           key={`row-${index}`}
-          onClick={(e) => !row.isGrouped && onClick(row, e)}
+          onClick={
+            onClick && !row.isGrouped ? (e) => onClick(row, e) : undefined
+          }
           data-striped={!row.isGrouped && tableStyle.striped}
           data-clickable={!row.isGrouped && !!onClick && isInteractive}
           data-section={row.isExpanded}
@@ -118,14 +120,14 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowInterface<any>>(
   }
 )
 
-interface TableRowInterface<D extends {}>
+interface TableRowProps<D extends {}>
   extends Omit<React.HTMLAttributes<HTMLTableRowElement>, 'onClick'> {
   prepareRow: (row: Row<D>) => void
   getRowCharacteristics: (row: Row<D>) => Partial<RowCharacteristics>
   row: Row<D>
   instance: TableInstance<D>
   index: number
-  onClick: (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => void
+  onClick?: (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => void
   renderRowSubComponent?: (row: Row<D>) => React.ReactNode
   tableStyle: TableStyle
 }
