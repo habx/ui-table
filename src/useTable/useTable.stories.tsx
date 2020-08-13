@@ -263,6 +263,12 @@ export const SelectRow = () => {
     {
       data: FAKE_DATA,
       columns: COLUMNS,
+      getCheckboxProps: (row) => {
+        if (row.id === '2') {
+          return { disabled: true }
+        }
+        return {}
+      },
     },
     useRowSelect
   )

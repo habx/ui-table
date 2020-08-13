@@ -17,15 +17,18 @@ const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
           </CheckboxContainer>
         </Tooltip>
       ),
-      Cell: ({ row }: CellProps<D>) => (
-        <CheckboxContainer onClick={(e) => e.stopPropagation()}>
-          <Checkbox
-            {...(row.getToggleRowSelectedProps
-              ? row.getToggleRowSelectedProps()
-              : {})}
-          />
-        </CheckboxContainer>
-      ),
+      Cell: ({ row, getCheckboxProps = () => ({}) }: CellProps<D>) => {
+        return (
+          <CheckboxContainer onClick={(e) => e.stopPropagation()}>
+            <Checkbox
+              {...(row.getToggleRowSelectedProps
+                ? row.getToggleRowSelectedProps()
+                : {})}
+              {...getCheckboxProps(row)}
+            />
+          </CheckboxContainer>
+        )
+      },
     },
     ...columns,
   ])

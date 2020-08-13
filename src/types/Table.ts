@@ -6,6 +6,8 @@ import {
   ColumnWithStrictAccessor,
 } from 'react-table'
 
+import CheckboxProps from '@habx/ui-core/dist/typings/Checkbox/Checkbox.interface'
+
 import {
   UseControlledFiltersInstanceProps,
   UseControlledFiltersOptions,
@@ -24,6 +26,10 @@ import {
   UseInfiniteScrollInstanceProps,
   UseInfiniteScrollOptions,
 } from '../plugin/useInfiniteScroll'
+import {
+  UseRowSelectCellProps,
+  UseRowSelectOptions,
+} from '../plugin/useRowSelect/useRowSelect.interface'
 
 export interface FilterProps<D extends object>
   extends Omit<ReactTable.FilterType<D>, 'column'> {
@@ -31,7 +37,8 @@ export interface FilterProps<D extends object>
 }
 
 export interface CellProps<D extends object = {}>
-  extends ReactTable.CellProps<D> {
+  extends ReactTable.CellProps<D>,
+    UseRowSelectCellProps<D> {
   row: Row<D>
 }
 
@@ -84,7 +91,8 @@ export interface TableOptions<D extends object = {}>
     UseDensityOptions<D>,
     UseInfiniteScrollOptions<D>,
     UseControlledPaginationOptions<D>,
-    UseControlledFiltersOptions<D> {
+    UseControlledFiltersOptions<D>,
+    UseRowSelectOptions<D> {
   columns: Array<Column<D>>
   defaultColumn?: Partial<Column<D>>
   initialState?: Partial<TableState<D>>
@@ -149,6 +157,7 @@ export interface Row<D extends object = {}>
   subRows: Array<Row<D>>
   groupByVal?: string
   isGrouped?: boolean
+  getCheckboxProps?: (row: ReactTable.Row<D>) => Partial<CheckboxProps>
 }
 
 export interface Hooks<D extends object>
