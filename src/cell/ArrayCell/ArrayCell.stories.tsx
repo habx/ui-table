@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { FAKE_DATA, BASIC_COLUMNS } from '../../_internal/storyFakeData'
+import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
 import Table from '../../Table'
 import useTable from '../../useTable'
 

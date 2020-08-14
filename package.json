@@ -16,7 +16,7 @@
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o .storybook-static",
     "storybook:deploy": "storybook-to-ghpages -s storybook:build --ci -t=GITHUB_TOKEN",
-    "test": "echo TODO"
+    "test": "jest"
   },
   "files": [
     "dist"
@@ -48,6 +48,7 @@
     "styled-components": ">= 5.0.0"
   },
   "dependencies": {
+    "@testing-library/react": "^10.4.8",
     "@types/papaparse": "^5.0.6",
     "papaparse": "^5.2.0",
     "react-dropzone": "^11.0.3",
@@ -67,7 +68,9 @@
     "@storybook/addon-viewport": "^6.0.3",
     "@storybook/react": "^6.0.3",
     "@storybook/storybook-deployer": "^2.8.1",
+    "@testing-library/react-hooks": "^3.4.1",
     "@types/faker": "^4.1.9",
+    "@types/jest": "^26.0.9",
     "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.11",
     "@types/react-table": "^7.0.17",
@@ -79,12 +82,16 @@
     "bili": "^5.0.2",
     "faker": "^4.1.0",
     "husky": "^4.0.6",
+    "jest": "^26.4.0",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
     "lint-staged": "^10.0.0",
     "lodash": "^4.17.15",
     "react": "^16.11.0",
+    "react-test-renderer": "^16.13.1",
     "rimraf": "^3.0.0",
     "rollup-plugin-typescript2": "^0.27.0",
     "styled-components": "^5.0.0",
+    "ts-jest": "^26.2.0",
     "ts-loader": "^8.0.0",
     "typescript": "^3.6.4"
   },
