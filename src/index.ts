@@ -33,3 +33,14 @@ export { default as useInfiniteScroll } from './plugin/useInfiniteScroll'
 
 // factories
 export { default as selectFilterFactory } from './filterFactory/selectFilterFactory'
+
+// Import / Export
+export { RowValueTypes, IMEXColumn } from './imex/imex.types'
+export { default as useExportTable } from './imex/useExportTable'
+export {
+  default as useImportTable,
+  UseImportTableOptions,
+  UseImportTableParams,
+} from './imex/useImportTable'
+export { default as ImportTableDropzone } from './imex/ImportTableDropzone'
+export { readXLS } from './imex/xls.utils'

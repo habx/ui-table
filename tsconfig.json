@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
+    "downlevelIteration": true,
     "jsx": "react",
     "outDir": "./dist/esm",
     "declarationDir": "./dist/typings",
     "baseUrl": "typings",
     "target": "ES5",
-    "module": "ES2015",
+    "module": "esnext",
     "moduleResolution": "Node",
     "lib": ["ESNext", "DOM"],
     "typeRoots": ["./node_modules/@types", "./typings"],
