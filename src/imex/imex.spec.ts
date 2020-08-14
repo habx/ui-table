@@ -9,13 +9,13 @@ import useImportTable from './useImportTable'
 
 describe('Import/Export (imex)', () => {
   describe('export', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       // @ts-ignore
       global.URL.createObjectURL = jest.fn()
       // @ts-ignore
       global.navigator.msSaveBlob = jest.fn()
     })
-    it('should allow download data', () => {
+    it('should allow download data in CSV', () => {
       const { result } = renderHook(() =>
         useExportTable({
           data: FAKE_DATA,
@@ -30,15 +30,6 @@ describe('Import/Export (imex)', () => {
       expect(window.navigator.msSaveBlob).toHaveBeenCalledWith(
         new Blob(),
         'test.csv'
-      )
-
-      act(() => {
-        const [downloadFile] = result.current
-        downloadFile('test', { type: 'xls' })
-      })
-      expect(window.navigator.msSaveBlob).toHaveBeenCalledWith(
-        new Blob(),
-        'test.xls'
       )
     })
   })
