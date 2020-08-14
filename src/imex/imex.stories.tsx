@@ -1,15 +1,12 @@
-import faker from 'faker'
-import { range } from 'lodash'
 import * as React from 'react'
 import styled from 'styled-components'
 
 import { Button, ActionBar, Provider } from '@habx/ui-core'
 
+import { FAKE_DATA, IMEX_COLUMNS } from '../_fakeData/storyFakeData'
 import Table from '../Table'
 import useTable from '../useTable'
 
-import { IMEXColumn } from './imex.types'
-import ImportTableDropzone from './ImportTableDropzone'
 import useExportTable from './useExportTable'
 import useImportTable from './useImportTable'
 
@@ -18,52 +15,6 @@ const Container = styled.div`
   width: 100vw;
 `
 
-const COLUMNS: IMEXColumn<Faker.Card>[] = [
-  {
-    Header: 'Username',
-    accessor: 'username',
-    meta: {
-      csv: {
-        identifier: true,
-        type: 'string',
-      },
-    },
-  },
-  {
-    Header: 'Name',
-    accessor: 'name',
-    meta: {
-      csv: {
-        type: 'string',
-      },
-    },
-  },
-  {
-    Header: 'Email',
-    accessor: 'email',
-    meta: {
-      csv: {
-        type: 'string',
-      },
-    },
-  },
-  {
-    Header: 'City',
-    accessor: 'address.city',
-    meta: {
-      csv: {
-        type: 'string',
-      },
-    },
-  },
-]
-
-const GROUPS = ['A', 'B', 'C']
-const FAKE_DATA = range(50).map(() => ({
-  ...faker.helpers.createCard(),
-  group: GROUPS[Math.floor(Math.random() * Math.floor(3))],
-}))
-
 export default {
   title: 'Import-Export',
 }
@@ -71,22 +22,22 @@ export default {
 export const BasicExample = () => {
   const tableInstance = useTable<Faker.Card>({
     data: FAKE_DATA,
-    columns: COLUMNS,
+    columns: IMEX_COLUMNS,
   })
   const [downloadTableData] = useExportTable({
     data: FAKE_DATA,
-    columns: COLUMNS,
+    columns: IMEX_COLUMNS,
   })
   const upsertRow = () => new Promise((resolve) => setTimeout(resolve, 1000))
-  const { dropzone, overlays } = useImportTable({
-    columns: COLUMNS,
+  const { dropzone, dropzoneProps, overlays } = useImportTable({
+    columns: IMEX_COLUMNS,
     upsertRow: upsertRow,
     originalData: FAKE_DATA,
   })
 
   return (
     <Provider>
-      <Container>
+      <Container {...dropzoneProps}>
         <ActionBar>
           <Button outline onClick={dropzone.getRootProps().onClick}>
             <input {...dropzone.getInputProps()} />
@@ -100,13 +51,7 @@ export const BasicExample = () => {
           </Button>
         </ActionBar>
         {overlays}
-        <ImportTableDropzone
-          columns={COLUMNS}
-          originalData={FAKE_DATA}
-          upsertRow={upsertRow}
-        >
-          <Table instance={tableInstance} />
-        </ImportTableDropzone>
+        <Table instance={tableInstance} />
       </Container>
     </Provider>
   )

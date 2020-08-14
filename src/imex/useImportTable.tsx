@@ -56,7 +56,7 @@ export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
       files: File[],
       options?: Partial<UseImportTableOptions<D>>
     ) => Promise<void>
-  ) => (files: File[], event: DropEvent) => Promise<void>
+  ) => (files: File[], event?: DropEvent) => Promise<void>
 }
 
 const cleanHeader = (header: string | number | {}) =>
@@ -64,7 +64,7 @@ const cleanHeader = (header: string | number | {}) =>
 
 const DEFAULT_ACCEPT = ['.csv', '.xls', '.xlsx']
 
-const useImportTable = <D extends { id: string }>(
+const useImportTable = <D extends { id?: string | number }>(
   params: Partial<UseImportTableParams<D>>
 ) => {
   const [isParsing, setParsing] = React.useState<boolean>(false)
@@ -373,7 +373,7 @@ const useImportTable = <D extends { id: string }>(
   )
 
   const onDropAccepted = React.useCallback(
-    (files: File[], event: DropEvent) =>
+    (files: File[], event?: DropEvent) =>
       params.onBeforeDropAccepted
         ? params.onBeforeDropAccepted(onFiles)(files, event)
         : onFiles(files),

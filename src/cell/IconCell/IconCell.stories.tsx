@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { palette } from '@habx/ui-core'
 
-import { FAKE_DATA, BASIC_COLUMNS } from '../../_internal/storyFakeData'
+import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
 import Table from '../../Table'
 import useTable from '../../useTable'
 
