@@ -31,6 +31,8 @@ import {
   UseRowSelectOptions,
 } from '../plugin/useRowSelect/useRowSelect.interface'
 
+import { IMEXColumn } from '..'
+
 export interface FilterProps<D extends object>
   extends Omit<ReactTable.FilterType<D>, 'column'> {
   column: ColumnInstance<D>
@@ -93,7 +95,7 @@ export interface TableOptions<D extends object = {}>
     UseControlledPaginationOptions<D>,
     UseControlledFiltersOptions<D>,
     UseRowSelectOptions<D> {
-  columns: Array<Column<D>>
+  columns: Array<Column<D> | IMEXColumn<D>>
   defaultColumn?: Partial<Column<D>>
   initialState?: Partial<TableState<D>>
 }
