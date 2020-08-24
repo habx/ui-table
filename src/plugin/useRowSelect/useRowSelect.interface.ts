@@ -8,4 +8,6 @@ export interface UseRowSelectCellProps<D extends {}> {
 
 export interface UseRowSelectOptions<D extends {}>
   extends ReactTable.UseRowSelectOptions<D>,
-    UseRowSelectCellProps<D> {}
+    UseRowSelectCellProps<D> {
+  canSelectAll?: boolean
+}
