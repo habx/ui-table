@@ -27,8 +27,11 @@ const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
       [multi, filter, options.length]
     )
     const selectOptions = React.useMemo(
-      () => (multi ? options : [{ value: 'all', label: 'Tout' }, ...options]),
-      [options, multi]
+      () =>
+        multi || !other.canSelectAll
+          ? options
+          : [{ value: 'all', label: 'Tout' }, ...options],
+      [options, multi, other.canSelectAll]
     )
 
     return (
