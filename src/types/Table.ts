@@ -28,6 +28,7 @@ import {
 } from '../plugin/useInfiniteScroll'
 import {
   UseRowSelectCellProps,
+  UseRowSelectInterfaceProps,
   UseRowSelectOptions,
 } from '../plugin/useRowSelect/useRowSelect.interface'
 
@@ -121,9 +122,11 @@ export interface TableInstance<D extends object = {}>
     ReactTable.UseGroupByInstanceProps<D>,
     ReactTable.UseExpandedInstanceProps<D>,
     UseDensityInstanceProps<D>,
+    UseDensityInstanceProps<D>,
     UseControlledPaginationInstanceProps<D>,
     UseControlledFiltersInstanceProps<D>,
-    UseInfiniteScrollInstanceProps<D> {
+    UseInfiniteScrollInstanceProps<D>,
+    UseRowSelectInterfaceProps<D> {
   state: TableState<D>
   initialState: TableState<D>
   rows: Array<Row<D>>
