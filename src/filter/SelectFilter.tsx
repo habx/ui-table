@@ -14,9 +14,10 @@ const StyledSelect = styled(Select)`
 const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
   (props, ref) => {
     const { options, multi = false, column, ...other } = props
-    const defaultValue = React.useMemo(() => (multi ? undefined : 'all'), [
-      multi,
-    ])
+    const defaultValue = React.useMemo(
+      () => (multi || !other.canSelectAll ? undefined : 'all'),
+      [multi, other.canSelectAll]
+    )
     const filter = column.filterValue
     const handleChange = column.setFilter
     const placeholder = React.useMemo(
