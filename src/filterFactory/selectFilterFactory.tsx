@@ -12,10 +12,10 @@ const selectFilterFactory = (
   >> = (props) => (
     <SelectFilter
       {...props}
-      {...otherProps}
       options={options}
       canSelectAll
       selectAllLabel="Tout selectionner"
+      {...otherProps}
     />
   )
 
