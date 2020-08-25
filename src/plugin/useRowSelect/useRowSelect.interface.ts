@@ -12,11 +12,5 @@ export interface UseRowSelectOptions<D extends {}>
   canSelectAll?: boolean
 }
 
-export interface UseRowSelectOptions<D extends {}>
-  extends ReactTable.UseRowSelectOptions<D>,
-    UseRowSelectCellProps<D> {
-  canSelectAll?: boolean
-}
-
 export interface UseRowSelectInterfaceProps<D extends {}>
   extends UseRowSelectOptions<D> {}
