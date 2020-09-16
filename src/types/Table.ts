@@ -43,8 +43,8 @@ export interface FilterProps<D extends object>
   column: ColumnInstance<D>
 }
 
-export interface CellProps<D extends object = {}>
-  extends ReactTable.CellProps<D>,
+export interface CellProps<D extends object = {}, V = any>
+  extends ReactTable.CellProps<D, V>,
     UseRowSelectCellProps<D> {
   row: Row<D>
 }
@@ -87,7 +87,7 @@ export type Column<D extends { [key: string]: any } = any, Meta = {}> =
 export interface TableOptions<D extends object = {}>
   extends Omit<
       ReactTable.TableOptions<D>,
-      'columns' | 'initialState' | 'defaultColumn'
+      'columns' | 'initialState' | 'defaultColumn' | 'data'
     >,
     ReactTable.UseFiltersOptions<D>,
     ReactTable.UsePaginationOptions<D>,
@@ -104,6 +104,7 @@ export interface TableOptions<D extends object = {}>
   columns: Array<Column<D> | IMEXColumn<D>>
   defaultColumn?: Partial<Column<D>>
   initialState?: Partial<TableState<D>>
+  data?: D[] | null
 }
 
 export interface TableState<D extends object>
