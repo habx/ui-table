@@ -2,8 +2,9 @@ import * as React from 'react'
 import * as ReactTable from 'react-table'
 
 import TextFilter from '../filter/TextFilter'
-import useControlledFilters from '../plugin/useControlledFilters/useControlledFilters'
-import useControlledPagination from '../plugin/useControlledPagination/useControlledPagination'
+import useControlledFilters from '../plugin/useControlledFilters'
+import useControlledPagination from '../plugin/useControlledPagination'
+import useControlledSortBy from '../plugin/useControlledSortBy'
 import { useRowSelect } from '../plugin/useRowSelect'
 import HeaderCell from '../Table/HeaderCell'
 import { TableOptions, Column, TableInstance } from '../types/Table'
@@ -50,13 +51,19 @@ const useTable = <D extends object = {}>(
   if (plugins.find((plugin) => plugin.pluginName === 'useRowSelect')) {
     plugins.push((useRowSelect as unknown) as ReactTable.PluginHook<D>)
   }
+
   if (options.manualPagination) {
     plugins.push(
       (useControlledPagination as unknown) as ReactTable.PluginHook<D>
     )
   }
+
   if (options.manualFilters) {
     plugins.push((useControlledFilters as unknown) as ReactTable.PluginHook<D>)
+  }
+
+  if (options.manualSortBy) {
+    plugins.push((useControlledSortBy as unknown) as ReactTable.PluginHook<D>)
   }
 
   return (ReactTable.useTable<D>(
