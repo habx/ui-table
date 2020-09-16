@@ -17,6 +17,10 @@ import {
   UseControlledPaginationOptions,
 } from '../plugin/useControlledPagination'
 import {
+  UseControlledSortByInstanceProps,
+  UseControlledSortByOptions,
+} from '../plugin/useControlledSortBy'
+import {
   UseDensityInstanceProps,
   UseDensityOptions,
   UseDensityColumnProps,
@@ -95,6 +99,7 @@ export interface TableOptions<D extends object = {}>
     UseInfiniteScrollOptions<D>,
     UseControlledPaginationOptions<D>,
     UseControlledFiltersOptions<D>,
+    UseControlledSortByOptions<D>,
     UseRowSelectOptions<D> {
   columns: Array<Column<D> | IMEXColumn<D>>
   defaultColumn?: Partial<Column<D>>
@@ -125,6 +130,7 @@ export interface TableInstance<D extends object = {}>
     UseDensityInstanceProps<D>,
     UseControlledPaginationInstanceProps<D>,
     UseControlledFiltersInstanceProps<D>,
+    UseControlledSortByInstanceProps<D>,
     UseInfiniteScrollInstanceProps<D>,
     UseRowSelectInterfaceProps<D> {
   state: TableState<D>
