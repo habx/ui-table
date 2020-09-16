@@ -22,7 +22,7 @@ const useTable = <D extends object = {}>(
     ...restOptions
   } = options
 
-  const data: typeof rawData = rawData?.length > 0 ? rawData : EMPTY_DATA
+  const data: D[] = rawData ?? EMPTY_DATA
 
   const columns = React.useMemo<ReactTable.Column<D>[]>(
     () =>
