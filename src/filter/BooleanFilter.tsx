@@ -2,29 +2,38 @@ import * as React from 'react'
 
 import { Select } from '@habx/ui-core'
 
-import { BooleanFilterValues } from '../filterMethod/booleanFilter'
 import { ColumnInstance } from '../types/Table'
 
-const OPTIONS = [
-  { label: 'Tout', value: BooleanFilterValues.All },
-  { label: 'Oui', value: BooleanFilterValues.Truthy },
-  { label: 'Non', value: BooleanFilterValues.Falsy },
+const OPTIONS_WITHOUT_NULL = [
+  { label: 'Oui', value: true },
+  { label: 'Non', value: false },
+]
+
+const OPTIONS_WITH_NULL = [
+  { label: 'Tout', value: null },
+  ...OPTIONS_WITHOUT_NULL,
 ]
 
 const BooleanFilter: React.FunctionComponent<BooleanFilterProps> = ({
   column,
-}) => (
-  <Select
-    small
-    canReset={false}
-    value={column?.filterValue ?? BooleanFilterValues.All}
-    onChange={(newValue) => column.setFilter(newValue)}
-    options={OPTIONS}
-  />
-)
+  canBeNull = true,
+}) => {
+  const rawValue = column.filterValue ?? null
+
+  return (
+    <Select
+      small
+      canReset={false}
+      value={canBeNull ? rawValue : !!rawValue}
+      onChange={(newValue) => column.setFilter(newValue)}
+      options={canBeNull ? OPTIONS_WITH_NULL : OPTIONS_WITHOUT_NULL}
+    />
+  )
+}
 
 interface BooleanFilterProps {
   column: ColumnInstance<any>
+  canBeNull?: boolean
 }
 
 export default BooleanFilter
