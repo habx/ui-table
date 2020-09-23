@@ -7,6 +7,7 @@ import {
   omit,
   lowerCase,
   deburr,
+  isNil,
   groupBy as lodashGroupBy,
 } from 'lodash'
 import Papa from 'papaparse'
@@ -240,6 +241,7 @@ const useImportTable = <D extends { id?: string | number }>(
             rawProps.row.original?.prevVal,
             column.accessor as string
           )
+
           const cellPrevProps = {
             ...props,
             cell: {
@@ -249,7 +251,7 @@ const useImportTable = <D extends { id?: string | number }>(
           }
           // using lodash merge causes performance issues
 
-          if (cellPrevVal === undefined) {
+          if (isNil(cellPrevVal)) {
             return (
               <NewCell>
                 <Cell {...props} />
@@ -258,7 +260,7 @@ const useImportTable = <D extends { id?: string | number }>(
           }
 
           if (
-            props.cell.value === undefined ||
+            isNil(props.cell.value) ||
             softCompare(cellPrevVal, props.cell.value)
           ) {
             return <Cell {...cellPrevProps} />
