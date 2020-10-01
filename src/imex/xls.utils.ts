@@ -15,16 +15,32 @@ export const readXLS = async (file: File) => {
 
 export const exportXLS = async (filename: string, data: any[][]) => {
   const xlsx = await getXLSX()
+
   const [headers, ...rows] = data
-  const jsonData = rows.map((row) =>
-    headers.reduce(
-      (ctx, header, i) => ({
+
+  const jsonData = []
+  for (const rowIndex in rows) {
+    const row = rows[rowIndex]
+    const rowJsonData: Record<string, string> = {}
+    for (const headerIndex in headers) {
+      rowJsonData[headers[headerIndex]] = Array.isArray(row[headerIndex])
+        ? row[headerIndex].join(',')
+        : row[headerIndex]
+    }
+    jsonData.push(rowJsonData)
+  }
+
+  if (!jsonData.length) {
+    const emptyRow = headers.reduce(
+      (ctx, header) => ({
         ...ctx,
-        [header]: Array.isArray(row[i]) ? row[i].join(',') : row[i],
+        [header]: '',
       }),
       {}
     )
-  )
+    jsonData.push(emptyRow)
+  }
+
   const workSheet = xlsx.utils.json_to_sheet(jsonData)
   const workBook = xlsx.utils.book_new()
   xlsx.utils.book_append_sheet(workBook, workSheet, 'export')
