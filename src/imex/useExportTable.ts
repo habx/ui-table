@@ -7,7 +7,7 @@ import { exportToCSV } from './imex.utils'
 import { exportXLS } from './xls.utils'
 
 type UseExportCsvParams<D> = {
-  data: D[]
+  data?: D[]
   columns: IMEXColumn[]
   type?: 'csv' | 'xls'
 }
@@ -15,7 +15,7 @@ type UseExportCsvParams<D> = {
 const useExportTable = <D extends object>(params: UseExportCsvParams<D>) => {
   const downloadTableData = React.useCallback(
     (title: string, options: Partial<UseExportCsvParams<D>> = {}) => {
-      const { type = 'csv', data, columns } = { ...params, ...options }
+      const { type = 'csv', data = [], columns } = { ...params, ...options }
       const csvColumns = getImexColumns(columns)
       const csvData = data.map((row) =>
         csvColumns.map(({ accessor, meta }) => {

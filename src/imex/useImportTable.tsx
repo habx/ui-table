@@ -42,7 +42,7 @@ import { readXLS } from './xls.utils'
 export interface UseImportTableOptions<D> {
   columns: IMEXColumn<D>[]
   upsertRow: (row: D | D[]) => any
-  originalData: D[]
+  getOriginalData: () => D[] | Promise<D[]>
   onFinish?: () => void
   readFile?: (file: File) => Promise<any[]>
   filterRows?: (row: D & { prevVal?: D; hasDiff?: boolean }) => boolean
@@ -76,7 +76,7 @@ const useImportTable = <D extends { id?: string | number }>(
       const {
         readFile,
         columns: _columns,
-        originalData,
+        getOriginalData,
         onFinish,
         upsertRow,
         filterRows,
@@ -88,11 +88,11 @@ const useImportTable = <D extends { id?: string | number }>(
 
       const columns = _columns as IMEXColumn<D>[]
 
-      const remainingOriginalData = [...originalData]
-
       const csvColumns = getImexColumns(columns)
 
-      const parseCsvFile = (csvData: any) => {
+      const parseCsvFile = async (csvData: any) => {
+        const originalData = getOriginalData ? await getOriginalData() : []
+
         const { data: _data } = Papa.parse(csvData)
         const data = _data as string[][]
 
@@ -210,13 +210,13 @@ const useImportTable = <D extends { id?: string | number }>(
               )
             }, {})
             const prevValId = get(csvRow, identifierColumn.accessor as string)
-            const prevValIndex = remainingOriginalData.findIndex(
+            const prevValIndex = originalData.findIndex(
               (originalRow) =>
                 get(originalRow, identifierColumn.accessor as string) ===
                 prevValId
             )
-            const prevVal = remainingOriginalData[prevValIndex]
-            remainingOriginalData.splice(prevValIndex, 1)
+            const prevVal = originalData[prevValIndex]
+            originalData.splice(prevValIndex, 1)
             const newRow = {
               ...csvRow,
               prevVal,
@@ -294,7 +294,9 @@ const useImportTable = <D extends { id?: string | number }>(
           rawCsvData = await readXLS(file)
         }
 
-        const parsedData = ((parseCsvFile(rawCsvData) as unknown) as (D & {
+        const parsedData = (((await parseCsvFile(
+          rawCsvData
+        )) as unknown) as (D & {
           hasDiff: boolean
         })[]).filter((csvRow) =>
           filterRows ? filterRows(csvRow) : csvRow.hasDiff
