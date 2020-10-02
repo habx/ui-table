@@ -1,20 +1,20 @@
 import {
-  set,
-  merge,
+  deburr,
   difference,
   get,
-  isFunction,
-  omit,
-  lowerCase,
-  deburr,
-  isNil,
   groupBy as lodashGroupBy,
+  isFunction,
+  isNil,
+  lowerCase,
+  merge,
+  omit,
+  set,
 } from 'lodash'
 import Papa from 'papaparse'
 import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
-import { useGroupBy, useExpanded } from 'react-table'
 import * as ReactTable from 'react-table'
+import { useExpanded, useGroupBy } from 'react-table'
 
 import { ActionBar, Button, notify, prompt, Text } from '@habx/ui-core'
 
@@ -36,13 +36,13 @@ import {
   PrevCell,
 } from './imex.style'
 import { IMEXColumn } from './imex.types'
-import { softCompare, readCsvFile } from './imex.utils'
+import { readCsvFile, softCompare } from './imex.utils'
 import { readXLS } from './xls.utils'
 
 export interface UseImportTableOptions<D> {
   columns: IMEXColumn<D>[]
   upsertRow: (row: D | D[]) => any
-  originalData: D[]
+  getOriginalData: () => D[] | Promise<D[]>
   onFinish?: () => void
   readFile?: (file: File) => Promise<any[]>
   filterRows?: (row: D & { prevVal?: D; hasDiff?: boolean }) => boolean
@@ -76,7 +76,7 @@ const useImportTable = <D extends { id?: string | number }>(
       const {
         readFile,
         columns: _columns,
-        originalData,
+        getOriginalData,
         onFinish,
         upsertRow,
         filterRows,
@@ -88,11 +88,11 @@ const useImportTable = <D extends { id?: string | number }>(
 
       const columns = _columns as IMEXColumn<D>[]
 
-      const remainingOriginalData = [...originalData]
-
       const csvColumns = getImexColumns(columns)
 
-      const parseCsvFile = (csvData: any) => {
+      const parseCsvFile = async (csvData: any) => {
+        const originalData = getOriginalData ? await getOriginalData() : []
+
         const { data: _data } = Papa.parse(csvData)
         const data = _data as string[][]
 
@@ -208,22 +208,21 @@ const useImportTable = <D extends { id?: string | number }>(
                 ctx,
                 set({}, orderedColumns[index]?.accessor as string, cellValue)
               )
-            }, {})
+            }, {}) as D
             const prevValId = get(csvRow, identifierColumn.accessor as string)
-            const prevValIndex = remainingOriginalData.findIndex(
+            const prevValIndex = originalData.findIndex(
               (originalRow) =>
                 get(originalRow, identifierColumn.accessor as string) ===
                 prevValId
             )
-            const prevVal = remainingOriginalData[prevValIndex]
-            remainingOriginalData.splice(prevValIndex, 1)
-            const newRow = {
+            const prevVal: D = originalData[prevValIndex]
+            originalData.splice(prevValIndex, 1)
+            return {
               ...csvRow,
               prevVal,
               hasDiff: !softCompare(csvRow, prevVal),
               id: prevVal?.id ?? undefined,
             }
-            return newRow
           })
         return parsedData
       }
@@ -294,9 +293,7 @@ const useImportTable = <D extends { id?: string | number }>(
           rawCsvData = await readXLS(file)
         }
 
-        const parsedData = ((parseCsvFile(rawCsvData) as unknown) as (D & {
-          hasDiff: boolean
-        })[]).filter((csvRow) =>
+        const parsedData = (await parseCsvFile(rawCsvData)).filter((csvRow) =>
           filterRows ? filterRows(csvRow) : csvRow.hasDiff
         )
         setParsing(false)
