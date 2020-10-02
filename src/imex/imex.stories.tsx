@@ -32,7 +32,7 @@ export const BasicExample = () => {
   const { dropzone, dropzoneProps, overlays } = useImportTable({
     columns: IMEX_COLUMNS,
     upsertRow: upsertRow,
-    originalData: FAKE_DATA,
+    getOriginalData: () => FAKE_DATA,
   })
 
   return (

@@ -38,7 +38,7 @@ describe('Import/Export (imex)', () => {
     it('should parse files', async () => {
       const { result, waitFor } = renderHook(() =>
         useImportTable({
-          originalData: FAKE_DATA,
+          getOriginalData: () => FAKE_DATA,
           columns: IMEX_COLUMNS,
         })
       )
