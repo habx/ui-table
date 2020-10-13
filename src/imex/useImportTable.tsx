@@ -316,13 +316,18 @@ const useImportTable = <D extends { id?: string | number }>(
               ...plugins
             )
             return (
-              <ConfirmContainer>
+              <ConfirmContainer data-testid="useImportTable-confirmContainer">
                 <Table style={{ scrollable: true }} instance={tableInstance} />
                 <ActionBar>
                   <Button warning onClick={() => onResolve(false)}>
                     Annuler
                   </Button>
-                  <Button onClick={() => onResolve(true)}>Valider</Button>
+                  <Button
+                    onClick={() => onResolve(true)}
+                    data-testid="useImportTable-submit"
+                  >
+                    Valider
+                  </Button>
                 </ActionBar>
               </ConfirmContainer>
             )
