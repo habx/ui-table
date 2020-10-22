@@ -91,7 +91,10 @@ const useImportTable = <D extends { id?: string | number }>(
       const csvColumns = getImexColumns(columns)
 
       const parseCsvFile = async (csvData: any) => {
-        const originalData = getOriginalData ? await getOriginalData() : []
+        // clone original data array
+        const originalData = [
+          ...(getOriginalData ? await getOriginalData() : []),
+        ]
 
         const { data: _data } = Papa.parse(csvData)
         const data = _data as string[][]
