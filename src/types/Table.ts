@@ -6,7 +6,7 @@ import {
   ColumnWithStrictAccessor,
 } from 'react-table'
 
-import CheckboxProps from '@habx/ui-core/dist/typings/Checkbox/Checkbox.interface'
+import { CheckboxProps } from '@habx/ui-core'
 
 import {
   UseControlledFiltersInstanceProps,
