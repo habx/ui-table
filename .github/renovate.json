@@ -1,0 +1,98 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "encrypted": {
+    "npmToken": "ZGTuTXf1p5UE2/GLJZDA7K+CaWqaYU1E6szBC2IhR3/IGscIM3987vTD6cwqJs1ZA0eAl4jt1t7rocRC6y53gD/qMI8b3jUSegKd71Jau6yjj0U9DJTn7n39C6MtM103Zb6pk4I1RVV63fts2GnjtAUmQHnlweV3T5S+ZiEW+uIfJVL1A8mL5diVcdIntDf4vLAKuZVId8pk64ZCC9/EI/dexLymA+jyUO3FFnoA5jLsBvP+l7bWgxSyPqFcy64hCHGXLZyNJAI28THEG15zPBpNYxlB2wGARli7R5FDhi9hrvCr3PeMgKxmjYkKykBT5kbThB74lrEdEWyqiD2qCA=="
+  },
+  "npmrc": "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}\n@habx:registry=https://npm.pkg.github.com/habx",
+  "masterIssue": true,
+  "rangeStrategy": "bump",
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 50,
+  "enabledManagers": [
+    "npm"
+  ],
+  "packageRules": [
+    {
+      "updateTypes": [
+        "minor",
+        "patch"
+      ],
+      "depTypeList": [
+        "devDependencies"
+      ],
+      "automerge": true,
+      "labels": [
+        "habx-automerge"
+      ]
+    },
+    {
+      "updateTypes": [
+        "patch"
+      ],
+      "depTypeList": [
+        "dependencies",
+        "peerDependencies"
+      ],
+      "automerge": true,
+      "labels": [
+        "habx-automerge"
+      ]
+    },
+    {
+      "packageNames": [
+        "three"
+      ],
+      "automerge": false,
+      "stabilityDays": 7
+    },
+    {
+      "packagePatterns": [
+        "^@habx/"
+      ],
+      "updateTypes": [
+        "minor",
+        "patch"
+      ],
+      "prPriority": 5,
+      "automerge": true,
+      "labels": [
+        "habx-automerge"
+      ]
+    },
+    {
+      "packageNames": [
+        "lodash",
+        "typescript",
+        "lint-staged"
+      ],
+      "updateTypes": [
+        "major",
+        "minor",
+        "patch"
+      ],
+      "automerge": true,
+      "prPriority": -5,
+      "labels": [
+        "habx-automerge"
+      ]
+    },
+    {
+      "packagePatterns": [
+        "^@sentry/",
+        "^@types/"
+      ],
+      "updateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true,
+      "prPriority": -10,
+      "labels": [
+        "habx-automerge"
+      ]
+    }
+  ]
+}
