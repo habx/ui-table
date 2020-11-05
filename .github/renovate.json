@@ -9,8 +9,8 @@
   "npmrc": "//npm.pkg.github.com/:_authToken=${NPM_TOKEN}\n@habx:registry=https://npm.pkg.github.com/habx",
   "masterIssue": true,
   "rangeStrategy": "bump",
-  "prConcurrentLimit": 10,
-  "prHourlyLimit": 50,
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 10,
   "enabledManagers": [
     "npm"
   ],
