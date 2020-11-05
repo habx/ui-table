@@ -351,8 +351,8 @@ const useImportTable = <D extends { id?: string | number }>(
             remainingActions.onActionDone()
           }
           notify({
-            title: 'Import terminé',
-            description: `${dataToUpsert.length} ligne(s) importée(s)`,
+            message: `Import terminé\n${dataToUpsert.length} ligne(s) importée(s)`,
+            markdown: true,
           })
           if (isFunction(onFinish)) {
             onFinish(dataToUpsert)
