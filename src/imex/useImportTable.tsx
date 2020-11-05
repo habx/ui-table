@@ -43,7 +43,7 @@ export interface UseImportTableOptions<D> {
   columns: IMEXColumn<D>[]
   upsertRow: (row: D | D[]) => any
   getOriginalData: () => D[] | Promise<D[]>
-  onFinish?: () => void
+  onFinish?: (rows: D[] | D[][]) => void
   readFile?: (file: File) => Promise<any[]>
   filterRows?: (row: D & { prevVal?: D; hasDiff?: boolean }) => boolean
   groupBy?: string
@@ -355,7 +355,7 @@ const useImportTable = <D extends { id?: string | number }>(
             description: `${dataToUpsert.length} ligne(s) importée(s)`,
           })
           if (isFunction(onFinish)) {
-            onFinish()
+            onFinish(dataToUpsert)
           }
         }
       } catch (e) {
