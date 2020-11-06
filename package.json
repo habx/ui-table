@@ -79,7 +79,7 @@
     "@types/styled-components": "^5.0.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.1.0",
-    "bili": "^5.0.2",
+    "bili": "^5.0.5",
     "faker": "^5.1.0",
     "husky": "^4.3.0",
     "jest": "^26.6.3",
