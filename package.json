@@ -51,7 +51,7 @@
     "@testing-library/react": "^11.1.1",
     "@types/papaparse": "^5.0.6",
     "papaparse": "^5.2.0",
-    "react-dropzone": "^11.0.3",
+    "react-dropzone": "^11.2.3",
     "react-table": "^7.0.0",
     "react-window": "^1.8.5",
     "react-window-infinite-loader": "^1.0.5",
