@@ -45,7 +45,7 @@
     "@habx/ui-core": "^4.1.0",
     "lodash": ">=4.17.15",
     "react": ">= 16.11.0",
-    "styled-components": ">= 5.0.0"
+    "styled-components": ">= 5.2.1"
   },
   "dependencies": {
     "@testing-library/react": "^11.1.1",
@@ -76,7 +76,7 @@
     "@types/react-table": "^7.0.25",
     "@types/react-window": "^1.8.2",
     "@types/react-window-infinite-loader": "^1.0.3",
-    "@types/styled-components": "^5.0.0",
+    "@types/styled-components": "^5.1.4",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.1.0",
     "bili": "^5.0.5",
@@ -90,7 +90,7 @@
     "react-test-renderer": "^16.14.0",
     "rimraf": "^3.0.2",
     "rollup-plugin-typescript2": "^0.29.0",
-    "styled-components": "^5.0.0",
+    "styled-components": "^5.2.1",
     "ts-jest": "^26.4.3",
     "ts-loader": "^8.0.9",
     "typescript": "^3.6.4"
