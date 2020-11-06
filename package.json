@@ -67,7 +67,7 @@
     "@storybook/addon-knobs": "^6.0.3",
     "@storybook/addon-viewport": "^6.0.3",
     "@storybook/react": "^6.0.3",
-    "@storybook/storybook-deployer": "^2.8.1",
+    "@storybook/storybook-deployer": "^2.8.7",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/faker": "^5.1.4",
     "@types/jest": "^26.0.9",
