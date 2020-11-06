@@ -92,7 +92,7 @@
     "rollup-plugin-typescript2": "^0.29.0",
     "styled-components": "^5.0.0",
     "ts-jest": "^26.4.3",
-    "ts-loader": "^8.0.0",
+    "ts-loader": "^8.0.9",
     "typescript": "^3.6.4"
   },
   "storybook-deployer": {
