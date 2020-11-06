@@ -52,7 +52,7 @@
     "@types/papaparse": "^5.2.4",
     "papaparse": "^5.3.0",
     "react-dropzone": "^11.2.3",
-    "react-table": "^7.0.0",
+    "react-table": "^7.6.1",
     "react-window": "^1.8.5",
     "react-window-infinite-loader": "^1.0.5",
     "xlsx": "^0.16.6"
@@ -73,7 +73,7 @@
     "@types/jest": "^26.0.9",
     "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.11",
-    "@types/react-table": "^7.0.17",
+    "@types/react-table": "^7.0.25",
     "@types/react-window": "^1.8.2",
     "@types/react-window-infinite-loader": "^1.0.3",
     "@types/styled-components": "^5.0.0",
