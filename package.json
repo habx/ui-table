@@ -70,7 +70,7 @@
     "@storybook/storybook-deployer": "^2.8.7",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/faker": "^5.1.4",
-    "@types/jest": "^26.0.9",
+    "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.149",
     "@types/react": "^16.9.11",
     "@types/react-table": "^7.0.25",
