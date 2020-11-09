@@ -14,12 +14,9 @@ const StyledSelect = styled(Select)`
 const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
   (props, ref) => {
     const { options, multi = false, column, ...other } = props
-    const defaultValue = React.useMemo(
-      () => (multi || !other.canSelectAll ? undefined : 'all'),
-      [multi, other.canSelectAll]
-    )
     const filter = column.filterValue
     const handleChange = column.setFilter
+
     const placeholder = React.useMemo(
       () =>
         multi
@@ -27,11 +24,12 @@ const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
           : undefined,
       [multi, filter, options.length]
     )
+
     const selectOptions = React.useMemo(
       () =>
         multi || !other.canSelectAll
           ? options
-          : [{ value: 'all', label: 'Tout' }, ...options],
+          : [{ label: 'Tout', value: undefined }, ...options],
       [options, multi, other.canSelectAll]
     )
 
@@ -39,7 +37,7 @@ const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
       <StyledSelect
         ref={ref}
         style={{ width: '100%' }}
-        value={filter ?? defaultValue}
+        value={filter}
         options={selectOptions}
         canReset={!!multi}
         small
