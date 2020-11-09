@@ -14,7 +14,7 @@ const selectFilterFactory = (
       {...props}
       options={options}
       canSelectAll
-      selectAllLabel="Tout selectionner"
+      selectAllLabel="Tout sélectionner"
       {...otherProps}
     />
   )
