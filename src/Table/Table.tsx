@@ -10,7 +10,6 @@ import { ColumnInstance } from '../types/Table'
 import Density from './Density'
 import LoadingOverlay from './LoadingOverlay'
 import LoadingRow from './LoadingRow'
-import Pagination from './Pagination'
 import { TableProps } from './Table.interface'
 import {
   TableContainer,
@@ -25,6 +24,7 @@ import {
   NoDataContainer,
   TableHeaderCellContainer,
 } from './Table.style'
+import TablePagination from './TablePagination'
 import TableRow from './TableRow'
 import useVirtualize from './useVirtualize'
 
@@ -228,7 +228,7 @@ const Table = <D extends {}>({
         </TableBody>
       </TableContent>
       <TableOptionBar>
-        {hasPagination && <Pagination instance={instance} />}
+        {hasPagination && <TablePagination instance={instance} />}
         {hasDensity && <Density instance={instance} />}
       </TableOptionBar>
     </TableContainer>
