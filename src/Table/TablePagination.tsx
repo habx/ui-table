@@ -47,7 +47,9 @@ const PAGE_SIZE_OPTIONS = [10, 20, 30, 40, 50].map((value) => ({
   label: `${value}`,
 }))
 
-const Pagination: React.FunctionComponent<PaginationProps> = ({ instance }) => (
+const TablePagination: React.FunctionComponent<PaginationProps> = ({
+  instance,
+}) => (
   <PaginationContainer>
     {instance.pageCount > 1 && (
       <React.Fragment>
@@ -89,4 +91,4 @@ interface PaginationProps {
   instance: TableInstance<any>
 }
 
-export default Pagination
+export default TablePagination

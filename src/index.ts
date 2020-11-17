@@ -1,5 +1,5 @@
 export { default as useTable } from './useTable'
-export { default as Table } from './Table'
+export { default as Table, TablePagination } from './Table'
 
 export { default as BooleanFilter } from './filter/BooleanFilter'
 export { default as TextFilter } from './filter/TextFilter'
