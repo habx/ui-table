@@ -47,6 +47,8 @@ export const TableHeadRow = styled.tr`
 `
 
 export const TableHeadCell = styled.th<{ size: number }>`
+  display: grid;
+
   text-align: left;
   padding: 12px;
   grid-column-end: span ${({ size }) => size};
