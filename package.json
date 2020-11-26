@@ -79,7 +79,7 @@
     "@types/react-window-infinite-loader": "^1.0.3",
     "@types/styled-components": "^5.1.4",
     "awesome-typescript-loader": "^5.2.1",
-    "babel-loader": "^8.2.1",
+    "babel-loader": "^8.2.2",
     "bili": "^5.0.5",
     "faker": "^5.1.0",
     "husky": "^4.3.0",
