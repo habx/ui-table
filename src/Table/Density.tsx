@@ -1,21 +1,21 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Tooltip, Icon, palette } from '@habx/ui-core'
+import { Tooltip, Icon, theme } from '@habx/ui-core'
 
 import { TableInstance } from '../types/Table'
 
 const DensityIcon = styled(Icon)`
   margin-left: 18px;
-  color: ${palette.darkBlue[800]};
+  color: ${theme.neutralColor(800)};
 
   &[data-active='false'] {
-    color: ${palette.darkBlue[300]};
+    color: ${theme.neutralColor(300)};
     transition: all ease-in-out 150ms;
   }
 
   &:hover {
-    color: ${palette.darkBlue[500]};
+    color: ${theme.neutralColor(500)};
     cursor: pointer;
   }
 `

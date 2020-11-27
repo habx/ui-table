@@ -155,7 +155,10 @@ const Table = <D extends {}>({
                         <TableHeaderCellContainer
                           data-align={column.align ?? 'flex-start'}
                         >
-                          <TableHeadCellContent opacity={0.5} {...headerProps}>
+                          <TableHeadCellContent
+                            variation="lowContrast"
+                            {...headerProps}
+                          >
                             {renderHeader}
                           </TableHeadCellContent>
                           {column.isSorted && (

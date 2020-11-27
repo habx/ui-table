@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { palette } from '@habx/ui-core'
+import { theme } from '@habx/ui-core'
 
 import { TableInstance } from '../types/Table'
 
@@ -22,9 +22,9 @@ const Loader = styled.div`
   max-height: 16px;
   background: linear-gradient(
     to right,
-    ${palette.darkBlue[200]} 20%,
-    ${palette.darkBlue[300]} 50%,
-    ${palette.darkBlue[200]} 80%
+    ${theme.neutralColor(200)} 20%,
+    ${theme.neutralColor(300)} 50%,
+    ${theme.neutralColor(200)} 80%
   );
   animation: fading 2s linear infinite;
   background-size: 500px 100px;

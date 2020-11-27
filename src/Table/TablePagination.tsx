@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { Text, Icon, Select, palette } from '@habx/ui-core'
+import { Text, Icon, Select, theme } from '@habx/ui-core'
 
 import { TableInstance } from '../types/Table'
 
@@ -24,16 +24,16 @@ export const PagesChevrons = styled.div`
 `
 
 export const PaginationIcon = styled(Icon)`
-  color: ${palette.darkBlue[800]};
+  color: ${theme.neutralColor(800)};
   transition: all ease-in-out 150ms;
   cursor: pointer;
 
   &:hover {
-    color: ${palette.darkBlue[500]};
+    color: ${theme.neutralColor(500)};
   }
 
   &[data-disabled='true'] {
-    color: ${palette.darkBlue[300]};
+    color: ${theme.neutralColor(300)};
     pointer-events: none;
   }
 `
