@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { palette, Text, theme } from '@habx/ui-core'
+import { Text, theme } from '@habx/ui-core'
 
 export const OverlayContainer = styled(Text)`
   position: fixed;
@@ -8,7 +8,7 @@ export const OverlayContainer = styled(Text)`
   height: 100vh;
   width: 100vw;
   left: 0;
-  background-color: ${palette.darkBlue[300]};
+  background-color: ${theme.neutralColor(300)};
   opacity: 0.9;
   display: grid;
   justify-items: center;

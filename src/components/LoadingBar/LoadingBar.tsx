@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 
-import { palette, theme } from '@habx/ui-core'
+import { theme } from '@habx/ui-core'
 
 export const LoadingBarStyled = styled.div`
   width: 300px;
@@ -9,7 +9,7 @@ export const LoadingBarStyled = styled.div`
   --loading-bar-progress: 0%;
   position: relative;
 
-  background: ${palette.darkBlue[300]};
+  background: ${theme.neutralColor(300)};
 
   &:after {
     transition: width ease-in-out 150ms;

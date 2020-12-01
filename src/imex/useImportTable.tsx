@@ -322,10 +322,11 @@ const useImportTable = <D extends { id?: string | number }>(
               <ConfirmContainer data-testid="useImportTable-confirmContainer">
                 <Table style={{ scrollable: true }} instance={tableInstance} />
                 <ActionBar>
-                  <Button warning onClick={() => onResolve(false)}>
+                  <Button ghost onClick={() => onResolve(false)}>
                     Annuler
                   </Button>
                   <Button
+                    error
                     onClick={() => onResolve(true)}
                     data-testid="useImportTable-submit"
                   >

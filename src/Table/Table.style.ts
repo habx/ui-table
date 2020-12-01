@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { palette, Text, theme } from '@habx/ui-core'
+import { Text, theme } from '@habx/ui-core'
 
 const alignItems = css`
   &[data-align='center'] {
@@ -54,13 +54,13 @@ export const TableHeadCell = styled.th<{ size: number }>`
   grid-column-end: span ${({ size }) => size};
 
   --table-header-font-size: 12px;
-  --table-header-color: ${palette.darkBlue[400]};
+  --table-header-color: ${theme.neutralColor(400)};
 
   &[data-big='true'] {
     font-size: 16px;
-    border-bottom: solid 1px ${palette.darkBlue[300]};
+    border-bottom: solid 1px ${theme.neutralColor(300)};
     --table-header-font-size: 16px;
-    --table-header-color: ${palette.darkBlue[900]};
+    --table-header-color: ${theme.neutralColor(900)};
   }
 `
 
@@ -84,22 +84,22 @@ export const TableBodyRow = styled.tr`
   transition: background-color 50ms ease-in-out;
 
   &[data-striped='true']:nth-child(2n + 1) {
-    background-color: ${palette.darkBlue[100]};
+    background-color: ${theme.neutralColor(100)};
   }
 
   &[data-active='true'] {
-    background-color: ${palette.blue[100]};
+    background-color: ${theme.neutralColor(100)};
 
     &[data-clickable='true'] {
       &:hover {
-        background-color: ${palette.blue[200]};
+        background-color: ${theme.neutralColor(200)};
       }
     }
   }
 
   &:not([data-active='true'])[data-clickable='true'] {
     &:hover {
-      background-color: ${palette.darkBlue[200]};
+      background-color: ${theme.neutralColor(200)};
     }
   }
 
@@ -133,7 +133,7 @@ export const TableCell = styled.td`
 
   > div {
     font-size: 16px;
-    color: ${palette.darkBlue[700]};
+    color: ${theme.neutralColor(700)};
     width: 100%;
   }
 `

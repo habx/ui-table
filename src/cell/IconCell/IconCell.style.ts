@@ -20,7 +20,7 @@ export const IconContainer = styled.div<{ color?: string }>`
           color: ${color};
         `
       : css`
-          color: ${theme.textColor({ opacity: 0.72 })};
+          color: ${theme.textColor()};
         `};
 `
 

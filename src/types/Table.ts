@@ -8,6 +8,7 @@ import {
 
 import { CheckboxProps } from '@habx/ui-core'
 
+import { IMEXColumn } from '../imex/imex.types'
 import {
   UseControlledFiltersInstanceProps,
   UseControlledFiltersOptions,
@@ -35,8 +36,6 @@ import {
   UseRowSelectInterfaceProps,
   UseRowSelectOptions,
 } from '../plugin/useRowSelect/useRowSelect.interface'
-
-import { IMEXColumn } from '..'
 
 export interface FilterProps<D extends object>
   extends Omit<ReactTable.FilterType<D>, 'column'> {
@@ -140,9 +139,9 @@ export interface TableInstance<D extends object = {}>
   page: Array<Row<D>>
 }
 
-export type ColumnInstance<D extends object = {}> = ReactTable.ColumnInstance<
-  D
-> &
+export type ColumnInstance<
+  D extends object = {}
+> = ReactTable.ColumnInstance<D> &
   ReactTable.UseTableColumnProps<D> &
   ReactTable.UseFiltersColumnProps<D> &
   ReactTable.UseSortByColumnProps<D> &
