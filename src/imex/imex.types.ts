@@ -1,10 +1,11 @@
 import { Column } from '../types/Table'
 
-export enum RowValueTypes {
+export enum ColumnValueTypes {
   string = 'string',
   'number' = 'number',
   'number[]' = 'number[]',
   'string[]' = 'string[]',
+  boolean = 'boolean',
 }
 
 export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
@@ -13,7 +14,7 @@ export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
     csv?: {
       identifier?: boolean
       required?: boolean
-      type: RowValueTypes
+      type: ColumnValueTypes
       format?: (value: any) => string
       parse?: (value: any) => any
     }

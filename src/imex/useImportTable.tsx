@@ -160,8 +160,18 @@ const useImportTable = <D extends { id?: string | number }>(
                 orderedColumns[index]?.meta?.csv?.format ??
                 ((value: any) => `${value}`)
 
-              let cellValue: string | number | string[] | number[]
+              let cellValue: string | number | string[] | number[] | boolean
               switch (orderedColumns[index]?.meta?.csv?.type) {
+                case 'boolean':
+                  if (!['true', 'false'].includes(rawCell)) {
+                    throw new Error(
+                      `${orderedColumns[index]?.Header} invalide ligne ${
+                        rowIndex + 1
+                      }`
+                    )
+                  }
+                  cellValue = rawCell === 'true'
+                  break
                 case 'number':
                   cellValue = Number(format(rawCell.replace(',', '.')))
                   if (Number.isNaN(cellValue)) {

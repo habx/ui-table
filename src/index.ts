@@ -36,7 +36,7 @@ export { Pagination } from './plugin/useControlledPagination'
 export { default as selectFilterFactory } from './filterFactory/selectFilterFactory'
 
 // Import / Export
-export { RowValueTypes, IMEXColumn } from './imex/imex.types'
+export { ColumnValueTypes, IMEXColumn } from './imex/imex.types'
 export { default as useExportTable } from './imex/useExportTable'
 export {
   default as useImportTable,
