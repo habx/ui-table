@@ -47,7 +47,8 @@ export const TableHeadRow = styled.tr`
 `
 
 export const TableHeadCell = styled.th<{ size: number }>`
-  display: grid;
+  display: flex;
+  flex-direction: column;
 
   text-align: left;
   padding: 12px;
