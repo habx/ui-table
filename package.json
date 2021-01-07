@@ -48,7 +48,7 @@
     "styled-components": ">= 5.2.1"
   },
   "dependencies": {
-    "@testing-library/react": "^11.2.2",
+    "@testing-library/react": "^11.2.3",
     "@types/papaparse": "^5.2.4",
     "papaparse": "^5.3.0",
     "react-dropzone": "^11.2.4",
