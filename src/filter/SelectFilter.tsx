@@ -23,7 +23,7 @@ const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
     const placeholder = React.useMemo(
       () =>
         multi
-          ? `${get(filter, 'value.length', options.length)} selectionnés`
+          ? `${get(filter, 'value.length', options.length)} sélectionnés`
           : undefined,
       [multi, filter, options.length]
     )
