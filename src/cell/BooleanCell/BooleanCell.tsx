@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useThemeVariant } from '@habx/ui-core'
+import { stringifyColor, useThemeVariant } from '@habx/ui-core'
 
 import IconCell, { IconCellProps } from '../IconCell'
 
@@ -14,7 +14,9 @@ const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
       <IconCell
         ref={ref}
         icon={value ? 'check' : 'close'}
-        color={value ? theme.colors.success.base : theme.colors.error.base}
+        color={stringifyColor(
+          value ? theme.colors.success.base : theme.colors.error.base
+        )}
         {...rest}
       />
     )
