@@ -176,6 +176,7 @@ export const TableHeadCellContent = styled(Text)`
 
 export const TableHeaderCellSort = styled.div`
   margin-top: 6px;
+  min-width: 0;
 `
 
 export const TableOptionBar = styled.div`
