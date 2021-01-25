@@ -57,8 +57,11 @@ export type FooterProps<D extends object> = TableInstance<D> & {
   column: ColumnInstance<D>
 }
 
+export type ColumnEnabledCondition = 'always' | 'never' | 'imex-only'
+
 type CustomColumnFields<Meta = {}> = {
   align?: 'left' | 'right' | 'center'
+  enabled?: ColumnEnabledCondition | null
   meta?: Meta & { [key: string]: any }
 }
 
