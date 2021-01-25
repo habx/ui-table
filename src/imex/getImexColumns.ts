@@ -20,7 +20,7 @@ const getImexColumns = <D extends { [key: string]: any } = any>(
   )
   const csvColumns = flatColumns.filter(
     (column) =>
-      !!column.meta?.csv ||
+      !!column.meta?.csv &&
       COLUMN_ENABLED_CONDITION.includes(column.enabled ?? 'always')
   )
 
