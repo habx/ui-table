@@ -39,7 +39,7 @@ import { IMEXColumn } from './imex.types'
 import { readCsvFile, softCompare } from './imex.utils'
 import { readXLS } from './xls.utils'
 
-export interface UseImportTableOptions<D> {
+export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
   columns: IMEXColumn<D>[]
   upsertRow: (row: D | D[]) => any
   getOriginalData: () => D[] | Promise<D[]>
@@ -88,7 +88,7 @@ const useImportTable = <D extends { id?: string | number }>(
 
       const columns = _columns as IMEXColumn<D>[]
 
-      const csvColumns = getImexColumns(columns)
+      const csvColumns = getImexColumns<D>(columns)
 
       const parseCsvFile = async (csvData: any) => {
         // clone original data array
