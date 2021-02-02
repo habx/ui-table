@@ -81,7 +81,7 @@
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.2.2",
     "bili": "^5.0.5",
-    "faker": "^5.2.0",
+    "faker": "^5.3.1",
     "husky": "^4.3.8",
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
