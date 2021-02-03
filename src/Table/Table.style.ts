@@ -117,6 +117,11 @@ export const TableBodyRow = styled.tr`
   }
 `
 
+export const TableBodySubRow = styled.tr`
+  display: flex;
+  flex-direction: column;
+`
+
 export const TableCell = styled.td`
   padding: 12px;
   display: flex;
