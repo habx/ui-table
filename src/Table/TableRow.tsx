@@ -5,7 +5,12 @@ import { Icon, Text } from '@habx/ui-core'
 import { ColumnInstance, Row, TableInstance } from '../types/Table'
 
 import { RowCharacteristics, TableStyle } from './Table.interface'
-import { ExpandToggleContainer, TableBodyRow, TableCell } from './Table.style'
+import {
+  ExpandToggleContainer,
+  TableBodyRow,
+  TableBodySubRow,
+  TableCell,
+} from './Table.style'
 
 const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
   (props, ref) => {
@@ -102,18 +107,18 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
             }
 
             if (cell.isPlaceholder) {
-              return <TableCell {...cellProps} />
+              return <TableCell {...cellProps} key={`cell-${cellIndex}`} />
             }
 
             return (
-              <TableCell {...cellProps}>
+              <TableCell {...cellProps} key={`cell-${cellIndex}`}>
                 <Text>{cell.render('Cell')}</Text>
               </TableCell>
             )
           })}
         </TableBodyRow>
         {renderRowSubComponent && row.isExpanded && (
-          <tr>{renderRowSubComponent(row)}</tr>
+          <TableBodySubRow>{renderRowSubComponent(row)}</TableBodySubRow>
         )}
       </React.Fragment>
     )
