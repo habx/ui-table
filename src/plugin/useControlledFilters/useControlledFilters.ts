@@ -27,10 +27,20 @@ const reducer = <D extends {}>(
   const state = rawState as TableState<D>
   const prevState = rawPrevState as TableState<D>
 
-  const instance = rawInstance as TableInstance<D>
-  const initialized = !(!prevState?.filters && instance.filters)
+  const {
+    onFiltersChange,
+    filters,
+    shouldIgnoreEmptyFilter = true,
+  } = rawInstance as TableInstance<D>
+  const initialized = !(!prevState?.filters && filters)
   if (initialized && !isEqual(prevState?.filters, state.filters)) {
-    instance.onFiltersChange && instance.onFiltersChange(state.filters)
+    let newFilters = state.filters
+    if (shouldIgnoreEmptyFilter) {
+      newFilters = state.filters.filter(({ value }) =>
+        Array.isArray(value) ? !!value.length : !!value
+      )
+    }
+    onFiltersChange?.(newFilters)
   }
 
   return state
