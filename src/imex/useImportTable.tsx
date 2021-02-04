@@ -16,7 +16,15 @@ import { DropEvent, useDropzone } from 'react-dropzone'
 import * as ReactTable from 'react-table'
 import { useExpanded, useGroupBy } from 'react-table'
 
-import { ActionBar, Button, notify, prompt, Text } from '@habx/ui-core'
+import {
+  ActionBar,
+  Button,
+  HeaderBar,
+  notify,
+  prompt,
+  Text,
+  Title,
+} from '@habx/ui-core'
 
 import useRemainingActionsTime from '../_internal/useRemainingActionsTime'
 import { LoadingOverlay } from '../components'
@@ -52,6 +60,7 @@ export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
 export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
   disabled?: boolean
   accept?: string[]
+  confirmLightBoxTitle?: string
   onBeforeDropAccepted?: (
     onFiles: (
       files: File[],
@@ -307,6 +316,7 @@ const useImportTable = <D extends { id?: string | number }>(
         const plugins = groupBy ? [useGroupBy, useExpanded, useExpandAll] : []
         const hasConfirmed = await prompt(({ onResolve }) => ({
           fullscreen: true,
+          spacing: 'regular',
           Component: () => {
             const tableInstance = useTable<D>(
               {
@@ -319,21 +329,31 @@ const useImportTable = <D extends { id?: string | number }>(
               ...plugins
             )
             return (
-              <ConfirmContainer data-testid="useImportTable-confirmContainer">
-                <Table style={{ scrollable: true }} instance={tableInstance} />
-                <ActionBar>
-                  <Button ghost onClick={() => onResolve(false)}>
-                    Annuler
-                  </Button>
-                  <Button
-                    error
-                    onClick={() => onResolve(true)}
-                    data-testid="useImportTable-submit"
-                  >
-                    Valider
-                  </Button>
-                </ActionBar>
-              </ConfirmContainer>
+              <React.Fragment>
+                {params.confirmLightBoxTitle && (
+                  <HeaderBar>
+                    <Title type="regular">{params.confirmLightBoxTitle}</Title>
+                  </HeaderBar>
+                )}
+                <ConfirmContainer data-testid="useImportTable-confirmContainer">
+                  <Table
+                    style={{ scrollable: true }}
+                    instance={tableInstance}
+                  />
+                  <ActionBar>
+                    <Button ghost onClick={() => onResolve(false)}>
+                      Annuler
+                    </Button>
+                    <Button
+                      error
+                      onClick={() => onResolve(true)}
+                      data-testid="useImportTable-submit"
+                    >
+                      Valider
+                    </Button>
+                  </ActionBar>
+                </ConfirmContainer>
+              </React.Fragment>
             )
           },
         }))

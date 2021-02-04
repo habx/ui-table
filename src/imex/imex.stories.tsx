@@ -33,6 +33,7 @@ export const BasicExample = () => {
     columns: IMEX_COLUMNS,
     upsertRow: upsertRow,
     getOriginalData: () => FAKE_DATA,
+    confirmLightBoxTitle: 'Import',
   })
 
   return (
