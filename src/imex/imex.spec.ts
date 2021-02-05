@@ -15,7 +15,7 @@ describe('Import/Export (imex)', () => {
       // @ts-ignore
       global.navigator.msSaveBlob = jest.fn()
     })
-    it('should allow download data in CSV', () => {
+    it('should allow download data in CSV', async () => {
       const { result } = renderHook(() =>
         useExportTable({
           data: FAKE_DATA,
@@ -23,13 +23,30 @@ describe('Import/Export (imex)', () => {
         })
       )
 
-      act(() => {
+      await act(() => {
         const [downloadFile] = result.current
-        downloadFile('test')
+        return downloadFile('test')
       })
-      expect(window.navigator.msSaveBlob).toHaveBeenCalledWith(
+      expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
         new Blob(),
         'test.csv'
+      )
+    })
+    it('should allow download data in XLS', async () => {
+      const { result } = renderHook(() =>
+        useExportTable({
+          data: FAKE_DATA,
+          columns: IMEX_COLUMNS,
+        })
+      )
+
+      await act(() => {
+        const [downloadFile] = result.current
+        return downloadFile('test', { type: 'xls' })
+      })
+      expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
+        new Blob(),
+        'test.xls'
       )
     })
   })
@@ -62,7 +79,7 @@ describe('Import/Export (imex)', () => {
           {
             Header: 'header',
             accessor: (originalRow) => originalRow.id,
-            meta: { csv: {} },
+            meta: { imex: {} },
           },
         ])
       ).toThrow()
@@ -70,11 +87,11 @@ describe('Import/Export (imex)', () => {
     it('it needs string header only', () => {
       expect(() =>
         getImexColumns([
-          { Header: () => null, accessor: 'id', meta: { csv: {} } },
+          { Header: () => null, accessor: 'id', meta: { imex: {} } },
         ])
       ).toThrow()
     })
-    it('it ignore columns without meta.csv field', () => {
+    it('it ignore columns without meta.imex field', () => {
       expect(
         getImexColumns([{ Header: () => null, accessor: 'id' }])
       ).toHaveLength(0)

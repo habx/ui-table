@@ -10,21 +10,12 @@ import {
   omit,
   set,
 } from 'lodash'
-import Papa from 'papaparse'
 import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
 import * as ReactTable from 'react-table'
 import { useExpanded, useGroupBy } from 'react-table'
 
-import {
-  ActionBar,
-  Button,
-  HeaderBar,
-  notify,
-  prompt,
-  Text,
-  Title,
-} from '@habx/ui-core'
+import { ActionBar, Button, notify, prompt, Text } from '@habx/ui-core'
 
 import useRemainingActionsTime from '../_internal/useRemainingActionsTime'
 import { LoadingOverlay } from '../components'
@@ -33,6 +24,8 @@ import Table from '../Table'
 import { CellProps, Column } from '../types/Table'
 import useTable from '../useTable'
 
+import { parseCsvFileData } from './csv.utils'
+import { parseExcelFileData } from './excel.utils'
 import getImexColumns from './getImexColumns'
 import {
   ChangedCell,
@@ -44,8 +37,7 @@ import {
   PrevCell,
 } from './imex.style'
 import { IMEXColumn } from './imex.types'
-import { readCsvFile, softCompare } from './imex.utils'
-import { readXLS } from './xls.utils'
+import { softCompare } from './imex.utils'
 
 export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
   columns: IMEXColumn<D>[]
@@ -55,12 +47,12 @@ export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
   readFile?: (file: File) => Promise<any[]>
   filterRows?: (row: D & { prevVal?: D; hasDiff?: boolean }) => boolean
   groupBy?: string
+  confirmLightBoxTitle?: string
 }
 
 export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
   disabled?: boolean
   accept?: string[]
-  confirmLightBoxTitle?: string
   onBeforeDropAccepted?: (
     onFiles: (
       files: File[],
@@ -97,26 +89,26 @@ const useImportTable = <D extends { id?: string | number }>(
 
       const columns = _columns as IMEXColumn<D>[]
 
-      const csvColumns = getImexColumns<D>(columns)
+      const imexColumns = getImexColumns<D>(columns)
 
-      const parseCsvFile = async (csvData: any) => {
+      const parseRawData = async (data: any[][]) => {
         // clone original data array
         const originalData = [
           ...(getOriginalData ? await getOriginalData() : []),
         ]
 
-        const { data: _data } = Papa.parse(csvData)
-        const data = _data as string[][]
-
         const headers = (data.shift() as string[])?.map(cleanHeader)
-        const identifierColumn = csvColumns.find(
-          (column) => column.meta?.csv?.identifier
+        if (!headers) {
+          throw new Error('Missing headers row')
+        }
+        const identifierColumn = imexColumns.find(
+          (column) => column.meta?.imex?.identifier
         )
         if (!identifierColumn) {
           throw new Error('Missing identifier column')
         }
-        const requiredColumnHeaders = csvColumns
-          .filter((column) => column.meta?.csv?.required)
+        const requiredColumnHeaders = imexColumns
+          .filter((column) => column.meta?.imex?.required)
           .map((column) => cleanHeader(column.Header as string))
 
         const missingRequiredColumns = difference(
@@ -129,9 +121,9 @@ const useImportTable = <D extends { id?: string | number }>(
 
         const ignoredColumns = []
         const orderedColumns = headers.map((header) => {
-          const column = csvColumns.find(
-            (csvColumn) =>
-              cleanHeader(csvColumn.Header as string) === cleanHeader(header)
+          const column = imexColumns.find(
+            (imexColumn) =>
+              cleanHeader(imexColumn.Header as string) === cleanHeader(header)
           )
           if (!column) {
             ignoredColumns.push(header)
@@ -144,8 +136,8 @@ const useImportTable = <D extends { id?: string | number }>(
             (row: string[]) =>
               row.length === headers.length && row.some((cell) => cell.length)
           )
-          .map((row: string[], rowIndex) => {
-            const csvRow = row.reduce((ctx, rawCell, index) => {
+          .map((row: any[], rowIndex) => {
+            const imexRow = row.reduce((ctx, rawCell, index) => {
               if (!orderedColumns[index]) {
                 return ctx
               }
@@ -166,12 +158,16 @@ const useImportTable = <D extends { id?: string | number }>(
               }
 
               const format =
-                orderedColumns[index]?.meta?.csv?.format ??
+                orderedColumns[index]?.meta?.imex?.format ??
                 ((value: any) => `${value}`)
 
               let cellValue: string | number | string[] | number[]
-              switch (orderedColumns[index]?.meta?.csv?.type) {
+              switch (orderedColumns[index]?.meta?.imex?.type) {
                 case 'number':
+                  if (typeof rawCell === 'number') {
+                    cellValue = Number(format(rawCell))
+                    break
+                  }
                   cellValue = Number(format(rawCell.replace(',', '.')))
                   if (Number.isNaN(cellValue)) {
                     throw new Error(
@@ -184,7 +180,7 @@ const useImportTable = <D extends { id?: string | number }>(
                 case 'number[]':
                   cellValue = format(rawCell)
                     .split(',')
-                    .map((value: string) => {
+                    .map((value: string | number) => {
                       const transformedValue = Number(value)
                       if (Number.isNaN(transformedValue)) {
                         throw new Error(
@@ -205,8 +201,8 @@ const useImportTable = <D extends { id?: string | number }>(
               }
 
               if (
-                orderedColumns[index]?.meta?.csv?.validate &&
-                !orderedColumns[index]?.meta?.csv?.validate(cellValue)
+                orderedColumns[index]?.meta?.imex?.validate &&
+                !orderedColumns[index]?.meta?.imex?.validate(cellValue)
               ) {
                 throw new Error(
                   `${orderedColumns[index]?.Header} invalide ligne ${
@@ -221,7 +217,7 @@ const useImportTable = <D extends { id?: string | number }>(
                 set({}, orderedColumns[index]?.accessor as string, cellValue)
               )
             }, {}) as D
-            const prevValId = get(csvRow, identifierColumn.accessor as string)
+            const prevValId = get(imexRow, identifierColumn.accessor as string)
             const prevValIndex = originalData.findIndex(
               (originalRow) =>
                 get(originalRow, identifierColumn.accessor as string) ===
@@ -230,16 +226,16 @@ const useImportTable = <D extends { id?: string | number }>(
             const prevVal: D = originalData[prevValIndex]
             originalData.splice(prevValIndex, 1)
             return {
-              ...csvRow,
+              ...imexRow,
               prevVal,
-              hasDiff: !softCompare(csvRow, prevVal),
+              hasDiff: !softCompare(imexRow, prevVal),
               id: prevVal?.id ?? undefined,
             }
           })
         return parsedData
       }
 
-      const diffColumns = csvColumns.map((column) => ({
+      const diffColumns = imexColumns.map((column) => ({
         ...column,
         Cell: ((rawProps) => {
           const props = (rawProps as unknown) as CellProps<D>
@@ -296,17 +292,17 @@ const useImportTable = <D extends { id?: string | number }>(
         setParsing(true)
 
         const file = files[0]
-        let rawCsvData
+        let rawData
         if (readFile) {
-          rawCsvData = await readFile(file)
+          rawData = await readFile(file)
         } else if (file.type.includes('text/csv')) {
-          rawCsvData = await readCsvFile(file)
+          rawData = await parseCsvFileData(file)
         } else {
-          rawCsvData = await readXLS(file)
+          rawData = await parseExcelFileData(file)
         }
 
-        const parsedData = (await parseCsvFile(rawCsvData)).filter((csvRow) =>
-          filterRows ? filterRows(csvRow) : csvRow.hasDiff
+        const parsedData = (await parseRawData(rawData)).filter((imexRow) =>
+          filterRows ? filterRows(imexRow) : imexRow.hasDiff
         )
         setParsing(false)
         if (parsedData.length === 0) {
@@ -316,7 +312,6 @@ const useImportTable = <D extends { id?: string | number }>(
         const plugins = groupBy ? [useGroupBy, useExpanded, useExpandAll] : []
         const hasConfirmed = await prompt(({ onResolve }) => ({
           fullscreen: true,
-          spacing: 'regular',
           Component: () => {
             const tableInstance = useTable<D>(
               {
@@ -329,31 +324,21 @@ const useImportTable = <D extends { id?: string | number }>(
               ...plugins
             )
             return (
-              <React.Fragment>
-                {params.confirmLightBoxTitle && (
-                  <HeaderBar>
-                    <Title type="regular">{params.confirmLightBoxTitle}</Title>
-                  </HeaderBar>
-                )}
-                <ConfirmContainer data-testid="useImportTable-confirmContainer">
-                  <Table
-                    style={{ scrollable: true }}
-                    instance={tableInstance}
-                  />
-                  <ActionBar>
-                    <Button ghost onClick={() => onResolve(false)}>
-                      Annuler
-                    </Button>
-                    <Button
-                      error
-                      onClick={() => onResolve(true)}
-                      data-testid="useImportTable-submit"
-                    >
-                      Valider
-                    </Button>
-                  </ActionBar>
-                </ConfirmContainer>
-              </React.Fragment>
+              <ConfirmContainer data-testid="useImportTable-confirmContainer">
+                <Table style={{ scrollable: true }} instance={tableInstance} />
+                <ActionBar>
+                  <Button ghost onClick={() => onResolve(false)}>
+                    Annuler
+                  </Button>
+                  <Button
+                    error
+                    onClick={() => onResolve(true)}
+                    data-testid="useImportTable-submit"
+                  >
+                    Valider
+                  </Button>
+                </ActionBar>
+              </ConfirmContainer>
             )
           },
         }))
@@ -443,7 +428,15 @@ const useImportTable = <D extends { id?: string | number }>(
     () =>
       params.disabled
         ? {}
-        : omit(dropzone.getRootProps(), ['onClick, onBlur', 'onFocus']),
+        : omit(dropzone.getRootProps(), [
+            'onClick',
+            'onBlur',
+            'onFocus',
+            'style',
+            'className',
+            'onKeyDown',
+            'tabIndex',
+          ]),
     [dropzone, params.disabled]
   )
 

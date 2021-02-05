@@ -10,12 +10,13 @@ export enum RowValueTypes {
 export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
   D & { [key: string]: any },
   {
-    csv?: {
+    imex?: {
       identifier?: boolean
       required?: boolean
       type: RowValueTypes
       format?: (value: any) => string
       parse?: (value: any) => any
+      width?: number
     }
   }
 >

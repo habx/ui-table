@@ -11,20 +11,20 @@ const COLUMN_ENABLED_CONDITION: ColumnEnabledCondition[] = [
 
 const getImexColumns = <D extends { [key: string]: any } = any>(
   columns: IMEXColumn<D>[]
-) => {
+): IMEXColumn<D>[] => {
   const flatColumns = columns.flatMap(
     (column) =>
       ((column as ReactTable.ColumnGroup<D>)?.columns as IMEXColumn<D>[]) ?? [
         column,
       ]
   )
-  const csvColumns = flatColumns.filter(
+  const imexColumns = flatColumns.filter(
     (column) =>
-      !!column.meta?.csv &&
+      !!column.meta?.imex &&
       COLUMN_ENABLED_CONDITION.includes(column.enabled ?? 'always')
   )
 
-  csvColumns.forEach((column) => {
+  imexColumns.forEach((column) => {
     if (typeof column.accessor !== 'string') {
       throw new Error('Cannot include data with a non-string accessor')
     }
@@ -33,6 +33,6 @@ const getImexColumns = <D extends { [key: string]: any } = any>(
     }
   })
 
-  return csvColumns
+  return imexColumns
 }
 export default getImexColumns

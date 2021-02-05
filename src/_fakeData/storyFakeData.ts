@@ -29,7 +29,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     Header: 'Username',
     accessor: 'username',
     meta: {
-      csv: {
+      imex: {
         identifier: true,
         type: 'string',
       },
@@ -39,7 +39,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     Header: 'Name',
     accessor: 'name',
     meta: {
-      csv: {
+      imex: {
         type: 'string',
       },
     },
@@ -48,7 +48,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     Header: 'Email',
     accessor: 'email',
     meta: {
-      csv: {
+      imex: {
         type: 'string',
       },
     },
@@ -57,7 +57,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     Header: 'City',
     accessor: 'address.city',
     meta: {
-      csv: {
+      imex: {
         type: 'string',
       },
     },
