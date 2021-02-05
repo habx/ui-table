@@ -1,11 +1,8 @@
+import type * as Excel from 'exceljs'
+
 import { Column } from '../types/Table'
 
-export enum RowValueTypes {
-  string = 'string',
-  'number' = 'number',
-  'number[]' = 'number[]',
-  'string[]' = 'string[]',
-}
+export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
 
 export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
   D & { [key: string]: any },
@@ -13,10 +10,12 @@ export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
     imex?: {
       identifier?: boolean
       required?: boolean
-      type: RowValueTypes
-      format?: (value: any) => string
-      parse?: (value: any) => any
+      type?: RowValueTypes
+      format?: (value: any, row: any[]) => any
+      parse?: (value: any, row: any[]) => any
       width?: number
+      validate?: (value: any, row: any[]) => any
+      dataValidation?: Excel.DataValidation
     }
   }
 >

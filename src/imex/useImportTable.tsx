@@ -157,9 +157,9 @@ const useImportTable = <D extends { id?: string | number }>(
                 return ctx
               }
 
-              const format =
-                orderedColumns[index]?.meta?.imex?.format ??
-                ((value: any) => `${value}`)
+              const format = (value: any) =>
+                orderedColumns[index]?.meta?.imex?.format?.(value, row) ??
+                `${value}`
 
               let cellValue: string | number | string[] | number[]
               switch (orderedColumns[index]?.meta?.imex?.type) {
@@ -200,10 +200,9 @@ const useImportTable = <D extends { id?: string | number }>(
                   break
               }
 
-              if (
-                orderedColumns[index]?.meta?.imex?.validate &&
-                !orderedColumns[index]?.meta?.imex?.validate(cellValue)
-              ) {
+              const validate =
+                orderedColumns[index]?.meta?.imex?.validate ?? (() => true)
+              if (!validate(cellValue, row)) {
                 throw new Error(
                   `${orderedColumns[index]?.Header} invalide ligne ${
                     rowIndex + 1
