@@ -66,6 +66,7 @@ export const exportData = async <D extends {}>(
     header: column.Header,
     key: column.id ?? column.Header,
     width: column.meta?.imex?.width,
+    hidden: column.meta?.imex?.hidden,
   })) as Excel.Column[]
 
   for (const row of data) {
