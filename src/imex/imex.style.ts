@@ -61,7 +61,7 @@ export const PrevCell = styled.div`
   font-size: 12px;
 `
 
-export const StyledCsvDropzone = styled.div`
+export const StyledIMEXDropzone = styled.div`
   height: 100%;
   position: relative;
   outline: none;

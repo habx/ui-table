@@ -1,22 +1,27 @@
 import { get, isNumber } from 'lodash'
 import * as React from 'react'
 
+import { ExcelValidationOptions } from './excel.utils'
 import getImexColumns from './getImexColumns'
 import { IMEXColumn } from './imex.types'
 import { exportData } from './imex.utils'
 
-type UseExportCsvParams<D extends { [key: string]: any } = any> = {
+export interface UseExportIMEXParams<D extends { [key: string]: any } = any>
+  extends ExcelValidationOptions {
   data?: D[]
   columns: IMEXColumn<D>[]
   type?: 'csv' | 'xls'
 }
 
 const useExportTable = <D extends { [key: string]: any } = any>(
-  params: UseExportCsvParams<D>
+  params: UseExportIMEXParams<D>
 ) => {
   const downloadTableData = React.useCallback(
-    (title: string, options: Partial<UseExportCsvParams<D>> = {}) => {
-      const { type = 'csv', data = [], columns } = { ...params, ...options }
+    (title: string, options: Partial<UseExportIMEXParams<D>> = {}) => {
+      const { data = [], columns, type = 'csv', ...exportOptions } = {
+        ...params,
+        ...options,
+      }
 
       const imexColumns = getImexColumns(columns)
       const imexData = data.map((row) =>
@@ -30,7 +35,10 @@ const useExportTable = <D extends { [key: string]: any } = any>(
           return parse(value)
         })
       )
-      return exportData<D>(title, imexColumns, imexData, { type })
+      return exportData<D>(title, imexColumns, imexData, {
+        type,
+        ...exportOptions,
+      })
     },
     Object.values(params) // eslint-disable-line
     // options object in "downloadCsv" function is overwriting params so we need all params
