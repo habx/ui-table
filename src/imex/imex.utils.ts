@@ -53,11 +53,20 @@ export const saveFile = (filename: string, file: any) => {
   }
 }
 
+interface ExportDataOptions extends ExcelValidationOptions {
+  type: 'csv' | 'xls'
+  /**
+   *
+   * @param workbook to export
+   * Allow to edit workbook instance before saving
+   */
+  editWorkbookBeforeSave?: (workbook: Excel.Workbook) => void | Promise<void>
+}
 export const exportData = async <D extends {}>(
   filename: string,
   columns: IMEXColumn<D>[],
   data: any[][],
-  options: { type: 'csv' | 'xls' } & ExcelValidationOptions
+  options: ExportDataOptions
 ) => {
   const workbook = await createWorkbook()
   const worksheet = workbook.addWorksheet(filename)
@@ -73,6 +82,8 @@ export const exportData = async <D extends {}>(
   })) as Excel.Column[]
 
   worksheet.addRows(data)
+
+  await options.editWorkbookBeforeSave?.(workbook)
 
   if (options.type === 'xls') {
     applyValidationRulesAndStyle<D>(worksheet, columns, options)
