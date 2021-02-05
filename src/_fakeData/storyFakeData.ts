@@ -31,7 +31,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     meta: {
       imex: {
         identifier: true,
-        type: 'string',
+        type: 'string' as const,
       },
     },
   },
@@ -40,7 +40,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     accessor: 'name',
     meta: {
       imex: {
-        type: 'string',
+        type: 'string' as const,
       },
     },
   },
@@ -49,7 +49,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     accessor: 'email',
     meta: {
       imex: {
-        type: 'string',
+        type: 'string' as const,
       },
     },
   },
@@ -58,7 +58,7 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
     accessor: 'address.city',
     meta: {
       imex: {
-        type: 'string',
+        type: 'string' as const,
       },
     },
   },

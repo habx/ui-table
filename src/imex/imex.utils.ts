@@ -67,9 +67,25 @@ export const exportData = async <D extends {}>(
   for (const row of data) {
     worksheet.addRow(row)
   }
+  for (const columnIndex in columns) {
+    const column = columns[columnIndex]
+    const columnNumber = Number(columnIndex) + 1
+    const dataValidation = column.meta?.imex?.dataValidation
+    if (dataValidation) {
+      const worksheetColumn = worksheet.getColumn(columnNumber)
+      worksheetColumn.eachCell((cell, rowNumber) => {
+        if (rowNumber > 1) {
+          if (cell) {
+            cell.dataValidation = dataValidation
+          }
+        }
+      })
+    }
+  }
+
   if (options.type === 'xls') {
     const fileBuffer = await workbook.xlsx.writeBuffer()
-    saveFile(`${filename}.xls`, fileBuffer)
+    saveFile(`${filename}.xlsx`, fileBuffer)
   } else {
     const fileBuffer = await workbook.csv.writeBuffer()
     saveFile(`${filename}.csv`, fileBuffer)

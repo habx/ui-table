@@ -22,7 +22,8 @@ const useExportTable = <D extends { [key: string]: any } = any>(
       const imexData = data.map((row) =>
         imexColumns.map(({ accessor, meta }) => {
           let value = get(row, accessor as string)
-          const parse = meta?.imex?.parse ?? ((v: any) => v)
+          const parse = (v: any) =>
+            meta?.imex?.parse?.(v, Object.values(row)) ?? v
           if (type === 'xls' && meta?.imex?.type === 'number') {
             return isNumber(value) ? `${parse(value)}`.replace('.', ',') : value
           }

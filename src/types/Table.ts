@@ -79,12 +79,13 @@ type ColumnCustom<D extends object, Meta = {}> = Omit<
     Header?: ReactTable.Renderer<HeaderProps<D>>
     Footer?: ReactTable.Renderer<FooterProps<D>>
     columns?: Column<D, Meta>[]
+    headerClassName?: string
   }
 
 export type Column<D extends { [key: string]: any } = any, Meta = {}> =
-  | (Omit<ColumnGroup<D>, 'columns'> & ColumnCustom<D>)
-  | (ColumnWithLooseAccessor<D> & ColumnCustom<D>)
-  | (ColumnWithStrictAccessor<D> & ColumnCustom<D>)
+  | (Omit<ColumnGroup<D>, 'columns'> & ColumnCustom<D, Meta>)
+  | (ColumnWithLooseAccessor<D> & ColumnCustom<D, Meta>)
+  | (ColumnWithStrictAccessor<D> & ColumnCustom<D, Meta>)
 
 export interface TableOptions<D extends object = {}>
   extends Omit<

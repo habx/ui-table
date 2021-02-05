@@ -46,7 +46,7 @@ describe('Import/Export (imex)', () => {
       })
       expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
         new Blob(),
-        'test.xls'
+        'test.xlsx'
       )
     })
   })
