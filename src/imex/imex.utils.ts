@@ -1,6 +1,7 @@
 import type * as Excel from 'exceljs'
 import { get, reduce } from 'lodash'
 
+import { applyValidationRulesAndStyle } from './excel.utils'
 import { createWorkbook } from './exceljs'
 import { IMEXColumn } from './imex.types'
 
@@ -58,6 +59,9 @@ export const exportData = async <D extends {}>(
   const workbook = await createWorkbook()
   const worksheet = workbook.addWorksheet(filename)
 
+  /**
+   * Insert data
+   */
   worksheet.columns = columns.map((column) => ({
     header: column.Header,
     key: column.id ?? column.Header,
@@ -67,23 +71,9 @@ export const exportData = async <D extends {}>(
   for (const row of data) {
     worksheet.addRow(row)
   }
-  for (const columnIndex in columns) {
-    const column = columns[columnIndex]
-    const columnNumber = Number(columnIndex) + 1
-    const dataValidation = column.meta?.imex?.dataValidation
-    if (dataValidation) {
-      const worksheetColumn = worksheet.getColumn(columnNumber)
-      worksheetColumn.eachCell((cell, rowNumber) => {
-        if (rowNumber > 1) {
-          if (cell) {
-            cell.dataValidation = dataValidation
-          }
-        }
-      })
-    }
-  }
 
   if (options.type === 'xls') {
+    applyValidationRulesAndStyle<D>(worksheet, columns)
     const fileBuffer = await workbook.xlsx.writeBuffer()
     saveFile(`${filename}.xlsx`, fileBuffer)
   } else {
