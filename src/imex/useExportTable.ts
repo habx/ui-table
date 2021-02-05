@@ -30,7 +30,7 @@ const useExportTable = <D extends { [key: string]: any } = any>(
           const parse = (v: any) =>
             meta?.imex?.parse?.(v, Object.values(row)) ?? v
           if (type === 'xls' && meta?.imex?.type === 'number') {
-            return isNumber(value) ? `${parse(value)}`.replace('.', ',') : value
+            return isNumber(value) ? Number(parse(value)) : value
           }
           return parse(value)
         })
