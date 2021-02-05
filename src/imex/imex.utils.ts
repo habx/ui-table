@@ -1,5 +1,7 @@
+import * as Excel from 'exceljs'
 import { get, reduce } from 'lodash'
-import Papa, { UnparseObject } from 'papaparse'
+
+import { IMEXColumn } from './imex.types'
 
 export const softCompare = (a: any, b: any): boolean =>
   typeof a !== 'object'
@@ -25,26 +27,8 @@ export const softCompare = (a: any, b: any): boolean =>
         true
       )
 
-export const readCsvFile = (file: File) =>
-  new Promise((resolve, reject) => {
-    try {
-      const myReader = new FileReader()
-      myReader.onloadend = async () => {
-        resolve(myReader.result)
-      }
-      myReader.readAsText(file)
-    } catch (e) {
-      reject(e)
-    }
-  })
-
-export const exportToCSV = (
-  filename: string,
-  rows: Array<Object> | Array<Array<any>> | UnparseObject
-) => {
-  const csvFile = Papa.unparse(rows)
-
-  const blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' })
+export const saveFile = (filename: string, file: any) => {
+  const blob = new Blob([file], { type: 'text/csv;charset=utf-8;' })
   if (navigator.msSaveBlob) {
     // IE 10+
     navigator.msSaveBlob(blob, filename)
@@ -61,5 +45,32 @@ export const exportToCSV = (
       link.click()
       document.body.removeChild(link)
     }
+  }
+}
+
+export const exportData = async <D extends {}>(
+  filename: string,
+  columns: IMEXColumn<D>[],
+  data: any[][],
+  options: { type: 'csv' | 'xls' }
+) => {
+  const workbook = await new Excel.Workbook()
+  const worksheet = workbook.addWorksheet(filename)
+
+  worksheet.columns = columns.map((column) => ({
+    header: column.Header,
+    key: column.id ?? column.Header,
+    width: column.meta?.imex?.width,
+  })) as Excel.Column[]
+
+  for (const row of data) {
+    worksheet.addRow(row)
+  }
+  if (options.type === 'xls') {
+    const fileBuffer = await workbook.xlsx.writeBuffer()
+    saveFile(`${filename}.xls`, fileBuffer)
+  } else {
+    const fileBuffer = await workbook.csv.writeBuffer()
+    saveFile(`${filename}.csv`, fileBuffer)
   }
 }

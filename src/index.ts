@@ -44,4 +44,4 @@ export {
   UseImportTableParams,
 } from './imex/useImportTable'
 export { default as ImportTableDropzone } from './imex/ImportTableDropzone'
-export { readXLS } from './imex/xls.utils'
+export { parseExcelFileData } from './imex/excel.utils'
