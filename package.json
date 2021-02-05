@@ -42,7 +42,7 @@
     ]
   },
   "peerDependencies": {
-    "@habx/ui-core": "^5.15.2",
+    "@habx/ui-core": "^5.16.0",
     "lodash": ">=4.17.20",
     "react": ">= 17.0.1",
     "styled-components": ">= 5.2.1"
@@ -61,12 +61,12 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.13",
     "@babel/plugin-proposal-optional-chaining": "^7.12.13",
     "@habx/eslint-config-client": "^5.5.0",
-    "@habx/ui-core": "^5.15.2",
-    "@storybook/addon-actions": "^6.1.16",
+    "@habx/ui-core": "^5.16.0",
+    "@storybook/addon-actions": "^6.1.17",
     "@storybook/addon-centered": "^5.3.21",
-    "@storybook/addon-knobs": "^6.1.16",
-    "@storybook/addon-viewport": "^6.1.16",
-    "@storybook/react": "^6.1.16",
+    "@storybook/addon-knobs": "^6.1.17",
+    "@storybook/addon-viewport": "^6.1.17",
+    "@storybook/react": "^6.1.17",
     "@storybook/storybook-deployer": "^2.8.7",
     "@testing-library/react-hooks": "^5.0.3",
     "@types/faker": "^5.1.6",
@@ -94,7 +94,7 @@
     "rollup-plugin-typescript2": "^0.29.0",
     "styled-components": "^5.2.1",
     "ts-jest": "^26.5.0",
-    "ts-loader": "^8.0.14",
+    "ts-loader": "^8.0.15",
     "typescript": "^4.1.3"
   },
   "storybook-deployer": {
