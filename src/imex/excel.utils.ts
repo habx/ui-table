@@ -60,9 +60,17 @@ export const parseExcelFileData = async (file: File): Promise<any[][]> => {
   return data
 }
 
+export interface ExcelValidationOptions {
+  /**
+   * @default 50
+   */
+  extraRows?: number
+}
+
 export const applyValidationRulesAndStyle = <D extends {}>(
   worksheet: Excel.Worksheet,
-  columns: IMEXColumn<D>[]
+  columns: IMEXColumn<D>[],
+  options: ExcelValidationOptions
 ) => {
   const headerRow = worksheet.getRow(1)
   headerRow.border = {
@@ -74,6 +82,9 @@ export const applyValidationRulesAndStyle = <D extends {}>(
     },
   }
 
+  // Add extra rows for validation
+  worksheet.addRows(new Array(options.extraRows ?? 50).fill([]))
+
   for (const columnIndex in columns) {
     const column = columns[columnIndex]
     const columnNumber = Number(columnIndex) + 1
@@ -81,7 +92,7 @@ export const applyValidationRulesAndStyle = <D extends {}>(
     const isIdentifer = !!column.meta?.imex?.identifier
     if (dataValidation || isIdentifer) {
       const worksheetColumn = worksheet.getColumn(columnNumber)
-      worksheetColumn.eachCell((cell, rowNumber) => {
+      worksheetColumn.eachCell({ includeEmpty: true }, (cell, rowNumber) => {
         if (rowNumber > 1 && cell) {
           if (dataValidation) {
             cell.dataValidation = dataValidation
