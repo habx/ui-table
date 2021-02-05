@@ -1,6 +1,7 @@
-import * as Excel from 'exceljs'
+import type * as Excel from 'exceljs'
 import { get, reduce } from 'lodash'
 
+import { createWorkbook } from './exceljs'
 import { IMEXColumn } from './imex.types'
 
 export const softCompare = (a: any, b: any): boolean =>
@@ -54,7 +55,7 @@ export const exportData = async <D extends {}>(
   data: any[][],
   options: { type: 'csv' | 'xls' }
 ) => {
-  const workbook = await new Excel.Workbook()
+  const workbook = await createWorkbook()
   const worksheet = workbook.addWorksheet(filename)
 
   worksheet.columns = columns.map((column) => ({
