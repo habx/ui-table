@@ -1,6 +1,9 @@
 import type * as Excel from 'exceljs'
 
+import { palette } from '@habx/ui-core'
+
 import { createWorkbook, getCellValueTypes } from './exceljs'
+import { IMEXColumn } from './imex.types'
 
 export const parseExcelFileData = async (file: File): Promise<any[][]> => {
   const CellValueType = getCellValueTypes()
@@ -55,4 +58,41 @@ export const parseExcelFileData = async (file: File): Promise<any[][]> => {
     })
   })
   return data
+}
+
+export const applyValidationRulesAndStyle = <D extends {}>(
+  worksheet: Excel.Worksheet,
+  columns: IMEXColumn<D>[]
+) => {
+  const headerRow = worksheet.getRow(1)
+  headerRow.border = {
+    bottom: {
+      style: 'medium',
+      color: {
+        argb: palette.neutralWhiteWithIntensityFading[500].replace('#', ''),
+      },
+    },
+  }
+
+  for (const columnIndex in columns) {
+    const column = columns[columnIndex]
+    const columnNumber = Number(columnIndex) + 1
+    const dataValidation = column.meta?.imex?.dataValidation
+    const isIdentifer = !!column.meta?.imex?.identifier
+    if (dataValidation || isIdentifer) {
+      const worksheetColumn = worksheet.getColumn(columnNumber)
+      worksheetColumn.eachCell((cell, rowNumber) => {
+        if (rowNumber > 1 && cell) {
+          if (dataValidation) {
+            cell.dataValidation = dataValidation
+          }
+          if (isIdentifer && !!cell.value) {
+            cell.protection = {
+              locked: true,
+            }
+          }
+        }
+      })
+    }
+  }
 }
