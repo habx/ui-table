@@ -6,7 +6,6 @@ import { Column } from '../types/Table'
 
 export const FAKE_DATA = range(50).map(() => ({
   ...faker.helpers.createCard(),
-  number: Math.random(),
   id: Math.random(),
 }))
 
@@ -26,15 +25,6 @@ export const BASIC_COLUMNS: Column<Faker.Card>[] = [
 ]
 
 export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
-  {
-    Header: 'Number',
-    accessor: 'number',
-    meta: {
-      imex: {
-        type: 'number' as const,
-      },
-    },
-  },
   {
     Header: 'Username',
     accessor: 'username',
