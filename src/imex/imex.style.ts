@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Text, theme } from '@habx/ui-core'
+import { Icon, Text, theme } from '@habx/ui-core'
 
 export const OverlayContainer = styled(Text)`
   position: fixed;
@@ -65,4 +65,18 @@ export const StyledIMEXDropzone = styled.div`
   height: 100%;
   position: relative;
   outline: none;
+`
+
+export const ErrorCellContent = styled.div`
+  opacity: 0.5;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+`
+
+export const ErrorIcon = styled(Icon)`
+  margin-right: 8px;
+  color: ${theme.color('error')};
 `

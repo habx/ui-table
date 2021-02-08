@@ -4,15 +4,12 @@ import {
   get,
   groupBy as lodashGroupBy,
   isFunction,
-  isNil,
   lowerCase,
-  merge,
   omit,
   set,
 } from 'lodash'
 import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
-import * as ReactTable from 'react-table'
 import { useExpanded, useGroupBy } from 'react-table'
 
 import { ActionBar, Button, notify, prompt, Text } from '@habx/ui-core'
@@ -21,45 +18,32 @@ import useRemainingActionsTime from '../_internal/useRemainingActionsTime'
 import { LoadingOverlay } from '../components'
 import useExpandAll from '../plugin/useExpandAll'
 import Table from '../Table'
-import { CellProps, Column } from '../types/Table'
+import { Column } from '../types/Table'
 import useTable from '../useTable'
 
 import { parseCsvFileData } from './csv.utils'
 import { parseExcelFileData } from './excel.utils'
 import getImexColumns from './getImexColumns'
 import {
-  ChangedCell,
+  ImportedRow,
+  ImportedRowMeta,
+  UseImportTableOptions,
+  UseImportTableParams,
+} from './imex.interface'
+import {
   ConfirmContainer,
   DropzoneIndicator,
-  NewCell,
   OverlayContainer,
   OverlayContent,
-  PrevCell,
 } from './imex.style'
-import { IMEXColumn } from './imex.types'
-import { softCompare } from './imex.utils'
-
-export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
-  columns: IMEXColumn<D>[]
-  upsertRow: (row: D | D[]) => any
-  getOriginalData: () => D[] | Promise<D[]>
-  onFinish?: (rows: D[] | D[][]) => void
-  readFile?: (file: File) => Promise<any[]>
-  filterRows?: (row: D & { prevVal?: D; hasDiff?: boolean }) => boolean
-  groupBy?: string
-  confirmLightBoxTitle?: string
-}
-
-export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
-  disabled?: boolean
-  accept?: string[]
-  onBeforeDropAccepted?: (
-    onFiles: (
-      files: File[],
-      options?: Partial<UseImportTableOptions<D>>
-    ) => Promise<void>
-  ) => (files: File[], event?: DropEvent) => Promise<void>
-}
+import { IMEXColumn, RowValueTypes } from './imex.types'
+import {
+  getCompareColumnsFromImexColumns,
+  parseCell,
+  ParseCellError,
+  ParsingErrors,
+  softCompare,
+} from './imex.utils'
 
 const cleanHeader = (header: string | number | {}) =>
   lowerCase(deburr(`${header}`))
@@ -87,9 +71,9 @@ const useImportTable = <D extends { id?: string | number }>(
         ...options,
       }
 
-      const columns = _columns as IMEXColumn<D>[]
+      const columns = _columns as IMEXColumn<ImportedRow<D>>[]
 
-      const imexColumns = getImexColumns<D>(columns)
+      const imexColumns = getImexColumns(columns)
 
       const parseRawData = async (data: any[][]) => {
         // clone original data array
@@ -131,161 +115,126 @@ const useImportTable = <D extends { id?: string | number }>(
           return column
         })
 
-        const parsedData = data
-          .filter(
-            (row: string[]) =>
-              row.length === headers.length && row.some((cell) => cell.length)
-          )
-          .map((row: any[], rowIndex) => {
-            const imexRow = row.reduce((ctx, rawCell, index) => {
-              if (!orderedColumns[index]) {
-                return ctx
-              }
-              if (
-                requiredColumnHeaders.includes(
-                  cleanHeader(orderedColumns[index]?.Header as string)
-                ) &&
-                rawCell.length === 0
-              ) {
-                throw new Error(
-                  `${orderedColumns[index]?.Header} manquant ligne ${
-                    rowIndex + 1
-                  }`
-                )
-              }
-              if (rawCell === '') {
-                return ctx
-              }
+        const filteredData = data.filter(
+          (row: string[]) =>
+            row.length === headers.length && row.some((cell) => cell.length)
+        )
 
-              const format = (value: any) =>
-                orderedColumns[index]?.meta?.imex?.format?.(value, row) ??
-                `${value}`
+        const parsedData: ImportedRow<D>[] = []
+        for (const row of filteredData) {
+          const importedRowMeta: ImportedRowMeta<D> = {
+            hasDiff: false,
+            errors: {},
+          }
 
-              let cellValue: string | number | string[] | number[]
-              switch (orderedColumns[index]?.meta?.imex?.type) {
-                case 'number':
-                  if (typeof rawCell === 'number') {
-                    cellValue = Number(format(rawCell))
-                    break
-                  }
-                  cellValue = Number(format(rawCell.replace(',', '.')))
-                  if (Number.isNaN(cellValue)) {
-                    throw new Error(
-                      `${orderedColumns[index]?.Header} invalide ligne ${
-                        rowIndex + 1
-                      }`
-                    )
-                  }
-                  break
-                case 'number[]':
-                  cellValue = format(rawCell)
-                    .split(',')
-                    .map((value: string | number) => {
-                      const transformedValue = Number(value)
-                      if (Number.isNaN(transformedValue)) {
-                        throw new Error(
-                          `${orderedColumns[index]?.Header} invalide ligne ${
-                            rowIndex + 1
-                          }`
-                        )
-                      }
-                      return transformedValue
-                    })
-                  break
-                case 'string[]':
-                  cellValue = format(rawCell).split(',')
-                  break
-                default:
-                  cellValue = format(rawCell)
-                  break
-              }
+          const importedRowValue: Partial<D> = {}
+
+          const rawRowValues = Object.values(row)
+          for (let index = 0; index < rawRowValues.length; index++) {
+            const rawCell = rawRowValues[index]
+            if (!orderedColumns[index]) {
+              continue
+            }
+
+            let cellError: string | null = null
+
+            if (
+              requiredColumnHeaders.includes(
+                cleanHeader(orderedColumns[index]?.Header as string)
+              ) &&
+              rawCell.length === 0
+            ) {
+              cellError = 'requise'
+            }
+            if (rawCell === '') {
+              continue
+            }
+
+            const format = (value: any) =>
+              orderedColumns[index]?.meta?.imex?.format?.(value, row) ??
+              `${value}`
+
+            // cast to string for default value to avoid render error
+            let newCellValue:
+              | string
+              | number
+              | string[]
+              | number[] = `${rawCell}`
+
+            try {
+              newCellValue = parseCell(
+                rawCell,
+                orderedColumns[index]!.meta!.imex!.type as RowValueTypes,
+                { format }
+              )
 
               const validate =
                 orderedColumns[index]?.meta?.imex?.validate ?? (() => true)
-              if (!validate(cellValue, row)) {
+              const validateResponse = validate(newCellValue, row)
+              const isValid =
+                typeof validateResponse === 'string'
+                  ? !validateResponse.length
+                  : !!validateResponse
+              if (!isValid) {
                 throw new Error(
-                  `${orderedColumns[index]?.Header} invalide ligne ${
-                    rowIndex + 1
-                  }`
+                  typeof validateResponse === 'string'
+                    ? validateResponse
+                    : ParsingErrors[ParseCellError.INVALID]
                 )
               }
-
-              return merge(
-                {},
-                ctx,
-                set({}, orderedColumns[index]?.accessor as string, cellValue)
-              )
-            }, {}) as D
-            const prevValId = get(imexRow, identifierColumn.accessor as string)
-            const prevValIndex = originalData.findIndex(
-              (originalRow) =>
-                get(originalRow, identifierColumn.accessor as string) ===
-                prevValId
-            )
-            const prevVal: D = originalData[prevValIndex]
-            originalData.splice(prevValIndex, 1)
-            return {
-              ...imexRow,
-              prevVal,
-              hasDiff: !softCompare(imexRow, prevVal),
-              id: prevVal?.id ?? undefined,
+            } catch (e) {
+              cellError = e.message
             }
+
+            if (cellError) {
+              set(
+                importedRowMeta.errors,
+                orderedColumns[index]?.accessor as string,
+                cellError
+              )
+            }
+
+            set(
+              importedRowValue,
+              orderedColumns[index]?.accessor as string,
+              newCellValue
+            )
+          }
+
+          /**
+           * Previous value
+           */
+          const prevValAccessor = get(
+            importedRowValue,
+            identifierColumn.accessor as string
+          )
+          const prevValIndex = originalData.findIndex(
+            (originalRow) =>
+              get(originalRow, identifierColumn.accessor as string) ===
+              prevValAccessor
+          )
+
+          importedRowMeta.prevVal = originalData[prevValIndex]
+          originalData.splice(prevValIndex, 1) // remove from original array
+
+          /**
+           * Diff
+           */
+          importedRowMeta.hasDiff = !softCompare(
+            importedRowValue,
+            importedRowMeta.prevVal
+          )
+
+          parsedData.push({
+            ...(importedRowValue as D),
+            meta: importedRowMeta as ImportedRowMeta<D>,
+            id: importedRowMeta.prevVal?.id ?? undefined,
           })
+        }
         return parsedData
       }
 
-      const diffColumns = imexColumns.map((column) => ({
-        ...column,
-        Cell: ((rawProps) => {
-          const props = (rawProps as unknown) as CellProps<D>
-          const Cell = (isFunction(column.Cell)
-            ? column.Cell
-            : ({ cell }) => <div>{cell.value}</div>) as React.ComponentType<
-            CellProps<D>
-          >
-          const cellPrevVal = get(
-            rawProps.row.original?.prevVal,
-            column.accessor as string
-          )
-
-          const cellPrevProps = {
-            ...props,
-            cell: {
-              ...props.cell,
-              value: cellPrevVal ?? '',
-            },
-          }
-          // using lodash merge causes performance issues
-
-          if (isNil(cellPrevVal)) {
-            return (
-              <NewCell>
-                <Cell {...props} />
-              </NewCell>
-            )
-          }
-
-          if (
-            isNil(props.cell.value) ||
-            softCompare(cellPrevVal, props.cell.value)
-          ) {
-            return <Cell {...cellPrevProps} />
-          }
-
-          return (
-            <div>
-              <ChangedCell>
-                <Cell {...props} />
-              </ChangedCell>
-              <PrevCell>
-                <Cell {...cellPrevProps} />
-              </PrevCell>
-            </div>
-          )
-        }) as ReactTable.Renderer<
-          CellProps<D & { prevVal: D; hasDiff: boolean }>
-        >,
-      }))
+      const diffColumns = getCompareColumnsFromImexColumns<D>(imexColumns)
 
       try {
         setParsing(true)
@@ -301,7 +250,7 @@ const useImportTable = <D extends { id?: string | number }>(
         }
 
         const parsedData = (await parseRawData(rawData)).filter((imexRow) =>
-          filterRows ? filterRows(imexRow) : imexRow.hasDiff
+          filterRows ? filterRows(imexRow) : imexRow.meta.hasDiff
         )
         setParsing(false)
         if (parsedData.length === 0) {
@@ -343,9 +292,11 @@ const useImportTable = <D extends { id?: string | number }>(
         }))
         if (hasConfirmed) {
           remainingActions.initLoading()
-          const cleanData = parsedData.map(
-            (row) => (omit(row, ['prevVal', 'hasDiff']) as unknown) as D
-          )
+
+          const cleanData = parsedData
+            .filter((row) => Object.values(row.meta.errors).length === 0) // ignore rows with error
+            .map((row) => (omit(row, ['meta']) as unknown) as D) // remove local meta
+
           const dataToUpsert = groupBy
             ? Object.values(lodashGroupBy(cleanData, groupBy))
             : cleanData
