@@ -39,9 +39,9 @@ export { default as selectFilterFactory } from './filterFactory/selectFilterFact
 export { RowValueTypes, IMEXColumn } from './imex/imex.types'
 export { default as useExportTable } from './imex/useExportTable'
 export {
-  default as useImportTable,
   UseImportTableOptions,
   UseImportTableParams,
-} from './imex/useImportTable'
+} from './imex/imex.interface'
+export { default as useImportTable } from './imex/useImportTable'
 export { default as ImportTableDropzone } from './imex/ImportTableDropzone'
 export { parseExcelFileData } from './imex/excel.utils'

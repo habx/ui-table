@@ -1,7 +1,8 @@
 import * as React from 'react'
 
+import { UseImportTableParams } from './imex.interface'
 import { StyledIMEXDropzone } from './imex.style'
-import useImportTable, { UseImportTableParams } from './useImportTable'
+import useImportTable from './useImportTable'
 
 const ImportTableDropzone: React.FunctionComponent<
   UseImportTableParams<any>
