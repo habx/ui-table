@@ -170,7 +170,7 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
         if (!Object.values(rowMeta?.errors ?? {}).length) {
           return <React.Fragment>{children}</React.Fragment>
         }
-        const error = rowMeta?.errors?.[column.accessor as keyof D]
+        const error = rowMeta?.errors?.[column.accessor as string]
 
         return (
           <Tooltip small title={error as string} disabled={!error}>
