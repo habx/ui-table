@@ -390,6 +390,23 @@ const useImportTable = <D extends { id?: string | number }>(
     [dropzone, params.disabled]
   )
 
+  /**
+   * Prevent leaving while uploading
+   */
+  React.useEffect(() => {
+    if (remainingActionsState.loading) {
+      const preventNavigation = (e: BeforeUnloadEvent) => {
+        e.preventDefault()
+        e.returnValue = ''
+        return ''
+      }
+      window.addEventListener('beforeunload', preventNavigation, false)
+      return () => {
+        window.removeEventListener('beforeunload', preventNavigation)
+      }
+    }
+  }, [remainingActionsState.loading])
+
   return {
     overlays,
     dropzoneProps,
