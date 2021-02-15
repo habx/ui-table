@@ -8,7 +8,7 @@ export interface ImportedRowMeta<D extends {}> {
   errors: Record<string, string>
 }
 
-export type ImportedRow<D extends {}> = D & { meta: ImportedRowMeta<D> }
+export type ImportedRow<D extends {}> = D & { _rowMeta: ImportedRowMeta<D> }
 
 export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
   columns: IMEXColumn<D>[]
