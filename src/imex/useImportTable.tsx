@@ -227,7 +227,7 @@ const useImportTable = <D extends { id?: string | number }>(
 
           parsedData.push({
             ...(importedRowValue as D),
-            meta: importedRowMeta as ImportedRowMeta<D>,
+            _rowMeta: importedRowMeta as ImportedRowMeta<D>,
             id: importedRowMeta.prevVal?.id ?? undefined,
           })
         }
@@ -250,7 +250,7 @@ const useImportTable = <D extends { id?: string | number }>(
         }
 
         const parsedData = (await parseRawData(rawData)).filter((imexRow) =>
-          filterRows ? filterRows(imexRow) : imexRow.meta.hasDiff
+          filterRows ? filterRows(imexRow) : imexRow._rowMeta.hasDiff
         )
         setParsing(false)
         if (parsedData.length === 0) {
@@ -260,6 +260,7 @@ const useImportTable = <D extends { id?: string | number }>(
         const plugins = groupBy ? [useGroupBy, useExpanded, useExpandAll] : []
         const hasConfirmed = await prompt(({ onResolve }) => ({
           fullscreen: true,
+          spacing: 'regular',
           Component: () => {
             const tableInstance = useTable<D>(
               {
@@ -294,8 +295,8 @@ const useImportTable = <D extends { id?: string | number }>(
           remainingActions.initLoading()
 
           const cleanData = parsedData
-            .filter((row) => Object.values(row.meta.errors).length === 0) // ignore rows with error
-            .map((row) => (omit(row, ['meta']) as unknown) as D) // remove local meta
+            .filter((row) => Object.values(row._rowMeta.errors).length === 0) // ignore rows with error
+            .map((row) => (omit(row, ['_rowMeta']) as unknown) as D) // remove local meta
 
           const dataToUpsert = groupBy
             ? Object.values(lodashGroupBy(cleanData, groupBy))

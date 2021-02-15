@@ -3,7 +3,7 @@ import { get, isFunction, isNil, reduce } from 'lodash'
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
-import { Tooltip } from '@habx/ui-core'
+import { Icon, Tooltip } from '@habx/ui-core'
 
 import { CellProps } from '../types/Table'
 
@@ -157,7 +157,7 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
     ...column,
     Cell: ((rawProps) => {
       const props = (rawProps as unknown) as CellProps<D>
-      const rowMeta = rawProps.row.original?.meta
+      const rowMeta = rawProps.row.original?._rowMeta
 
       const Cell = (isFunction(column.Cell)
         ? column.Cell
@@ -194,7 +194,8 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
       if (isNil(cellPrevVal)) {
         return (
           <CellContainer>
-            <NewCell>
+            <NewCell data-new-row={!!column.meta?.imex?.identifier}>
+              {column.meta?.imex?.identifier && <Icon icon="add-round" />}
               <Cell {...props} />
             </NewCell>
           </CellContainer>

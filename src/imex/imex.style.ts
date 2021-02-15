@@ -47,6 +47,13 @@ export const ConfirmContainer = styled.div`
 
 export const NewCell = styled.div`
   color: ${theme.color('primary')};
+  &[data-new-row='true'] {
+    display: flex;
+    align-items: center;
+    > span:first-child {
+      margin-right: 8px;
+    }
+  }
 `
 
 export const ChangedCell = styled.div`
