@@ -173,7 +173,12 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
         const error = rowMeta?.errors?.[column.accessor as string]
 
         return (
-          <Tooltip small title={error as string} disabled={!error}>
+          <Tooltip
+            small
+            title={error as string}
+            description={`${props.cell?.value}`}
+            disabled={!error}
+          >
             <ErrorCellContent>
               {error && <ErrorIcon icon="exclam-round" />}
               {children}

@@ -19,6 +19,12 @@ export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
   filterRows?: (row: ImportedRow<D>) => boolean
   groupBy?: string
   confirmLightBoxTitle?: string
+  /**
+   * Use this predicate instead of simple comparison with identifier column
+   * @param originalDataRow
+   * @param row
+   */
+  findPrevValPredicate?: (originalDataRow: D, row: Partial<D>) => boolean
 }
 
 export interface UseImportTableParams<D> extends UseImportTableOptions<D> {

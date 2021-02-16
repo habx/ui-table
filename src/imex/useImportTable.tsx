@@ -13,12 +13,13 @@ import { DropEvent, useDropzone } from 'react-dropzone'
 import { useExpanded, useGroupBy } from 'react-table'
 
 import {
-  ActionBar,
   Button,
+  HeaderBar,
   Icon,
   notify,
   prompt,
   Text,
+  Title,
   Tooltip,
 } from '@habx/ui-core'
 
@@ -41,6 +42,7 @@ import {
 import {
   ConfirmContainer,
   DataInfo,
+  ActionBar,
   DataInfoContainer,
   DropzoneIndicator,
   OverlayContainer,
@@ -156,7 +158,7 @@ const useImportTable = <D extends { id?: string | number }>(
             ) {
               cellError = 'requise'
             }
-            if (rawCell === '') {
+            if (rawCell === '' || rawCell === undefined) {
               continue
             }
 
@@ -214,15 +216,19 @@ const useImportTable = <D extends { id?: string | number }>(
           /**
            * Previous value
            */
-          const prevValAccessor = get(
+          const prevValIdentifier = get(
             importedRowValue,
             identifierColumn.accessor as string
           )
-          const prevValIndex = originalData.findIndex(
-            (originalRow) =>
+          const prevValIndex = originalData.findIndex((originalRow) => {
+            if (options.findPrevValPredicate) {
+              return options.findPrevValPredicate(originalRow, importedRowValue)
+            }
+            return (
               get(originalRow, identifierColumn.accessor as string) ===
-              prevValAccessor
-          )
+              prevValIdentifier
+            )
+          })
 
           importedRowMeta.prevVal = originalData[prevValIndex]
           originalData.splice(prevValIndex, 1) // remove from original array
@@ -303,8 +309,18 @@ const useImportTable = <D extends { id?: string | number }>(
               }
             }, [])
             return (
-              <ConfirmContainer data-testid="useImportTable-confirmContainer">
-                <Table style={{ scrollable: true }} instance={tableInstance} />
+              <React.Fragment>
+                {params.confirmLightBoxTitle && (
+                  <HeaderBar>
+                    <Title type="regular">{params.confirmLightBoxTitle}</Title>
+                  </HeaderBar>
+                )}
+                <ConfirmContainer data-testid="useImportTable-confirmContainer">
+                  <Table
+                    style={{ scrollable: true }}
+                    instance={tableInstance}
+                  />
+                </ConfirmContainer>
                 <ActionBar>
                   <DataInfoContainer>
                     <Tooltip title={`${dataInfos.added} ajout(s)`} small>
@@ -337,7 +353,7 @@ const useImportTable = <D extends { id?: string | number }>(
                     Valider
                   </Button>
                 </ActionBar>
-              </ConfirmContainer>
+              </React.Fragment>
             )
           },
         }))

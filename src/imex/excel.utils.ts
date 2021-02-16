@@ -17,7 +17,8 @@ export const parseExcelFileData = async (file: File): Promise<any[][]> => {
   worksheet.eachRow((row, _rowIndex) => {
     // Indexes start at 1
     const rowIndex = _rowIndex - 1
-    data[rowIndex] = []
+    // fill with null to avoid empty content
+    data[rowIndex] = new Array(worksheet.columns.length).fill(undefined)
     row.eachCell((cell, _cellIndex) => {
       // Indexes start at 1
       const cellIndex = _cellIndex - 1
@@ -73,6 +74,9 @@ export const applyValidationRulesAndStyle = <D extends {}>(
   options: ExcelValidationOptions
 ) => {
   const headerRow = worksheet.getRow(1)
+  headerRow.font = {
+    bold: true,
+  }
   headerRow.border = {
     bottom: {
       style: 'medium',
