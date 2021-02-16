@@ -12,7 +12,15 @@ import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
 import { useExpanded, useGroupBy } from 'react-table'
 
-import { ActionBar, Button, notify, prompt, Text } from '@habx/ui-core'
+import {
+  ActionBar,
+  Button,
+  Icon,
+  notify,
+  prompt,
+  Text,
+  Tooltip,
+} from '@habx/ui-core'
 
 import useRemainingActionsTime from '../_internal/useRemainingActionsTime'
 import { LoadingOverlay } from '../components'
@@ -32,6 +40,8 @@ import {
 } from './imex.interface'
 import {
   ConfirmContainer,
+  DataInfo,
+  DataInfoContainer,
   DropzoneIndicator,
   OverlayContainer,
   OverlayContent,
@@ -272,10 +282,50 @@ const useImportTable = <D extends { id?: string | number }>(
               },
               ...plugins
             )
+
+            const dataInfos = React.useMemo(() => {
+              return {
+                added: parsedData.filter(
+                  (row) =>
+                    row._rowMeta.hasDiff &&
+                    !row._rowMeta.prevVal &&
+                    !Object.values(row._rowMeta.errors).length
+                ).length,
+                edited: parsedData.filter(
+                  (row) =>
+                    row._rowMeta.hasDiff &&
+                    !!row._rowMeta.prevVal &&
+                    !Object.values(row._rowMeta.errors).length
+                ).length,
+                ignored: parsedData.filter(
+                  (row) => Object.values(row._rowMeta.errors).length
+                ).length,
+              }
+            }, [])
             return (
               <ConfirmContainer data-testid="useImportTable-confirmContainer">
                 <Table style={{ scrollable: true }} instance={tableInstance} />
                 <ActionBar>
+                  <DataInfoContainer>
+                    <Tooltip title={`${dataInfos.added} ajout(s)`} small>
+                      <DataInfo data-type="addition">
+                        {dataInfos.added} <Icon icon="add-round" />
+                      </DataInfo>
+                    </Tooltip>
+                    <Tooltip
+                      title={`${dataInfos.edited} modification(s)`}
+                      small
+                    >
+                      <DataInfo data-type="edition">
+                        {dataInfos.edited} <Icon icon="check-round" />
+                      </DataInfo>
+                    </Tooltip>
+                    <Tooltip title={`${dataInfos.ignored} ignoré(s)`} small>
+                      <DataInfo data-type="ignored">
+                        {dataInfos.ignored} <Icon icon="exclam-round" />
+                      </DataInfo>
+                    </Tooltip>
+                  </DataInfoContainer>
                   <Button ghost onClick={() => onResolve(false)}>
                     Annuler
                   </Button>

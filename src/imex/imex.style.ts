@@ -87,3 +87,27 @@ export const ErrorIcon = styled(Icon)`
   margin-right: 8px;
   color: ${theme.color('error')};
 `
+
+export const DataInfoContainer = styled.div`
+  display: flex;
+`
+
+export const DataInfo = styled(Text)`
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+
+  > :last-child {
+    margin-left: 8px;
+  }
+
+  &[data-type='ignored'] {
+    color: ${theme.color('error')};
+  }
+  &[data-type='edition'] {
+    color: ${theme.color('warning')};
+  }
+  &[data-type='addition'] {
+    color: ${theme.color('primary')};
+  }
+`
