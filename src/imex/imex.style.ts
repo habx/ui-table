@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
-import { Icon, Text, theme } from '@habx/ui-core'
+import { Icon, Text, theme, ActionBar as BasActionBar } from '@habx/ui-core'
+
+import { zIndex } from '../_internal/zIndex'
 
 export const OverlayContainer = styled(Text)`
   position: fixed;
@@ -13,7 +15,7 @@ export const OverlayContainer = styled(Text)`
   display: grid;
   justify-items: center;
   align-items: center;
-  z-index: 9999999;
+  z-index: ${zIndex.overlay};
   text-align: center;
 `
 
@@ -40,9 +42,14 @@ export const DropzoneIndicator = styled.div`
 
 export const ConfirmContainer = styled.div`
   height: 100%;
+  min-height: 0;
 
   display: flex;
   flex-direction: column;
+`
+
+export const ActionBar = styled(BasActionBar)`
+  z-index: ${zIndex.overlay};
 `
 
 export const NewCell = styled.div`

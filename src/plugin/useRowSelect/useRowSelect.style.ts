@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 
+import { zIndex } from '../../_internal/zIndex'
+
 export const CheckboxContainer = styled.div`
-  z-index: 99;
+  z-index: ${zIndex.checkbox};
   height: 100%;
   display: flex;
   align-items: center;
