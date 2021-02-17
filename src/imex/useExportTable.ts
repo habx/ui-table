@@ -27,8 +27,17 @@ const useExportTable = <D extends { [key: string]: any } = any>(
       const imexData = data.map((row) =>
         imexColumns.map(({ accessor, meta }) => {
           let value = get(row, accessor as string)
-          const parse = (v: any) =>
-            meta?.imex?.parse?.(v, Object.values(row)) ?? v
+          const parse = (v: any) => {
+            if (
+              !meta?.imex?.parse &&
+              ['string[]', 'number[]'].includes(
+                meta?.imex?.type as 'string[]' | 'number[]'
+              )
+            ) {
+              return v?.join(',')
+            }
+            return meta?.imex?.parse?.(v, Object.values(row)) ?? v
+          }
           if (type === 'xls' && meta?.imex?.type === 'number') {
             return isNumber(value) ? Number(parse(value)) : value
           }

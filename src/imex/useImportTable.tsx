@@ -256,10 +256,11 @@ const useImportTable = <D extends { id?: string | number }>(
         setParsing(true)
 
         const file = files[0]
+
         let rawData
         if (readFile) {
           rawData = await readFile(file)
-        } else if (file.type.includes('text/csv')) {
+        } else if (file.type.includes('text/')) {
           rawData = await parseCsvFileData(file)
         } else {
           rawData = await parseExcelFileData(file)
