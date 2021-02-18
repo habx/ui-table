@@ -29,11 +29,17 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
 
     const {
       isActive = false,
-      isInteractive = true,
+      isInteractive = false,
       backgroundColor,
-    } = getRowCharacteristics
-      ? getRowCharacteristics(row)
-      : ({} as Partial<RowCharacteristics>)
+    } = React.useMemo<Partial<RowCharacteristics>>(() => {
+      let temp: Partial<RowCharacteristics> = {}
+
+      if (getRowCharacteristics) {
+        temp = getRowCharacteristics(row)
+      }
+
+      return temp
+    }, [getRowCharacteristics, row])
 
     const rowProps = row.getRowProps()
 
@@ -128,7 +134,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
 interface TableRowProps<D extends {}>
   extends Omit<React.HTMLAttributes<HTMLTableRowElement>, 'onClick'> {
   prepareRow: (row: Row<D>) => void
-  getRowCharacteristics: (row: Row<D>) => Partial<RowCharacteristics>
+  getRowCharacteristics?: (row: Row<D>) => Partial<RowCharacteristics>
   row: Row<D>
   instance: TableInstance<D>
   index: number

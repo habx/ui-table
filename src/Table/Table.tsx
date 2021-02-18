@@ -8,7 +8,9 @@ import { Icon, Tooltip } from '@habx/ui-core'
 import { ColumnInstance } from '../types/Table'
 
 import Density from './Density'
-import LoadingOverlay from './LoadingOverlay'
+import { useGridTemplateColumns } from './hooks/useGridTemplateColumns'
+import { useVirtualize } from './hooks/useVirtualize'
+import { LoadingOverlay } from './LoadingOverlay'
 import LoadingRow from './LoadingRow'
 import { TableProps } from './Table.interface'
 import {
@@ -26,10 +28,6 @@ import {
 } from './Table.style'
 import TablePagination from './TablePagination'
 import TableRow from './TableRow'
-import useVirtualize from './useVirtualize'
-
-const DEFAULT_COLUMN_WIDTH = 100
-const DEFAULT_ROW_CHARACTERISTICS_GETTER = () => ({})
 
 const Table = <D extends {}>({
   onRowClick,
@@ -38,7 +36,7 @@ const Table = <D extends {}>({
   noDataComponent: NoDataComponent,
   renderRowSubComponent,
   instance,
-  getRowCharacteristics = DEFAULT_ROW_CHARACTERISTICS_GETTER,
+  getRowCharacteristics,
   virtualized = false,
 }: React.PropsWithChildren<TableProps<D>>) => {
   const {
@@ -49,34 +47,13 @@ const Table = <D extends {}>({
     page,
     prepareRow,
     columns,
+    plugins,
   } = instance
 
-  const hasPagination = !!instance.pageOptions //&& !infiniteScroll
+  const hasPagination = !!instance.pageOptions
   const hasDensity = !!instance.setDensity
-  const hasRowSelect = !!instance.plugins.find(
-    (plugin) => plugin.pluginName === 'useRowSelect'
-  )
 
-  const gridTemplateColumns = React.useMemo(() => {
-    const flatColumns = columns.flatMap((column) => column?.columns ?? column)
-    return `${hasRowSelect ? '45px' : ''} ${flatColumns
-      .map(({ minWidth, maxWidth }) => {
-        const screenWidth =
-          typeof window === 'object' ? window.innerWidth : 10000
-        const realMaxWidth =
-          maxWidth && maxWidth > screenWidth ? '1fr' : `${maxWidth}px`
-        return `minmax(${
-          minWidth
-            ? `${minWidth}px`
-            : `${
-                maxWidth && maxWidth < DEFAULT_COLUMN_WIDTH
-                  ? maxWidth
-                  : DEFAULT_COLUMN_WIDTH
-              }px`
-        }, ${realMaxWidth})`
-      })
-      .join(' ')}`
-  }, [columns, hasRowSelect])
+  const gridTemplateColumns = useGridTemplateColumns({ plugins, columns })
 
   const virtualState = useVirtualize({
     skip: (!virtualized && !instance.infiniteScroll) || rows.length === 0,
@@ -141,6 +118,7 @@ const Table = <D extends {}>({
                 const isBig =
                   headerGroups.length > 1 &&
                   headerGroupIndex < headerGroups.length - 1
+
                 return (
                   <TableHeadCell
                     data-big={isBig}
