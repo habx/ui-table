@@ -29,7 +29,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
 
     const {
       isActive = false,
-      isInteractive = false,
+      isInteractive = true,
       backgroundColor,
     } = React.useMemo<Partial<RowCharacteristics>>(() => {
       let temp: Partial<RowCharacteristics> = {}
