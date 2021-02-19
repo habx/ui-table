@@ -41,14 +41,12 @@ const Loader = styled.div`
 
 const LoadingRow: React.FunctionComponent<{ instance: TableInstance<any> }> = ({
   instance,
-}) => {
-  return (
-    <LoaderContainer>
-      {instance.columns.map((column) => (
-        <Loader style={{ width: column.width }} />
-      ))}
-    </LoaderContainer>
-  )
-}
+}) => (
+  <LoaderContainer>
+    {instance.columns.map((column) => (
+      <Loader key={column.id} style={{ width: column.width }} />
+    ))}
+  </LoaderContainer>
+)
 
 export default LoadingRow

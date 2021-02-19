@@ -123,7 +123,10 @@ export interface TableState<D extends object>
 }
 
 export interface TableInstance<D extends object = {}>
-  extends Omit<ReactTable.TableInstance<D>, 'state' | 'initialState'>,
+  extends Omit<
+      ReactTable.TableInstance<D>,
+      'state' | 'initialState' | 'columns'
+    >,
     ReactTable.UseFiltersInstanceProps<D>,
     ReactTable.UsePaginationInstanceProps<D>,
     ReactTable.UseSortByInstanceProps<D>,
@@ -141,6 +144,7 @@ export interface TableInstance<D extends object = {}>
   initialState: TableState<D>
   rows: Array<Row<D>>
   page: Array<Row<D>>
+  columns: ColumnInstance<D>[]
 }
 
 export type ColumnInstance<

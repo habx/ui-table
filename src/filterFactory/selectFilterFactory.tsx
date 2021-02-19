@@ -6,10 +6,9 @@ const selectFilterFactory = (
   options: any[],
   otherProps: Partial<SelectFilterProps> = {}
 ) => {
-  const Component: React.FunctionComponent<Omit<
-    SelectFilterProps,
-    'options'
-  >> = (props) => (
+  const Component: React.FunctionComponent<
+    Omit<SelectFilterProps, 'options'>
+  > = (props) => (
     <SelectFilter
       {...props}
       options={options}
