@@ -82,8 +82,6 @@ export const TableBodyRow = styled.tr`
   grid-template-columns: var(--table-grid-template-columns);
   grid-gap: var(--table-grid-gap);
 
-  transition: background-color 50ms ease-in-out;
-
   &[data-striped='true']:nth-child(2n + 1) {
     background-color: ${theme.neutralColor(100)};
   }

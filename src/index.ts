@@ -1,15 +1,25 @@
 export { default as useTable } from './useTable'
 export { default as Table, TablePagination } from './Table'
 
+/*
+ * Filter methods
+ */
+export { default as booleanFilter } from './filterMethod/booleanFilter'
+export { default as arrayFilter } from './filterMethod/arrayFilter'
+
+/*
+ * Filter components
+ */
 export { default as BooleanFilter } from './filter/BooleanFilter'
 export { default as TextFilter } from './filter/TextFilter'
+export { RangeFilter } from './filter/RangeFilter'
 
+/*
+ * Table Cell
+ */
 export { default as BooleanCell } from './cell/BooleanCell'
 export { default as IconCell } from './cell/IconCell'
 export { default as ArrayCell } from './cell/ArrayCell'
-
-export { default as booleanFilter } from './filterMethod/booleanFilter'
-export { default as arrayFilter } from './filterMethod/arrayFilter'
 
 export {
   Column,

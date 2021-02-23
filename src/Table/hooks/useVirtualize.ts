@@ -1,7 +1,11 @@
 import { isEmpty } from 'lodash'
 import * as React from 'react'
 
-const useVirtualize = <D extends {}>({ skip }: { skip: boolean }) => {
+type UseVirtualizeConfig = {
+  skip: boolean
+}
+
+export const useVirtualize = ({ skip }: UseVirtualizeConfig) => {
   const scrollContainerRef = React.useRef<HTMLTableSectionElement>(null)
   const firstItemRef = React.useRef<HTMLTableRowElement>(null)
 
@@ -19,9 +23,14 @@ const useVirtualize = <D extends {}>({ skip }: { skip: boolean }) => {
         itemSize: firstItemRef.current?.clientHeight,
       })
     }
+
     const handleResize = () => setDimensions({})
+
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
   }, [dimensions, skip])
 
   return {
@@ -31,5 +40,3 @@ const useVirtualize = <D extends {}>({ skip }: { skip: boolean }) => {
     ...dimensions,
   }
 }
-
-export default useVirtualize
