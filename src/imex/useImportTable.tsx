@@ -128,8 +128,8 @@ const useImportTable = <D extends { id?: string | number }>(
         })
 
         const filteredData = data.filter(
-          (row: string[]) =>
-            row.length === headers.length && row.some((cell) => cell.length)
+          (row: string[] | null) =>
+            row?.length === headers?.length && row.some((cell) => !!cell)
         )
 
         const parsedData: ImportedRow<D>[] = []
@@ -149,12 +149,11 @@ const useImportTable = <D extends { id?: string | number }>(
             }
 
             let cellError: string | null = null
-
             if (
               requiredColumnHeaders.includes(
                 cleanHeader(orderedColumns[index]?.Header as string)
               ) &&
-              rawCell.length === 0
+              rawCell?.length === 0
             ) {
               cellError = 'requise'
             }
@@ -270,7 +269,7 @@ const useImportTable = <D extends { id?: string | number }>(
           filterRows ? filterRows(imexRow) : imexRow._rowMeta.hasDiff
         )
         setParsing(false)
-        if (parsedData.length === 0) {
+        if (parsedData?.length === 0) {
           notify('Aucune difference avec les données actuelles')
           return
         }
