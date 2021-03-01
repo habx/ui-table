@@ -58,8 +58,8 @@
     "react-window-infinite-loader": "^1.0.7"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.0",
-    "@babel/plugin-proposal-optional-chaining": "^7.13.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
+    "@babel/plugin-proposal-optional-chaining": "^7.13.8",
     "@habx/eslint-config-client": "^5.5.0",
     "@habx/ui-core": "^5.20.1",
     "@storybook/addon-actions": "^6.1.20",
