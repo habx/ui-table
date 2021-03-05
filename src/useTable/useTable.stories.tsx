@@ -127,7 +127,7 @@ export const InfiniteScroll = () => {
 
   return (
     <Container>
-      <Table instance={tableInstance} virtualized />
+      <Table instance={tableInstance} virtualized style={{ striped: true }} />
     </Container>
   )
 }

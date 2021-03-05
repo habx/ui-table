@@ -4,7 +4,7 @@ import { Icon, Text } from '@habx/ui-core'
 
 import { ColumnInstance, Row, TableInstance } from '../types/Table'
 
-import { RowCharacteristics, TableStyle } from './Table.interface'
+import { RowCharacteristics } from './Table.interface'
 import {
   ExpandToggleContainer,
   TableBodyRow,
@@ -21,7 +21,6 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
       instance,
       index,
       onClick,
-      tableStyle,
       renderRowSubComponent,
       ...rest
     } = props
@@ -63,7 +62,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
           onClick={
             onClick && !row.isGrouped ? (e) => onClick(row, e) : undefined
           }
-          data-striped={!row.isGrouped && tableStyle.striped}
+          data-even={!row.isGrouped && row.index % 2 === 0}
           data-clickable={!row.isGrouped && !!onClick && isInteractive}
           data-section={row.isExpanded}
           data-active={isActive}
@@ -140,7 +139,6 @@ interface TableRowProps<D extends {}>
   index: number
   onClick?: (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => void
   renderRowSubComponent?: (row: Row<D>) => React.ReactNode
-  tableStyle: TableStyle
 }
 
 export default TableRow

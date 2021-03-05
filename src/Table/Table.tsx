@@ -78,7 +78,6 @@ const Table = <D extends {}>({
 
     return (
       <TableRow
-        tableStyle={style}
         index={rowIndex}
         row={row}
         getRowCharacteristics={getRowCharacteristics}
@@ -169,6 +168,7 @@ const Table = <D extends {}>({
         )}
         <TableBody
           {...getTableBodyProps()}
+          data-striped={style?.striped}
           ref={virtualState.scrollContainerRef}
         >
           {virtualState.initialized ? (
@@ -198,7 +198,6 @@ const Table = <D extends {}>({
                 getRowCharacteristics={getRowCharacteristics}
                 instance={instance}
                 onClick={onRowClick}
-                tableStyle={style}
                 prepareRow={prepareRow}
                 renderRowSubComponent={renderRowSubComponent}
                 ref={rowIndex === 0 ? virtualState.firstItemRef : undefined}
