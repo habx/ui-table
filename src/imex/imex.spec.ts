@@ -3,9 +3,9 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import exportData from '../_fakeData/export'
 import { FAKE_DATA, IMEX_COLUMNS } from '../_fakeData/storyFakeData'
 
-import getImexColumns from './getImexColumns'
-import useExportTable from './useExportTable'
-import useImportTable from './useImportTable'
+import { getImexColumns } from './getImexColumns'
+import { useExportTable } from './useExportTable'
+import { useImportTable } from './useImportTable'
 
 describe('Import/Export (imex)', () => {
   describe('export', () => {
