@@ -1,4 +1,4 @@
-export interface UseControlledFiltersOptions<D extends {}> {
+export interface UseControlledFiltersOptions {
   onFiltersChange?: (filters: any) => void
   filters?: any[]
   /**
@@ -8,5 +8,5 @@ export interface UseControlledFiltersOptions<D extends {}> {
   shouldIgnoreEmptyFilter?: boolean
 }
 
-export interface UseControlledFiltersInstanceProps<D extends {}>
-  extends UseControlledFiltersOptions<D> {}
+export interface UseControlledFiltersInstanceProps
+  extends UseControlledFiltersOptions {}

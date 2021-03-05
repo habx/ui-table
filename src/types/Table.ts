@@ -98,10 +98,10 @@ export interface TableOptions<D extends object = {}>
     ReactTable.UseRowSelectOptions<D>,
     ReactTable.UseGroupByOptions<D>,
     ReactTable.UseExpandedOptions<D>,
-    UseDensityOptions<D>,
-    UseInfiniteScrollOptions<D>,
-    UseControlledPaginationOptions<D>,
-    UseControlledFiltersOptions<D>,
+    UseDensityOptions,
+    UseInfiniteScrollOptions,
+    UseControlledPaginationOptions,
+    UseControlledFiltersOptions,
     UseControlledSortByOptions<D>,
     UseRowSelectOptions<D> {
   columns: Array<Column<D> | IMEXColumn<D>>
@@ -118,7 +118,7 @@ export interface TableState<D extends object>
     ReactTable.UseRowSelectState<D>,
     ReactTable.UseGroupByState<D>,
     ReactTable.UseExpandedState<D>,
-    UseDensityState<D> {
+    UseDensityState {
   groupBy: string[]
 }
 
@@ -133,12 +133,12 @@ export interface TableInstance<D extends object = {}>
     ReactTable.UseRowSelectInstanceProps<D>,
     ReactTable.UseGroupByInstanceProps<D>,
     ReactTable.UseExpandedInstanceProps<D>,
-    UseDensityInstanceProps<D>,
-    UseDensityInstanceProps<D>,
-    UseControlledPaginationInstanceProps<D>,
-    UseControlledFiltersInstanceProps<D>,
+    UseDensityInstanceProps,
+    UseDensityInstanceProps,
+    UseControlledPaginationInstanceProps,
+    UseControlledFiltersInstanceProps,
     UseControlledSortByInstanceProps<D>,
-    UseInfiniteScrollInstanceProps<D>,
+    UseInfiniteScrollInstanceProps,
     UseRowSelectInterfaceProps<D> {
   state: TableState<D>
   initialState: TableState<D>
@@ -154,7 +154,7 @@ export type ColumnInstance<
   ReactTable.UseFiltersColumnProps<D> &
   ReactTable.UseSortByColumnProps<D> &
   ReactTable.UseGroupByColumnProps<D> &
-  UseDensityColumnProps<D> & {
+  UseDensityColumnProps & {
     getToggleAllRowsSelectedProps: Function
   } & CustomColumnFields
 

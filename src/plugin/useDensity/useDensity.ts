@@ -20,7 +20,7 @@ const useInstance = <D extends {}>(
     [dispatch]
   )
 
-  const pluginInstance: UseDensityInstanceProps<D> = {
+  const pluginInstance: UseDensityInstanceProps = {
     setDensity,
   }
 
