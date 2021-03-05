@@ -199,7 +199,6 @@ const Table = <D extends {}>({
                 getRowCharacteristics={getRowCharacteristics}
                 instance={instance}
                 onClick={onRowClick}
-                tableStyle={style}
                 prepareRow={prepareRow}
                 renderRowSubComponent={renderRowSubComponent}
                 ref={rowIndex === 0 ? virtualState.firstItemRef : undefined}

@@ -4,7 +4,7 @@ import { Icon, Text } from '@habx/ui-core'
 
 import { ColumnInstance, Row, TableInstance } from '../types/Table'
 
-import { RowCharacteristics, TableStyle } from './Table.interface'
+import { RowCharacteristics } from './Table.interface'
 import {
   ExpandToggleContainer,
   TableBodyRow,
@@ -139,7 +139,6 @@ interface TableRowProps<D extends {}>
   index: number
   onClick?: (row: Row<D>, event: React.MouseEvent<HTMLTableRowElement>) => void
   renderRowSubComponent?: (row: Row<D>) => React.ReactNode
-  tableStyle: TableStyle
 }
 
 export default TableRow
