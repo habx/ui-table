@@ -1,3 +1,1 @@
-import LoadingOverlay from './LoadingOverlay'
-
-export default LoadingOverlay
+export { LoadingOverlay } from './LoadingOverlay'

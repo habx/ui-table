@@ -1,3 +1,1 @@
-import useTable from './useTable'
-
-export default useTable
+export { useTable } from './useTable'

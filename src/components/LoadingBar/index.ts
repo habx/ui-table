@@ -1,3 +1,1 @@
-import LoadingBar from './LoadingBar'
-
-export default LoadingBar
+export { LoadingBar } from './LoadingBar'

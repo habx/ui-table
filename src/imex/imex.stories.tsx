@@ -4,11 +4,11 @@ import styled from 'styled-components'
 import { Button, ActionBar, Provider } from '@habx/ui-core'
 
 import { FAKE_DATA, IMEX_COLUMNS } from '../_fakeData/storyFakeData'
-import Table from '../Table'
-import useTable from '../useTable'
+import { Table } from '../Table'
+import { useTable } from '../useTable'
 
-import useExportTable from './useExportTable'
-import useImportTable from './useImportTable'
+import { useExportTable } from './useExportTable'
+import { useImportTable } from './useImportTable'
 
 const Container = styled.div`
   height: 100vh;

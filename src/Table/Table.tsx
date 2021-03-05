@@ -7,11 +7,11 @@ import { Icon, Tooltip } from '@habx/ui-core'
 
 import { ColumnInstance } from '../types/Table'
 
-import Density from './Density'
+import { Density } from './Density'
 import { useGridTemplateColumns } from './hooks/useGridTemplateColumns'
 import { useVirtualize } from './hooks/useVirtualize'
 import { LoadingOverlay } from './LoadingOverlay'
-import LoadingRow from './LoadingRow'
+import { LoadingRow } from './LoadingRow'
 import { TableProps } from './Table.interface'
 import {
   TableContainer,
@@ -26,10 +26,10 @@ import {
   NoDataContainer,
   TableHeaderCellContainer,
 } from './Table.style'
-import TablePagination from './TablePagination'
-import TableRow from './TableRow'
+import { TablePagination } from './TablePagination'
+import { TableRow } from './TableRow'
 
-const Table = <D extends {}>({
+export const Table = <D extends {}>({
   onRowClick,
   loading,
   style = {},
@@ -215,5 +215,3 @@ const Table = <D extends {}>({
     </TableContainer>
   )
 }
-
-export default Table

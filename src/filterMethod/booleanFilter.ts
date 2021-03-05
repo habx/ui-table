@@ -4,7 +4,7 @@ import { FilterType } from 'react-table'
 /**
  * @deprecated use filters: 'equals' instead
  */
-const booleanFilter: FilterType<any> = (rows, id, filterValue) => {
+export const booleanFilter: FilterType<any> = (rows, id, filterValue) => {
   if (filterValue == null) {
     return rows
   }
@@ -16,5 +16,3 @@ const booleanFilter: FilterType<any> = (rows, id, filterValue) => {
     return (value && filterValue === true) || (!value && filterValue === false)
   })
 }
-
-export default booleanFilter

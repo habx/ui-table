@@ -1,1 +1,1 @@
-export { default as useRowSelect } from './useRowSelect'
+export { useRowSelect } from './useRowSelect'

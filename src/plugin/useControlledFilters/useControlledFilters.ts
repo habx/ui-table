@@ -46,11 +46,9 @@ const reducer = <D extends {}>(
   return state
 }
 
-const useControlledFilters = (hooks: ReactTable.Hooks<any>) => {
+export const useControlledFilters = (hooks: ReactTable.Hooks<any>) => {
   hooks.stateReducers.push(reducer)
   hooks.useControlledState.push(useControlledState)
 }
 
 useControlledFilters.pluginName = 'useControlledFilters'
-
-export default useControlledFilters

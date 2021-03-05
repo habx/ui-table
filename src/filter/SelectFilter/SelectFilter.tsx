@@ -1,17 +1,16 @@
 import { get } from 'lodash'
 import * as React from 'react'
+import styled from 'styled-components'
 
 import { Select, SelectProps } from '@habx/ui-core'
 
-import styled from 'styled-components'
-
-import { Column } from '..'
+import { Column } from '../../index'
 
 const StyledSelect = styled(Select)`
   width: 100%;
 `
 
-const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
+export const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
   (props, ref) => {
     const { options, multi = false, column, ...other } = props
     const defaultValue = React.useMemo(
@@ -55,5 +54,3 @@ const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
 export interface SelectFilterProps extends SelectProps {
   column: Column<any>
 }
-
-export default SelectFilter

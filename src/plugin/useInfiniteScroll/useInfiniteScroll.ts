@@ -1,5 +1,5 @@
 import { memoize } from 'lodash'
-import { default as ReactTable } from 'react-table'
+import * as ReactTable from 'react-table'
 
 import { TableInstance } from '../../types/Table'
 
@@ -32,5 +32,3 @@ const useInstance = <D extends {}>(
 }
 
 useInfiniteScroll.pluginName = 'useInfiniteScroll'
-
-export default useInfiniteScroll

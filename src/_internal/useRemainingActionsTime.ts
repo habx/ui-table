@@ -1,7 +1,7 @@
 import { mean } from 'lodash'
 import * as React from 'react'
 
-import useInterval from './useInterval'
+import { useInterval } from './useInterval'
 
 export enum ActionTypes {
   setActionsCount,
@@ -25,7 +25,7 @@ type State = {
   deltaTimes: number[]
   remainingTime: number | undefined | null
 }
-const reducer = (state: State, action: Actions) => {
+export const reducer = (state: State, action: Actions) => {
   switch (action.type) {
     case ActionTypes.actionDone: {
       const done = state.done + 1
@@ -88,7 +88,7 @@ const INITIAL_STATE: State = {
   remainingTime: undefined,
 }
 
-const useRemainingActionsTime = () => {
+export const useRemainingActionsTime = () => {
   const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE)
 
   const intervalTime = state.loading ? 1000 : null
@@ -128,5 +128,3 @@ const useRemainingActionsTime = () => {
     },
   ] as const
 }
-
-export default useRemainingActionsTime

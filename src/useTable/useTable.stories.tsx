@@ -15,13 +15,13 @@ import styled from 'styled-components'
 
 import { Text } from '@habx/ui-core'
 
-import BooleanCell from '../cell/BooleanCell/BooleanCell'
-import useDensity from '../plugin/useDensity'
-import useExpandAll from '../plugin/useExpandAll'
-import useInfiniteScroll from '../plugin/useInfiniteScroll/useInfiniteScroll'
-import Table from '../Table'
+import { BooleanCell } from '../cell/BooleanCell/BooleanCell'
+import { useDensity } from '../plugin/useDensity'
+import { useExpandAll } from '../plugin/useExpandAll'
+import { useInfiniteScroll } from '../plugin/useInfiniteScroll/useInfiniteScroll'
+import { Table } from '../Table'
 import { Column } from '../types/Table'
-import useTable from '../useTable'
+import { useTable } from '../useTable'
 
 const Container = styled.div`
   height: 100vh;

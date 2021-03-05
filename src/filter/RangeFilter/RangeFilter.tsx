@@ -12,7 +12,7 @@ import {
   SliderProps,
 } from '@habx/ui-core'
 
-import { ColumnInstance } from '../types/Table'
+import { ColumnInstance } from '../../types/Table'
 
 const togglePanelStyleSetter: TogglePanelStyleSetter = (
   dimensions,

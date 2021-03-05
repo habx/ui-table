@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Select } from '@habx/ui-core'
 
-import { ColumnInstance } from '../types/Table'
+import { ColumnInstance } from '../../types/Table'
 
 const OPTIONS_WITHOUT_NULL = [
   { label: 'Oui', value: true },
@@ -14,7 +14,7 @@ const OPTIONS_WITH_NULL = [
   ...OPTIONS_WITHOUT_NULL,
 ]
 
-const BooleanFilter: React.FunctionComponent<BooleanFilterProps> = ({
+export const BooleanFilter: React.FunctionComponent<BooleanFilterProps> = ({
   column,
   canBeNull = true,
 }) => {
@@ -35,5 +35,3 @@ interface BooleanFilterProps {
   column: ColumnInstance<any>
   canBeNull?: boolean
 }
-
-export default BooleanFilter

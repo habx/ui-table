@@ -37,11 +37,9 @@ const useInstance = <D extends {}>(
   }
 }
 
-const useControlledPagination = (hooks: ReactTable.Hooks<any>) => {
+export const useControlledPagination = (hooks: ReactTable.Hooks<any>) => {
   hooks.useInstance.push(useInstance)
   hooks.useControlledState.push(useControlledState)
 }
 
 useControlledPagination.pluginName = 'useControlledPagination'
-
-export default useControlledPagination

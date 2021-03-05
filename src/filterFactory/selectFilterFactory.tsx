@@ -1,8 +1,11 @@
 import * as React from 'react'
 
-import SelectFilter, { SelectFilterProps } from '../filter/SelectFilter'
+import {
+  SelectFilter,
+  SelectFilterProps,
+} from '../filter/SelectFilter/SelectFilter'
 
-const selectFilterFactory = (
+export const selectFilterFactory = (
   options: any[],
   otherProps: Partial<SelectFilterProps> = {}
 ) => {
@@ -20,5 +23,3 @@ const selectFilterFactory = (
 
   return Component
 }
-
-export default selectFilterFactory

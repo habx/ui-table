@@ -2,10 +2,10 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
-import Table from '../../Table'
-import useTable from '../../useTable'
+import { Table } from '../../Table'
+import { useTable } from '../../useTable'
 
-import ArrayCell from './ArrayCell'
+import { ArrayCell } from './ArrayCell'
 
 const Container = styled.div`
   height: 100vh;

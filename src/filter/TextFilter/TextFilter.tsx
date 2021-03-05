@@ -3,11 +3,11 @@ import * as React from 'react'
 
 import { TextInput } from '@habx/ui-core'
 
-import { ColumnInstance } from '../types/Table'
+import { ColumnInstance } from '../../types/Table'
 
-const TextFilter: React.FunctionComponent<{ column: ColumnInstance<any> }> = ({
-  column,
-}) => {
+export const TextFilter: React.FunctionComponent<{
+  column: ColumnInstance<any>
+}> = ({ column }) => {
   const [liveValue, setLiveValue] = React.useState<string | undefined>(
     column.filterValue
   )
@@ -26,5 +26,3 @@ const TextFilter: React.FunctionComponent<{ column: ColumnInstance<any> }> = ({
     />
   )
 }
-
-export default TextFilter

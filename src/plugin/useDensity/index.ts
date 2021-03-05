@@ -1,4 +1,4 @@
-import useDensity from './useDensity'
+export { useDensity } from './useDensity'
 
 export {
   UseDensityColumnProps,
@@ -6,5 +6,3 @@ export {
   UseDensityOptions,
   UseDensityState,
 } from './useDensity.interface'
-
-export default useDensity

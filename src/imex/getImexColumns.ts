@@ -9,7 +9,7 @@ const COLUMN_ENABLED_CONDITION: ColumnEnabledCondition[] = [
   'imex-only',
 ]
 
-const getImexColumns = <D extends { [key: string]: any } = any>(
+export const getImexColumns = <D extends { [key: string]: any } = any>(
   columns: IMEXColumn<D>[]
 ): IMEXColumn<D>[] => {
   const flatColumns = columns.flatMap(
@@ -35,4 +35,3 @@ const getImexColumns = <D extends { [key: string]: any } = any>(
 
   return imexColumns
 }
-export default getImexColumns

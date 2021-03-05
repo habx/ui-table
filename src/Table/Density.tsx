@@ -25,7 +25,9 @@ const DensityContainer = styled.div`
   padding: 8px 12px;
 `
 
-const Density: React.FunctionComponent<DensityProps> = ({ instance }) => (
+export const Density: React.FunctionComponent<DensityProps> = ({
+  instance,
+}) => (
   <DensityContainer>
     <Tooltip small title="Low">
       <DensityIcon
@@ -54,5 +56,3 @@ const Density: React.FunctionComponent<DensityProps> = ({ instance }) => (
 interface DensityProps {
   instance: TableInstance<any>
 }
-
-export default Density
