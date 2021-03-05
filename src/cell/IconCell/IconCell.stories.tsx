@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import { palette } from '@habx/ui-core'
 
 import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
-import Table from '../../Table'
-import useTable from '../../useTable'
+import { Table } from '../../Table'
+import { useTable } from '../../useTable'
 
-import IconCell from './IconCell'
+import { IconCell } from './IconCell'
 
 const Container = styled.div`
   height: 100vh;
@@ -78,7 +78,9 @@ export const WithCustomColor = () => {
         Cell: ({ cell }) => (
           <IconCell
             icon={cell.value ? 'paper-plane-filled' : 'eye'}
-            color={cell.value ? palette.yellow[600] : palette.blue[600]}
+            color={
+              cell.value ? palette.yellowGolden['500'] : palette.blueMoon['500']
+            }
           />
         ),
       },

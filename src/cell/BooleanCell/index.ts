@@ -1,3 +1,1 @@
-import BooleanCell from './BooleanCell'
-
-export default BooleanCell
+export { BooleanCell } from './BooleanCell'

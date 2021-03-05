@@ -1,13 +1,13 @@
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
-import TextFilter from '../filter/TextFilter'
+import { TextFilter } from '../filter/TextFilter'
 import { IMEXColumn } from '../imex/imex.types'
-import useControlledFilters from '../plugin/useControlledFilters'
-import useControlledPagination from '../plugin/useControlledPagination'
-import useControlledSortBy from '../plugin/useControlledSortBy'
+import { useControlledFilters } from '../plugin/useControlledFilters'
+import { useControlledPagination } from '../plugin/useControlledPagination'
+import { useControlledSortBy } from '../plugin/useControlledSortBy'
 import { useRowSelect } from '../plugin/useRowSelect'
-import HeaderCell from '../Table/HeaderCell'
+import { HeaderCell } from '../Table/HeaderCell'
 import {
   TableOptions,
   Column,
@@ -19,7 +19,7 @@ const EMPTY_DATA: any[] = []
 
 const COLUMN_ENABLED_CONDITION: ColumnEnabledCondition[] = ['always']
 
-const useTable = <D extends object = {}>(
+export const useTable = <D extends object = {}>(
   options: TableOptions<D>,
   ...plugins: Array<ReactTable.PluginHook<D>>
 ) => {
@@ -106,5 +106,3 @@ const useTable = <D extends object = {}>(
     ...plugins
   ) as any) as TableInstance<D>
 }
-
-export default useTable

@@ -61,11 +61,9 @@ const reducer = <D extends {}>(
   return getState() as ReactTable.TableState<D>
 }
 
-const useDensity = (hooks: ReactTable.Hooks<any>) => {
+export const useDensity = (hooks: ReactTable.Hooks<any>) => {
   hooks.useInstance.push(useInstance)
   hooks.stateReducers.push(reducer)
 }
 
 useDensity.pluginName = 'useDensity'
-
-export default useDensity

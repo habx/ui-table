@@ -23,16 +23,16 @@ import {
   Tooltip,
 } from '@habx/ui-core'
 
-import useRemainingActionsTime from '../_internal/useRemainingActionsTime'
+import { useRemainingActionsTime } from '../_internal/useRemainingActionsTime'
 import { LoadingOverlay } from '../components'
-import useExpandAll from '../plugin/useExpandAll'
-import Table from '../Table'
+import { useExpandAll } from '../plugin/useExpandAll'
+import { Table } from '../Table'
 import { Column } from '../types/Table'
-import useTable from '../useTable'
+import { useTable } from '../useTable'
 
 import { parseCsvFileData } from './csv.utils'
 import { parseExcelFileData } from './excel.utils'
-import getImexColumns from './getImexColumns'
+import { getImexColumns } from './getImexColumns'
 import {
   ImportedRow,
   ImportedRowMeta,
@@ -62,7 +62,7 @@ const cleanHeader = (header: string | number | {}) =>
 
 const DEFAULT_ACCEPT = ['.csv', '.xls', '.xlsx']
 
-const useImportTable = <D extends { id?: string | number }>(
+export const useImportTable = <D extends { id?: string | number }>(
   params: Partial<UseImportTableParams<D>>
 ) => {
   const [isParsing, setParsing] = React.useState<boolean>(false)
@@ -489,5 +489,3 @@ const useImportTable = <D extends { id?: string | number }>(
     remainingTime: remainingActionsState.remainingTime,
   }
 }
-
-export default useImportTable

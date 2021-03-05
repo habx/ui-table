@@ -1,3 +1,1 @@
-import useExpandedAll from './useExpandAll'
-
-export default useExpandedAll
+export { useExpandAll } from './useExpandAll'

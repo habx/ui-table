@@ -36,11 +36,9 @@ const reducer = <D extends {}>(
   return state
 }
 
-const useControlledSortBy = (hooks: ReactTable.Hooks<any>) => {
+export const useControlledSortBy = (hooks: ReactTable.Hooks<any>) => {
   hooks.stateReducers.push(reducer)
   hooks.useControlledState.push(useControlledState)
 }
 
 useControlledSortBy.pluginName = 'useControlledFilters'
-
-export default useControlledSortBy

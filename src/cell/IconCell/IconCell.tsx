@@ -2,14 +2,14 @@ import * as React from 'react'
 
 import { Icon } from '@habx/ui-core'
 
-import IconCellProps from './IconCell.interface'
+import { IconCellProps } from './IconCell.interface'
 import {
   IconCellContainer,
   IconContainer,
   LabelContainer,
 } from './IconCell.style'
 
-const IconCell = React.forwardRef<HTMLDivElement, IconCellProps>(
+export const IconCell = React.forwardRef<HTMLDivElement, IconCellProps>(
   (props, ref) => {
     const { icon, color, label, large = false, ...rest } = props
 
@@ -23,5 +23,3 @@ const IconCell = React.forwardRef<HTMLDivElement, IconCellProps>(
     )
   }
 )
-
-export default IconCell

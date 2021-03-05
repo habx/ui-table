@@ -10,11 +10,9 @@ export const HeaderCellContainer = styled.div`
   }
 `
 
-const HeaderCell: React.FunctionComponent<any> = ({ icon, content }) => (
+export const HeaderCell: React.FunctionComponent<any> = ({ icon, content }) => (
   <HeaderCellContainer>
     {icon}
     {content}
   </HeaderCellContainer>
 )
-
-export default HeaderCell

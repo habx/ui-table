@@ -23,7 +23,7 @@ export const LoadingBarStyled = styled.div`
   }
 `
 
-const LoadingBar: React.FunctionComponent<LoadingBarInterface> = ({
+export const LoadingBar: React.FunctionComponent<LoadingBarInterface> = ({
   loaded,
   total,
 }) => (
@@ -40,5 +40,3 @@ interface LoadingBarInterface {
   loaded: number
   total: number
 }
-
-export default LoadingBar

@@ -16,10 +16,8 @@ const useInstance = <D extends {}>(instance: TableInstance<D>) => {
   ensurePluginOrder(plugins, ['useExpanded'], 'useExpandAll')
 }
 
-const useExpandAll = (hooks: ReactTable.Hooks<any>) => {
+export const useExpandAll = (hooks: ReactTable.Hooks<any>) => {
   hooks.useInstance.push(useInstance as any)
 }
 
 useExpandAll.pluginName = 'useExpandAll'
-
-export default useExpandAll

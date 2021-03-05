@@ -6,7 +6,7 @@ import { CellProps, HeaderProps, Hooks, TableInstance } from '../../types/Table'
 
 import { CheckboxContainer } from './useRowSelect.style'
 
-const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
+export const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
   hooks.visibleColumns.push((columns, { instance: _instance }) => {
     const instance = _instance as TableInstance<D>
     return [
@@ -37,5 +37,3 @@ const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
     ]
   })
 }
-
-export default useRowSelect

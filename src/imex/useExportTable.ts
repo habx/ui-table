@@ -2,7 +2,7 @@ import { get, isNumber } from 'lodash'
 import * as React from 'react'
 
 import { ExcelValidationOptions } from './excel.utils'
-import getImexColumns from './getImexColumns'
+import { getImexColumns } from './getImexColumns'
 import { IMEXColumn } from './imex.types'
 import { exportData } from './imex.utils'
 
@@ -13,7 +13,7 @@ export interface UseExportIMEXParams<D extends { [key: string]: any } = any>
   type?: 'csv' | 'xls'
 }
 
-const useExportTable = <D extends { [key: string]: any } = any>(
+export const useExportTable = <D extends { [key: string]: any } = any>(
   params: UseExportIMEXParams<D>
 ) => {
   const downloadTableData = React.useCallback(
@@ -57,5 +57,3 @@ const useExportTable = <D extends { [key: string]: any } = any>(
   )
   return [downloadTableData] as const
 }
-
-export default useExportTable

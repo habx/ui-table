@@ -2,9 +2,9 @@ import * as React from 'react'
 
 import { stringifyColor, useThemeVariant } from '@habx/ui-core'
 
-import IconCell, { IconCellProps } from '../IconCell'
+import { IconCell, IconCellProps } from '../IconCell'
 
-const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
+export const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
   (props, ref) => {
     const { value, ...rest } = props
 
@@ -26,5 +26,3 @@ const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
 interface BooleanCellProps extends Omit<IconCellProps, 'icon' | 'color'> {
   value: boolean
 }
-
-export default BooleanCell

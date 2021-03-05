@@ -1,3 +1,1 @@
-import ArrayCell from './ArrayCell'
-
-export default ArrayCell
+export { ArrayCell } from './ArrayCell'
