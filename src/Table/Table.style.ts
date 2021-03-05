@@ -65,26 +65,11 @@ export const TableHeadCell = styled.th<{ size: number }>`
   }
 `
 
-export const TableBody = styled.tbody`
-  // https://stackoverflow.com/questions/14962468/how-can-i-combine-flexbox-and-vertical-scroll-in-a-full-height-app
-  flex: 1 1 auto;
-  flex-direction: column;
-  min-height: 0;
-  min-width: 100%;
-  width: fit-content;
-  overflow-x: hidden;
-  overflow-y: auto;
-`
-
 export const TableBodyRow = styled.tr`
   display: grid;
 
   grid-template-columns: var(--table-grid-template-columns);
   grid-gap: var(--table-grid-gap);
-
-  &[data-striped='true']:nth-child(2n + 1) {
-    background-color: ${theme.neutralColor(100)};
-  }
 
   &[data-active='true'] {
     background-color: ${theme.neutralColor(100)};
@@ -112,6 +97,21 @@ export const TableBodyRow = styled.tr`
     z-index: 1;
     background-color: ${theme.color('background')};
     border-bottom: solid 1px ${theme.color('secondary', { opacity: 0.1 })};
+  }
+`
+
+export const TableBody = styled.tbody`
+  // https://stackoverflow.com/questions/14962468/how-can-i-combine-flexbox-and-vertical-scroll-in-a-full-height-app
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 100%;
+  width: fit-content;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &[data-striped='true'] ${TableBodyRow}[data-even="true"] {
+    background-color: ${theme.neutralColor(100)};
   }
 `
 
