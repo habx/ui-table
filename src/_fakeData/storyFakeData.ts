@@ -4,12 +4,15 @@ import { range } from 'lodash'
 import { IMEXColumn } from '../index'
 import { Column } from '../types/Table'
 
+const GROUPS = ['A', 'B', 'C']
+
 export const FAKE_DATA = range(50).map(() => ({
   ...faker.helpers.createCard(),
   id: Math.random(),
+  group: GROUPS[Math.floor(Math.random() * Math.floor(3))],
 }))
 
-export const BASIC_COLUMNS: Column<Faker.Card>[] = [
+export const BASIC_COLUMNS = [
   {
     Header: 'Username',
     accessor: (el) => el.name,
@@ -22,9 +25,9 @@ export const BASIC_COLUMNS: Column<Faker.Card>[] = [
     Header: 'City',
     accessor: (el) => el.address.city,
   },
-]
+] as Column<Faker.Card>[]
 
-export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
+export const IMEX_COLUMNS = [
   {
     Header: 'Username',
     accessor: 'username',
@@ -62,4 +65,4 @@ export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
       },
     },
   },
-]
+] as IMEXColumn<Faker.Card & { id: number }>[]
