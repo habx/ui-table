@@ -22,6 +22,22 @@ export const BasicExample = () => {
     {
       data: FAKE_DATA,
       columns: BASIC_COLUMNS,
+    },
+    useRowSelect
+  )
+
+  return (
+    <Container>
+      <Table instance={tableInstance} />
+    </Container>
+  )
+}
+
+export const WithDisabledRow = () => {
+  const tableInstance = useTable<Faker.Card>(
+    {
+      data: FAKE_DATA,
+      columns: BASIC_COLUMNS,
       getCheckboxProps: (row) => {
         if (row.id === '2') {
           return { disabled: true }
