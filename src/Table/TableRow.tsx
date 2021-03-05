@@ -21,7 +21,6 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
       instance,
       index,
       onClick,
-      tableStyle,
       renderRowSubComponent,
       ...rest
     } = props
@@ -63,7 +62,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps<any>>(
           onClick={
             onClick && !row.isGrouped ? (e) => onClick(row, e) : undefined
           }
-          data-striped={!row.isGrouped && tableStyle.striped}
+          data-even={!row.isGrouped && row.index % 2 === 0}
           data-clickable={!row.isGrouped && !!onClick && isInteractive}
           data-section={row.isExpanded}
           data-active={isActive}

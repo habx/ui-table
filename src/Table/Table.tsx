@@ -169,6 +169,7 @@ const Table = <D extends {}>({
         )}
         <TableBody
           {...getTableBodyProps()}
+          data-striped={style?.striped}
           ref={virtualState.scrollContainerRef}
         >
           {virtualState.initialized ? (
