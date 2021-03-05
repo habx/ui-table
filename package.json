@@ -48,7 +48,6 @@
     "styled-components": ">= 5.2.1"
   },
   "dependencies": {
-    "@habx/config-ci-front": "^0.6.0",
     "@testing-library/react": "^11.2.5",
     "@types/papaparse": "^5.2.5",
     "exceljs": "^4.2.0",
@@ -59,6 +58,7 @@
     "react-window-infinite-loader": "^1.0.7"
   },
   "devDependencies": {
+    "@habx/config-ci-front": "^0.6.0",
     "@habx/eslint-config-client": "^6.0.0",
     "@habx/ui-core": "^5.21.0",
     "@storybook/addon-actions": "^6.1.21",
