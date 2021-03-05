@@ -78,7 +78,6 @@ const Table = <D extends {}>({
 
     return (
       <TableRow
-        tableStyle={style}
         index={rowIndex}
         row={row}
         getRowCharacteristics={getRowCharacteristics}
