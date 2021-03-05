@@ -1,6 +1,9 @@
 import { get, has } from 'lodash'
 import { FilterType } from 'react-table'
 
+/**
+ * @deprecated use filters: 'equals' instead
+ */
 const booleanFilter: FilterType<any> = (rows, id, filterValue) => {
   if (filterValue == null) {
     return rows
