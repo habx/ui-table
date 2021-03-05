@@ -1,6 +1,6 @@
 import { withKnobs } from '@storybook/addon-knobs'
 import * as React from 'react'
-import { usePagination } from 'react-table'
+import { useFilters } from 'react-table'
 import styled from 'styled-components'
 
 import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Plugins/usePagination [built in]',
+  title: 'Plugins/useFilters [built in]',
   decorators: [withKnobs],
 }
 
@@ -22,9 +22,8 @@ export const BasicExample = () => {
     {
       data: FAKE_DATA,
       columns: BASIC_COLUMNS,
-      pageSizeOptions: [5, 10, 15, 20],
     },
-    usePagination
+    useFilters
   )
 
   return (

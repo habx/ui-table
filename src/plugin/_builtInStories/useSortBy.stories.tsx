@@ -1,6 +1,6 @@
 import { withKnobs } from '@storybook/addon-knobs'
 import * as React from 'react'
-import { usePagination } from 'react-table'
+import { useSortBy } from 'react-table'
 import styled from 'styled-components'
 
 import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Plugins/usePagination [built in]',
+  title: 'Plugins/useSortBy [built in]',
   decorators: [withKnobs],
 }
 
@@ -24,7 +24,7 @@ export const BasicExample = () => {
       columns: BASIC_COLUMNS,
       pageSizeOptions: [5, 10, 15, 20],
     },
-    usePagination
+    useSortBy
   )
 
   return (

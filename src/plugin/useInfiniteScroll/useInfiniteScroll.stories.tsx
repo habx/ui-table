@@ -1,11 +1,12 @@
 import { withKnobs } from '@storybook/addon-knobs'
 import * as React from 'react'
-import { usePagination } from 'react-table'
 import styled from 'styled-components'
 
 import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
 import { Table } from '../../Table'
 import { useTable } from '../../useTable'
+
+import { useInfiniteScroll } from './useInfiniteScroll'
 
 const Container = styled.div`
   height: 100vh;
@@ -13,23 +14,31 @@ const Container = styled.div`
 `
 
 export default {
-  title: 'Plugins/usePagination [built in]',
+  title: 'Plugins/useInfiniteScroll',
   decorators: [withKnobs],
 }
-
 export const BasicExample = () => {
+  const [data, setData] = React.useState(FAKE_DATA)
   const tableInstance = useTable<Faker.Card>(
     {
-      data: FAKE_DATA,
+      data,
       columns: BASIC_COLUMNS,
-      pageSizeOptions: [5, 10, 15, 20],
+      loadMore: () => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            setData((currentData) => [...currentData, ...FAKE_DATA])
+            resolve()
+          }, 5000)
+        })
+      },
+      total: 1000,
     },
-    usePagination
+    useInfiniteScroll
   )
 
   return (
     <Container>
-      <Table instance={tableInstance} />
+      <Table instance={tableInstance} virtualized style={{ striped: true }} />
     </Container>
   )
 }
