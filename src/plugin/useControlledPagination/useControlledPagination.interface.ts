@@ -3,11 +3,11 @@ export type Pagination = {
   pageIndex: number
 }
 
-export interface UseControlledPaginationOptions<D extends {}> {
+export interface UseControlledPaginationOptions {
   onPaginationChange?: (pagination: Pagination) => void
   pagination?: Pagination
   pageSizeOptions?: number[]
 }
 
-export interface UseControlledPaginationInstanceProps<D extends {}>
-  extends UseControlledPaginationOptions<D> {}
+export interface UseControlledPaginationInstanceProps
+  extends UseControlledPaginationOptions {}

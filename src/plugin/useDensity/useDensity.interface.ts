@@ -1,13 +1,13 @@
 export type Densities = 'low' | 'medium' | 'high'
 
-export interface UseDensityOptions<D extends {}> {}
+export interface UseDensityOptions {}
 
-export interface UseDensityInstanceProps<D extends {}> {
+export interface UseDensityInstanceProps {
   setDensity: (density: Densities) => void
 }
 
-export interface UseDensityColumnProps<D extends {}> {}
+export interface UseDensityColumnProps {}
 
-export interface UseDensityState<D extends {}> {
+export interface UseDensityState {
   density: Densities
 }

@@ -58,9 +58,8 @@
     "react-window-infinite-loader": "^1.0.7"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
-    "@babel/plugin-proposal-optional-chaining": "^7.13.8",
-    "@habx/eslint-config-client": "^5.5.0",
+    "@habx/config-ci-front": "^0.6.0",
+    "@habx/eslint-config-client": "^6.0.0",
     "@habx/ui-core": "^5.21.0",
     "@storybook/addon-actions": "^6.1.21",
     "@storybook/addon-centered": "^5.3.21",
@@ -78,8 +77,6 @@
     "@types/react-window": "^1.8.2",
     "@types/react-window-infinite-loader": "^1.0.3",
     "@types/styled-components": "^5.1.7",
-    "awesome-typescript-loader": "^5.2.1",
-    "babel-loader": "^8.2.2",
     "bili": "^5.0.5",
     "faker": "^5.4.0",
     "husky": "^4.3.8",
@@ -94,7 +91,6 @@
     "rollup-plugin-typescript2": "^0.30.0",
     "styled-components": "^5.2.1",
     "ts-jest": "^26.5.3",
-    "ts-loader": "^8.0.17",
     "typescript": "^4.2.3"
   },
   "storybook-deployer": {
