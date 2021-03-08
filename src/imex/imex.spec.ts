@@ -1,11 +1,9 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 
-import exportData from '../_fakeData/export'
 import { FAKE_DATA, IMEX_COLUMNS } from '../_fakeData/storyFakeData'
 
+import { useExportTable } from './export/useExportTable'
 import { getImexColumns } from './getImexColumns'
-import { useExportTable } from './useExportTable'
-import { useImportTable } from './useImportTable'
 
 describe('Import/Export (imex)', () => {
   describe('export', () => {
@@ -48,27 +46,6 @@ describe('Import/Export (imex)', () => {
         new Blob(),
         'test.xlsx'
       )
-    })
-  })
-
-  describe('import', () => {
-    it('should parse files', async () => {
-      const { result, waitFor } = renderHook(() =>
-        useImportTable({
-          getOriginalData: () => FAKE_DATA,
-          columns: IMEX_COLUMNS,
-        })
-      )
-
-      act(() => {
-        const { onDropAccepted } = result.current
-        onDropAccepted([
-          new Blob([exportData], { type: 'text/csv;charset=utf-8;' }) as File,
-        ])
-      })
-      expect(result.current.parsing).toBeTruthy()
-      await waitFor(() => !result.current.parsing)
-      expect(result.current.parsing).toBeFalsy()
     })
   })
 

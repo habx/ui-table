@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as ReactTable from 'react-table'
 
 import { TextFilter } from '../filter/TextFilter'
-import { IMEXColumn } from '../imex/imex.types'
+import { IMEXColumn } from '../imex/imex.interface'
 import { useControlledFilters } from '../plugin/useControlledFilters'
 import { useControlledPagination } from '../plugin/useControlledPagination'
 import { useControlledSortBy } from '../plugin/useControlledSortBy'

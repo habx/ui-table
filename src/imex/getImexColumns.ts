@@ -2,7 +2,7 @@ import * as ReactTable from 'react-table'
 
 import { ColumnEnabledCondition } from '../types/Table'
 
-import { IMEXColumn } from './imex.types'
+import { IMEXColumn } from './imex.interface'
 
 const COLUMN_ENABLED_CONDITION: ColumnEnabledCondition[] = [
   'always',

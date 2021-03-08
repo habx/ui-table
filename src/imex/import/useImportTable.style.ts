@@ -2,42 +2,37 @@ import styled from 'styled-components'
 
 import { Icon, Text, theme, ActionBar as BasActionBar } from '@habx/ui-core'
 
-import { zIndex } from '../_internal/zIndex'
-
-export const OverlayContainer = styled(Text)`
-  position: fixed;
-  top: 0;
-  height: 100vh;
-  width: 100vw;
-  left: 0;
-  background-color: ${theme.neutralColor(300)};
-  opacity: 0.9;
-  display: grid;
-  justify-items: center;
-  align-items: center;
-  z-index: ${zIndex.overlay};
-  text-align: center;
-`
+import { zIndex } from '../../_internal/zIndex'
 
 export const OverlayContent = styled.div`
   background: ${theme.color('background')};
-  padding: 8px 16px;
-  border-radius: 16px;
-  box-shadow: ${theme.shadow()};
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 200px;
+    margin-bottom: 12px;
+  }
 `
 
-export const DropzoneIndicator = styled.div`
+export const DropzoneContainer = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 
+  max-height: 100vh;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
   background: ${theme.color('primary', { opacity: 0.8 })};
+  border: dashed 2px ${theme.color('primary')};
 `
 
 export const ConfirmContainer = styled.div`
