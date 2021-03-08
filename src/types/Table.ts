@@ -71,6 +71,7 @@ type ColumnCustom<D extends object, Meta = {}> = Omit<
 > &
   Partial<ReactTable.UseFiltersColumnProps<D>> &
   ReactTable.UseGroupByColumnOptions<D> &
+  ReactTable.UseGlobalFiltersColumnOptions<D> &
   ReactTable.UseSortByColumnOptions<D> &
   CustomColumnFields<Meta> & {
     HeaderIcon?: React.ReactNode
@@ -98,6 +99,7 @@ export interface TableOptions<D extends object = {}>
     ReactTable.UseRowSelectOptions<D>,
     ReactTable.UseGroupByOptions<D>,
     ReactTable.UseExpandedOptions<D>,
+    ReactTable.UseGlobalFiltersOptions<D>,
     UseDensityOptions,
     UseInfiniteScrollOptions,
     UseControlledPaginationOptions,
@@ -117,6 +119,7 @@ export interface TableState<D extends object>
     ReactTable.UseSortByState<D>,
     ReactTable.UseRowSelectState<D>,
     ReactTable.UseGroupByState<D>,
+    ReactTable.UseGlobalFiltersState<D>,
     ReactTable.UseExpandedState<D>,
     UseDensityState {
   groupBy: string[]
@@ -133,6 +136,7 @@ export interface TableInstance<D extends object = {}>
     ReactTable.UseRowSelectInstanceProps<D>,
     ReactTable.UseGroupByInstanceProps<D>,
     ReactTable.UseExpandedInstanceProps<D>,
+    ReactTable.UseGlobalFiltersInstanceProps<D>,
     UseDensityInstanceProps,
     UseDensityInstanceProps,
     UseControlledPaginationInstanceProps,
