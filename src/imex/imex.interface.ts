@@ -1,9 +1,10 @@
+import type * as Excel from 'exceljs'
 import { DropEvent } from 'react-dropzone'
 
-import { IMEXColumn } from './imex.types'
+import { Column } from '../types/Table'
 
 export interface ImportedRowMeta<D extends {}> {
-  prevVal?: D
+  prevVal?: D & { id?: string | number }
   hasDiff: boolean
   errors: Record<string, string>
 }
@@ -37,3 +38,22 @@ export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
     ) => Promise<void>
   ) => (files: File[], event?: DropEvent) => Promise<void>
 }
+
+export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
+
+export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
+  D & { [key: string]: any },
+  {
+    imex?: {
+      identifier?: boolean
+      required?: boolean
+      type?: RowValueTypes
+      format?: (value: any, row: any[]) => any
+      parse?: (value: any, row: any[]) => any
+      width?: number
+      validate?: (value: any, row: any[]) => string | boolean | null
+      dataValidation?: Excel.DataValidation
+      hidden?: boolean
+    }
+  }
+>

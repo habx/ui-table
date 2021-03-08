@@ -46,12 +46,12 @@ export { Pagination } from './plugin/useControlledPagination'
 export { selectFilterFactory } from './filterFactory/selectFilterFactory'
 
 // Import / Export
-export { RowValueTypes, IMEXColumn } from './imex/imex.types'
-export { useExportTable } from './imex/useExportTable'
+export { RowValueTypes, IMEXColumn } from './imex/imex.interface'
+export { useExportTable } from './imex/export/useExportTable'
 export {
   UseImportTableOptions,
   UseImportTableParams,
 } from './imex/imex.interface'
-export { useImportTable } from './imex/useImportTable'
-export { ImportTableDropzone } from './imex/ImportTableDropzone'
+export { useImportTable } from './imex/import/useImportTable'
+export { ImportTableDropzone } from './imex/import/ImportTableDropzone'
 export { parseExcelFileData } from './imex/excel.utils'

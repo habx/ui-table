@@ -8,7 +8,7 @@ import {
 
 import { CheckboxProps } from '@habx/ui-core'
 
-import { IMEXColumn } from '../imex/imex.types'
+import { IMEXColumn } from '../imex/imex.interface'
 import {
   UseControlledFiltersInstanceProps,
   UseControlledFiltersOptions,

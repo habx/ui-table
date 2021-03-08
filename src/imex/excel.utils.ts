@@ -3,7 +3,7 @@ import type * as Excel from 'exceljs'
 import { palette } from '@habx/ui-core'
 
 import { createWorkbook, getCellValueTypes } from './exceljs'
-import { IMEXColumn } from './imex.types'
+import { IMEXColumn } from './imex.interface'
 
 export const parseExcelFileData = async (file: File): Promise<any[][]> => {
   const CellValueType = getCellValueTypes()
