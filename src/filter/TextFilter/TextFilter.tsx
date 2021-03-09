@@ -11,11 +11,22 @@ export const TextFilter: React.FunctionComponent<{
   const [liveValue, setLiveValue] = React.useState<string | undefined>(
     column.filterValue
   )
-  const handleSetFilter = debounce(column.setFilter, 500)
+
+  const handleSetFilter = React.useMemo(() => {
+    if (!column.setFilter) {
+      return null
+    }
+    return debounce(column.setFilter, 500)
+  }, [column.setFilter])
+
+  if (!column.setFilter) {
+    return null
+  }
+
   const handleSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value || undefined
     setLiveValue(value)
-    handleSetFilter(value)
+    handleSetFilter!(value)
   }
 
   return (
