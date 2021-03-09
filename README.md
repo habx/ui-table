@@ -44,7 +44,7 @@ Test all our components in our [Storybook](https://habx.github.io/ui-table/)
 
 ### Import / Export
 
-Import and export your data in `.xls` or `.csv` thanks to [exceljs](https://github.com/exceljs/exceljs)
+Import and export your data in `.xlsx` or `.csv` thanks to [exceljs](https://github.com/exceljs/exceljs)
 
 #### Columns Example
 
