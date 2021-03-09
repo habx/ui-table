@@ -210,3 +210,7 @@ export const NoDataContainer = styled.div`
 
   position: relative;
 `
+
+export const SearchBarContainer = styled.div`
+  margin: 12px 8px;
+`

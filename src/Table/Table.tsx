@@ -3,7 +3,7 @@ import * as React from 'react'
 import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { Icon, Tooltip } from '@habx/ui-core'
+import { Icon, Tooltip, SearchBar } from '@habx/ui-core'
 
 import { ColumnInstance } from '../types/Table'
 
@@ -25,6 +25,7 @@ import {
   TableHeadRow,
   NoDataContainer,
   TableHeaderCellContainer,
+  SearchBarContainer,
 } from './Table.style'
 import { TablePagination } from './TablePagination'
 import { TableRow } from './TableRow'
@@ -99,6 +100,15 @@ export const Table = <D extends {}>({
         } as React.CSSProperties
       }
     >
+      {instance.setGlobalFilter && (
+        <SearchBarContainer>
+          <SearchBar
+            placeholder="Rechercher..."
+            onChange={(e) => instance.setGlobalFilter(e.target.value)}
+            value={instance.state.globalFilter}
+          />
+        </SearchBarContainer>
+      )}
       {loading && <LoadingOverlay />}
       <TableContent {...getTableProps()}>
         <TableHead>
