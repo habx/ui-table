@@ -19,20 +19,21 @@ export const TextFilter: React.FunctionComponent<{
     return debounce(column.setFilter, 500)
   }, [column.setFilter])
 
-  const handleSetValue = (value: string | undefined) => {
-    setLiveValue(value)
-    handleSetFilter?.(value)
-  }
-
   if (!column.setFilter) {
     return null
+  }
+
+  const handleSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value || undefined
+    setLiveValue(value)
+    handleSetFilter!(value)
   }
 
   return (
     <TextInput
       small
       value={liveValue}
-      onChange={(e) => handleSetValue(e.target.value || undefined)}
+      onChange={handleSetValue}
       placeholder="Filtrer"
     />
   )
