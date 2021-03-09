@@ -1,9 +1,11 @@
 import { debounce } from 'lodash'
 import * as React from 'react'
 
-import { TextInput } from '@habx/ui-core'
+import { Icon } from '@habx/ui-core'
 
 import { ColumnInstance } from '../../types/Table'
+
+import { TextFilterInput } from './TextFilter.style'
 
 export const TextFilter: React.FunctionComponent<{
   column: ColumnInstance<any>
@@ -12,17 +14,19 @@ export const TextFilter: React.FunctionComponent<{
     column.filterValue
   )
   const handleSetFilter = debounce(column.setFilter, 500)
-  const handleSetValue = (value: string | undefined) => {
+  const handleSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value || undefined
     setLiveValue(value)
     handleSetFilter(value)
   }
 
   return (
-    <TextInput
+    <TextFilterInput
       small
+      elementLeft={<Icon icon="search" />}
       value={liveValue}
-      onChange={(e) => handleSetValue(e.target.value || undefined)}
-      placeholder="Filtrer"
+      onChange={handleSetValue}
+      placeholder="Rechercher"
     />
   )
 }

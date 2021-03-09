@@ -32,6 +32,9 @@ const togglePanelStyleSetter: TogglePanelStyleSetter = (
 const RangeFilterTrigger = styled.div`
   ${inputStyle};
 
+  border: solid 1px ${theme.neutralColor(300)};
+  background-color: ${theme.color('background')};
+
   position: relative;
   color: ${theme.textColor()};
   display: flex;

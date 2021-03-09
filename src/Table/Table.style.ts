@@ -2,6 +2,8 @@ import styled, { css } from 'styled-components'
 
 import { Text, theme } from '@habx/ui-core'
 
+import { CheckboxContainer } from '../plugin/useRowSelect/useRowSelect.style'
+
 const alignItems = css`
   &[data-align='center'] {
     justify-content: center;
@@ -16,19 +18,6 @@ const alignItems = css`
   }
 `
 
-export const TableContainer = styled.div`
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-
-  height: 100%;
-  width: 100%;
-
-  --table-grid-gap: 0 12px;
-`
-
 export const TableContent = styled.table`
   display: grid;
 
@@ -38,6 +27,12 @@ export const TableContent = styled.table`
 
 export const TableHead = styled.thead`
   display: block;
+
+  margin-right: var(--table-scrollbar-width);
+
+  ${CheckboxContainer} {
+    margin-top: 4px;
+  }
 `
 
 export const TableHeadRow = styled.tr`
@@ -70,6 +65,8 @@ export const TableBodyRow = styled.tr`
 
   grid-template-columns: var(--table-grid-template-columns);
   grid-gap: var(--table-grid-gap);
+
+  border-bottom: solid 1px ${theme.neutralColor(200)};
 
   &[data-active='true'] {
     background-color: ${theme.neutralColor(100)};
@@ -109,9 +106,35 @@ export const TableBody = styled.tbody`
   width: fit-content;
   overflow-x: hidden;
   overflow-y: auto;
+  scroll-margin: var(--table-scrollbar-width);
 
-  &[data-striped='true'] ${TableBodyRow}[data-even="true"] {
-    background-color: ${theme.neutralColor(100)};
+  --table-body-font-size: 14px;
+`
+
+export const TableContainer = styled.div`
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  height: 100%;
+  width: 100%;
+
+  --table-grid-gap: 0 12px;
+
+  &[data-scrollable='true'] {
+    ${TableBody} {
+      overflow-y: scroll;
+    }
+  }
+  &[data-virtualized='true'] {
+    > div {
+      width: 100% !important;
+    }
+    ${TableBody} {
+      overflow-y: hidden;
+    }
   }
 `
 
@@ -124,6 +147,11 @@ export const TableCell = styled.td`
   padding: 12px;
   display: flex;
   overflow: hidden;
+  align-items: center;
+
+  img {
+    align-items: flex-start;
+  }
 
   &[data-density='low'] {
     padding: 18px 12px;
@@ -136,7 +164,7 @@ export const TableCell = styled.td`
   ${alignItems};
 
   > div {
-    font-size: 16px;
+    font-size: var(--table-body-font-size);
     color: ${theme.neutralColor(700)};
     width: 100%;
   }
@@ -160,7 +188,6 @@ export const TableHeadCellContent = styled(Text)`
   user-select: none;
   width: 100%;
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 
   position: relative;
@@ -183,10 +210,12 @@ export const TableHeaderCellSort = styled.div`
 `
 
 export const TableOptionBar = styled.div`
+  margin-top: auto;
   height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top: solid 1px ${theme.neutralColor(300)};
 `
 
 export const ExpandToggleContainer = styled.span`

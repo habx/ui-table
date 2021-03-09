@@ -3,9 +3,13 @@ import * as React from 'react'
 import { useFilters, usePagination, useSortBy, useRowSelect } from 'react-table'
 import styled from 'styled-components'
 
-import { Text } from '@habx/ui-core'
+import { Text, Background, palette } from '@habx/ui-core'
 
-import { BASIC_COLUMNS, FAKE_DATA } from '../_fakeData/storyFakeData'
+import {
+  BASIC_COLUMNS,
+  FAKE_DATA,
+  RICH_COLUMNS,
+} from '../_fakeData/storyFakeData'
 import { useDensity } from '../plugin/useDensity'
 import { Table } from '../Table'
 import { useTable } from '../useTable'
@@ -65,7 +69,27 @@ export const HorizontalScroll = () => {
   )
 }
 
-export const FullExample = () => {
+export const RichExample = () => {
+  const tableInstance = useTable<Faker.Card>(
+    {
+      data: FAKE_DATA,
+      columns: RICH_COLUMNS,
+    },
+    useFilters,
+    useSortBy,
+    usePagination,
+    useDensity,
+    useRowSelect
+  )
+
+  return (
+    <Container>
+      <Table instance={tableInstance} />
+    </Container>
+  )
+}
+
+export const WithPluginsExample = () => {
   const tableInstance = useTable<Faker.Card>(
     {
       data: FAKE_DATA,
@@ -82,6 +106,28 @@ export const FullExample = () => {
     <Container>
       <Table instance={tableInstance} />
     </Container>
+  )
+}
+
+export const DarkMode = () => {
+  const tableInstance = useTable<Faker.Card>(
+    {
+      data: FAKE_DATA,
+      columns: BASIC_COLUMNS,
+    },
+    useFilters,
+    useSortBy,
+    usePagination,
+    useDensity,
+    useRowSelect
+  )
+
+  return (
+    <Background backgroundColor={palette.neutralBlackWithIntensityFading[900]}>
+      <Container>
+        <Table instance={tableInstance} />
+      </Container>
+    </Background>
   )
 }
 
