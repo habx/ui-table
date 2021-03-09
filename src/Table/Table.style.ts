@@ -200,7 +200,7 @@ export const TableHeadCellContent = styled(Text)`
     padding-left: 8px;
   }
 
-  font-size: var(--table-header-font-size);
+  font-size: var(--table-header-font-size) !important;
   color: var(--table-header-color);
 `
 

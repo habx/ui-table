@@ -1,11 +1,9 @@
 import { debounce } from 'lodash'
 import * as React from 'react'
 
-import { Icon } from '@habx/ui-core'
+import { Icon, TextInput } from '@habx/ui-core'
 
 import { ColumnInstance } from '../../types/Table'
-
-import { TextFilterInput } from './TextFilter.style'
 
 export const TextFilter: React.FunctionComponent<{
   column: ColumnInstance<any>
@@ -21,7 +19,8 @@ export const TextFilter: React.FunctionComponent<{
   }
 
   return (
-    <TextFilterInput
+    <TextInput
+      bare
       small
       elementLeft={<Icon icon="search" />}
       value={liveValue}

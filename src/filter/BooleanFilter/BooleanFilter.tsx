@@ -1,7 +1,8 @@
 import * as React from 'react'
 
+import { Select } from '@habx/ui-core'
+
 import { ColumnInstance } from '../../types/Table'
-import { StyledSelect } from '../SelectFilter/SelectFilter.style'
 
 const OPTIONS_WITHOUT_NULL = [
   { label: 'Oui', value: true },
@@ -20,7 +21,9 @@ export const BooleanFilter: React.FunctionComponent<BooleanFilterProps> = ({
   const rawValue = column.filterValue ?? null
 
   return (
-    <StyledSelect
+    <Select
+      small
+      bare
       canReset={false}
       value={canBeNull ? rawValue : !!rawValue}
       onChange={(newValue) => column.setFilter(newValue)}
