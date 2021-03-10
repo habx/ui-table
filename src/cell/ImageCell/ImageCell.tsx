@@ -1,14 +1,21 @@
 import * as React from 'react'
 
-import { ImageCellContainer } from './ImageCell.style'
+import { useMergedRef } from '../../_internal/useMergedRef'
+
+import { useZoomStyle } from './ImageCell.hooks'
+import { ImageCellContainer, Image, ImageZoom } from './ImageCell.style'
 
 export const ImageCell = React.forwardRef<HTMLImageElement, ImageCellProps>(
   (props, ref) => {
     const { value, ...rest } = props
 
+    const imageRef = useMergedRef(ref)
+    const zoomStyle = useZoomStyle(imageRef)
+
     return (
       <ImageCellContainer>
-        <img src={value} alt={value} {...rest} ref={ref} />
+        <Image ref={imageRef} src={value} alt={value} {...rest} />
+        {zoomStyle && <ImageZoom src={value} alt={value} style={zoomStyle} />}
       </ImageCellContainer>
     )
   }

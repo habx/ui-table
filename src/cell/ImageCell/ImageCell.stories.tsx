@@ -27,6 +27,12 @@ export const BasicExample = () => {
         Cell: ImageCell,
       },
       ...BASIC_COLUMNS,
+      {
+        Header: 'Image',
+        id: 'image2',
+        accessor: 'image',
+        Cell: ImageCell,
+      },
     ],
   })
 
