@@ -1,4 +1,3 @@
-import color from 'color'
 import styled, { css } from 'styled-components'
 
 import { Text, theme } from '@habx/ui-core'
@@ -67,8 +66,7 @@ export const TableBodyRow = styled.tr`
   grid-template-columns: var(--table-grid-template-columns);
   grid-gap: var(--table-grid-gap);
 
-  border-bottom: solid 1px
-    ${(props) => color(theme.neutralColor(500)(props)).alpha(0.1)};
+  border-bottom: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })};
 
   &[data-active='true'] {
     background-color: ${theme.neutralColor(100)};
