@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import { Icon } from '@habx/ui-core'
 
+import { ImageCell } from '../cell/ImageCell'
 import { BooleanCell, BooleanFilter, IMEXColumn, RangeFilter } from '../index'
 import { Column } from '../types/Table'
 
@@ -12,14 +13,9 @@ const GROUPS = ['A', 'B', 'C']
 export const FAKE_DATA = range(45).map(() => ({
   ...faker.helpers.createCard(),
   image: faker.helpers.randomize([
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838.png',
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838_1.png',
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838_2.png',
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838_3.png',
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838_4.png',
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838_5.png',
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838_6.png',
-    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/Frame_838_7.png',
+    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/02e27c05f756816d97983027afe8310a.jpg',
+    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/326355d6d0a0f4018c7b2bc6b35d7e00.jpg',
+    '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/c0dc8559767798d6cba8ee18a913ad0a.jpg',
   ]),
   done: faker.helpers.randomize([true, false]),
   price: Math.round(Math.random() * 10000),
@@ -58,7 +54,7 @@ export const RICH_COLUMNS = [
   {
     Header: 'Image',
     accessor: 'image',
-    Cell: ({ value }: { value: string }) => <img src={value} alt={value} />,
+    Cell: ImageCell,
     Filter: () => null,
   },
   {
