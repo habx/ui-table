@@ -66,7 +66,7 @@ export const TableBodyRow = styled.tr`
   grid-template-columns: var(--table-grid-template-columns);
   grid-gap: var(--table-grid-gap);
 
-  border-bottom: solid 1px ${theme.neutralColor(200)};
+  border-bottom: solid 1px ${theme.neutralColor(900, { opacity: 0.1 })};
 
   &[data-active='true'] {
     background-color: ${theme.neutralColor(100)};
