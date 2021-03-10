@@ -226,14 +226,16 @@ export const Table = <D extends {}>({
           )}
         </TableBody>
       </TableContent>
-      <TableOptionBar>
-        {hasPagination && (
-          <TablePagination instance={instance}>
-            {hasDensity && <TableDensity instance={instance} />}
-          </TablePagination>
-        )}
-        {!hasPagination && hasDensity && <TableDensity instance={instance} />}
-      </TableOptionBar>
+      {(hasPagination || hasDensity) && (
+        <TableOptionBar>
+          {hasPagination && (
+            <TablePagination instance={instance}>
+              {hasDensity && <TableDensity instance={instance} />}
+            </TablePagination>
+          )}
+          {!hasPagination && hasDensity && <TableDensity instance={instance} />}
+        </TableOptionBar>
+      )}
     </TableContainer>
   )
 }
