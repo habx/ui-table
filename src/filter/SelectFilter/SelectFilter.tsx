@@ -1,14 +1,9 @@
 import { get } from 'lodash'
 import * as React from 'react'
-import styled from 'styled-components'
 
-import { Select, SelectProps } from '@habx/ui-core'
+import { SelectProps, Select } from '@habx/ui-core'
 
 import { Column } from '../../index'
-
-const StyledSelect = styled(Select)`
-  width: 100%;
-`
 
 export const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
   (props, ref) => {
@@ -35,13 +30,14 @@ export const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
     )
 
     return (
-      <StyledSelect
+      <Select
         ref={ref}
+        bare
+        small
         style={{ width: '100%' }}
         value={filter ?? defaultValue}
         options={selectOptions}
         canReset={!!multi}
-        small
         placeholder={placeholder}
         multi={multi}
         onChange={handleChange}

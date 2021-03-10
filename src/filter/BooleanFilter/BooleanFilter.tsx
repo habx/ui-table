@@ -23,6 +23,7 @@ export const BooleanFilter: React.FunctionComponent<BooleanFilterProps> = ({
   return (
     <Select
       small
+      bare
       canReset={false}
       value={canBeNull ? rawValue : !!rawValue}
       onChange={(newValue) => column.setFilter(newValue)}

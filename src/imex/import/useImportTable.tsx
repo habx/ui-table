@@ -217,7 +217,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 <LoadingOverlay {...remainingActionsState} />
               )}
               <ConfirmContainer data-testid="useImportTable-confirmContainer">
-                <Table style={{ scrollable: true }} instance={tableInstance} />
+                <Table instance={tableInstance} />
               </ConfirmContainer>
               <ActionBar>
                 <DataInfoContainer>

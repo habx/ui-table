@@ -5,10 +5,11 @@ import InfiniteLoader from 'react-window-infinite-loader'
 
 import { Icon, Tooltip, SearchBar } from '@habx/ui-core'
 
+import { useMergedRef } from '../_internal/useMergedRef'
 import { ColumnInstance } from '../types/Table'
 
-import { Density } from './Density'
 import { useGridTemplateColumns } from './hooks/useGridTemplateColumns'
+import { useScrollbarWidth } from './hooks/useScrollbarWidth'
 import { useVirtualize } from './hooks/useVirtualize'
 import { LoadingOverlay } from './LoadingOverlay'
 import { LoadingRow } from './LoadingRow'
@@ -27,13 +28,13 @@ import {
   TableHeaderCellContainer,
   SearchBarContainer,
 } from './Table.style'
-import { TablePagination } from './TablePagination'
+import { TableDensity } from './TableOptions/TableDensity'
+import { TablePagination } from './TableOptions/TablePagination'
 import { TableRow } from './TableRow'
 
 export const Table = <D extends {}>({
   onRowClick,
   loading,
-  style = {},
   noDataComponent: NoDataComponent,
   renderRowSubComponent,
   instance,
@@ -92,13 +93,23 @@ export const Table = <D extends {}>({
     )
   }
 
+  const tableBodyRef = useMergedRef(virtualState.scrollContainerRef)
+  const scrollbarWidth = useScrollbarWidth(
+    (virtualized
+      ? tableBodyRef?.current?.firstElementChild
+      : tableBodyRef?.current) as HTMLElement
+  )
+
   return (
     <TableContainer
       style={
         {
           '--table-grid-template-columns': gridTemplateColumns,
+          '--table-scrollbar-width': `${scrollbarWidth}px`,
         } as React.CSSProperties
       }
+      data-scrollable={!!scrollbarWidth}
+      data-virtualized={virtualized}
     >
       {instance.setGlobalFilter && (
         <SearchBarContainer>
@@ -152,8 +163,8 @@ export const Table = <D extends {}>({
                             <Icon
                               icon={
                                 column.isSortedDesc
-                                  ? 'chevron-south'
-                                  : 'chevron-north'
+                                  ? 'arrow-south'
+                                  : 'arrow-north'
                               }
                             />
                           )}
@@ -176,29 +187,27 @@ export const Table = <D extends {}>({
             <NoDataComponent />
           </NoDataContainer>
         )}
-        <TableBody
-          {...getTableBodyProps()}
-          data-striped={style?.striped}
-          ref={virtualState.scrollContainerRef}
-        >
+        <TableBody {...getTableBodyProps()} ref={tableBodyRef}>
           {virtualState.initialized ? (
             <InfiniteLoader
               isItemLoaded={isItemLoaded}
               itemCount={instance.total ?? currentRows.length}
               loadMoreItems={instance.loadMore ?? (() => null)}
             >
-              {({ onItemsRendered, ref }) => (
-                <FixedSizeList
-                  ref={ref}
-                  onItemsRendered={onItemsRendered}
-                  width={virtualState.width ?? 0}
-                  itemCount={instance.total ?? currentRows.length}
-                  height={virtualState.height ?? 0}
-                  itemSize={virtualState.itemSize ?? 0}
-                >
-                  {VirtualRow}
-                </FixedSizeList>
-              )}
+              {({ onItemsRendered, ref }) => {
+                return (
+                  <FixedSizeList
+                    ref={ref}
+                    onItemsRendered={onItemsRendered}
+                    width={virtualState.width ?? 0}
+                    itemCount={instance.total ?? currentRows.length}
+                    height={virtualState.height ?? 0}
+                    itemSize={virtualState.itemSize ?? 0}
+                  >
+                    {VirtualRow}
+                  </FixedSizeList>
+                )
+              }}
             </InfiniteLoader>
           ) : (
             currentRows.map((row, rowIndex) => (
@@ -218,8 +227,12 @@ export const Table = <D extends {}>({
         </TableBody>
       </TableContent>
       <TableOptionBar>
-        {hasPagination && <TablePagination instance={instance} />}
-        {hasDensity && <Density instance={instance} />}
+        {hasPagination && (
+          <TablePagination instance={instance}>
+            {hasDensity && <TableDensity instance={instance} />}
+          </TablePagination>
+        )}
+        {!hasPagination && hasDensity && <TableDensity instance={instance} />}
       </TableOptionBar>
     </TableContainer>
   )

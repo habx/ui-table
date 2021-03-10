@@ -1,7 +1,7 @@
 import { debounce } from 'lodash'
 import * as React from 'react'
 
-import { TextInput } from '@habx/ui-core'
+import { Icon, TextInput } from '@habx/ui-core'
 
 import { ColumnInstance } from '../../types/Table'
 
@@ -31,10 +31,12 @@ export const TextFilter: React.FunctionComponent<{
 
   return (
     <TextInput
+      bare
       small
+      elementLeft={<Icon icon="search" />}
       value={liveValue}
       onChange={handleSetValue}
-      placeholder="Filtrer"
+      placeholder="Rechercher"
     />
   )
 }

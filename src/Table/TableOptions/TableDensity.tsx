@@ -1,31 +1,12 @@
 import * as React from 'react'
-import styled from 'styled-components'
 
-import { Tooltip, Icon, theme } from '@habx/ui-core'
+import { Tooltip } from '@habx/ui-core'
 
-import { TableInstance } from '../types/Table'
+import { TableInstance } from '../../types/Table'
 
-const DensityIcon = styled(Icon)`
-  margin-left: 18px;
-  color: ${theme.neutralColor(800)};
+import { DensityContainer, DensityIcon } from './TableOptions.style'
 
-  &[data-active='false'] {
-    color: ${theme.neutralColor(300)};
-    transition: all ease-in-out 150ms;
-  }
-
-  &:hover {
-    color: ${theme.neutralColor(500)};
-    cursor: pointer;
-  }
-`
-
-const DensityContainer = styled.div`
-  display: flex;
-  padding: 8px 12px;
-`
-
-export const Density: React.FunctionComponent<DensityProps> = ({
+export const TableDensity: React.FunctionComponent<DensityProps> = ({
   instance,
 }) => (
   <DensityContainer>

@@ -63,7 +63,6 @@ export const TableRow = React.forwardRef<
         ref={ref}
         key={`row-${index}`}
         onClick={onClick && !row.isGrouped ? (e) => onClick(row, e) : undefined}
-        data-even={!row.isGrouped && row.index % 2 === 0}
         data-clickable={!row.isGrouped && !!onClick && isInteractive}
         data-section={row.isExpanded}
         data-active={isActive}
@@ -95,7 +94,7 @@ export const TableRow = React.forwardRef<
                     <Icon icon="chevron-east" />
                   )}
                 </ExpandToggleContainer>
-                <Text>{cell.render('Cell')}</Text>
+                <Text variation="title">{cell.render('Cell')}</Text>
               </TableCell>
             )
           }
@@ -118,7 +117,7 @@ export const TableRow = React.forwardRef<
 
           return (
             <TableCell {...cellProps} key={`cell-${cellIndex}`}>
-              <Text>{cell.render('Cell')}</Text>
+              <Text variation="title">{cell.render('Cell')}</Text>
             </TableCell>
           )
         })}

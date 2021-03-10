@@ -16,7 +16,7 @@ export const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
           instance.canSelectAll === false ? null : (
             <Tooltip title="Tout sélectionner">
               <CheckboxContainer onClick={(e) => e.stopPropagation()}>
-                <Checkbox {...getToggleAllRowsSelectedProps()} />
+                <Checkbox small {...getToggleAllRowsSelectedProps()} />
               </CheckboxContainer>
             </Tooltip>
           ),
@@ -24,6 +24,7 @@ export const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
           return (
             <CheckboxContainer onClick={(e) => e.stopPropagation()}>
               <Checkbox
+                small
                 {...(row.getToggleRowSelectedProps
                   ? row.getToggleRowSelectedProps()
                   : {})}
