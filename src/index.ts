@@ -20,6 +20,7 @@ export { RangeFilter } from './filter/RangeFilter'
 export { BooleanCell } from './cell/BooleanCell'
 export { IconCell } from './cell/IconCell'
 export { ArrayCell } from './cell/ArrayCell'
+export { ImageCell } from './cell/ImageCell'
 
 export {
   Column,
