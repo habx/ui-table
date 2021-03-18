@@ -22,9 +22,8 @@ export const BasicExample = () => {
     columns: [
       {
         Header: 'Boolean',
-        id: 'boolean',
-        accessor: () => Math.random() > 0.5,
-        Cell: ({ cell }) => <BooleanCell value={cell.value} />,
+        accessor: 'done',
+        Cell: BooleanCell,
       },
       ...BASIC_COLUMNS,
     ],

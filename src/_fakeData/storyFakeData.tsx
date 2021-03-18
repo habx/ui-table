@@ -17,7 +17,7 @@ export const FAKE_DATA = range(45).map(() => ({
     '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/326355d6d0a0f4018c7b2bc6b35d7e00.jpg',
     '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/c0dc8559767798d6cba8ee18a913ad0a.jpg',
   ]),
-  done: faker.helpers.randomize([true, false]),
+  done: faker.helpers.randomize([true, false, null, undefined]),
   price: Math.round(Math.random() * 10000),
   id: Math.random(),
   group: GROUPS[Math.floor(Math.random() * Math.floor(3))],

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { stringifyColor, useThemeVariant, Text } from '@habx/ui-core'
+import { stringifyColor, useThemeVariant } from '@habx/ui-core'
 
 import { IconCell, IconCellProps } from '../IconCell'
 
@@ -12,25 +12,44 @@ export const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
 
     const theme = useThemeVariant()
 
-    const color = stringifyColor(
-      value ? theme.colors.success.base : theme.colors.error.base
-    )
+    const iconProps = React.useMemo<
+      Pick<IconCellProps, 'color' | 'icon' | 'label'>
+    >(() => {
+      switch (value) {
+        case true:
+          return {
+            icon: 'check-round-outline',
+            color: stringifyColor(theme.colors.success.base),
+            label: 'Oui',
+          }
+        case false:
+          return {
+            icon: 'x-mark-outline',
+            color: stringifyColor(theme.colors.error.base),
+            label: 'Non',
+          }
+        default:
+          return {
+            icon: 'question-round-outline',
+            color: stringifyColor(theme.colors.secondary.calm),
+            label: 'Non défini',
+          }
+      }
+    }, [
+      theme.colors.error.base,
+      theme.colors.secondary.calm,
+      theme.colors.success.base,
+      value,
+    ])
+
     return (
       <BooleanCellContainer>
-        <IconCell
-          ref={ref}
-          icon={value ? 'check-round-outline' : 'x-mark-outline'}
-          color={color}
-          {...rest}
-        />
-        <Text color={color} variation="title">
-          {value ? 'Oui' : 'Non'}
-        </Text>
+        <IconCell ref={ref} {...iconProps} {...rest} />
       </BooleanCellContainer>
     )
   }
 )
 
 interface BooleanCellProps extends Omit<IconCellProps, 'icon' | 'color'> {
-  value: boolean
+  value?: boolean | null
 }
