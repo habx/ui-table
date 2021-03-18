@@ -23,9 +23,11 @@ export const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
           color={color}
           {...rest}
         />
-        <Text color={color} variation="title">
-          {value ? 'Oui' : 'Non'}
-        </Text>
+        {!rest.label && (
+          <Text color={color} variation="title">
+            {value ? 'Oui' : 'Non'}
+          </Text>
+        )}
       </BooleanCellContainer>
     )
   }
