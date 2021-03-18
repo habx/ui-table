@@ -18,7 +18,7 @@ export const IconCell = React.forwardRef<HTMLDivElement, IconCellProps>(
         <IconContainer color={color} data-large={large}>
           <Icon icon={icon} />
         </IconContainer>
-        {label && <LabelContainer>{label}</LabelContainer>}
+        {label && <LabelContainer color={color}>{label}</LabelContainer>}
       </IconCellContainer>
     )
   }
