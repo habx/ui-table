@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import { zIndex } from '../../_internal/zIndex'
+
 export const IMAGE_ZOOM_SIZE = 120
 export const IMAGE_SIZE = 36
 
@@ -9,6 +11,8 @@ export const ImageZoom = styled.img`
   width: ${IMAGE_ZOOM_SIZE}px;
   object-fit: contain;
   position: fixed;
+
+  z-index: ${zIndex.overlay};
 
   margin-left: 8px;
   margin-top: -16px;

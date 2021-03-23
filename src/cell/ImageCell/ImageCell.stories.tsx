@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { FAKE_DATA, BASIC_COLUMNS } from '../../_fakeData/storyFakeData'
 import { Table } from '../../Table'
 import { useTable } from '../../useTable'
+import { BooleanCell } from '../BooleanCell'
 
 import { ImageCell } from './ImageCell'
 
@@ -27,6 +28,11 @@ export const BasicExample = () => {
         Cell: ImageCell,
       },
       ...BASIC_COLUMNS,
+      {
+        Header: 'Boolean',
+        accessor: 'done',
+        Cell: BooleanCell,
+      },
       {
         Header: 'Image',
         id: 'image2',
