@@ -69,6 +69,27 @@ export const HorizontalScroll = () => {
   )
 }
 
+const COLUMNS_WITH_SECTIONS = new Array(5).fill(0).map((_, index) => ({
+  Header: `Section ${index + 1}`,
+  columns: BASIC_COLUMNS.map((column) => ({
+    ...column,
+    id: `${column?.id ?? column.accessor}${index}`,
+  })),
+}))
+
+export const WithSectionsHeader = () => {
+  const tableInstance = useTable({
+    data: FAKE_DATA,
+    columns: COLUMNS_WITH_SECTIONS,
+  })
+
+  return (
+    <Container>
+      <Table instance={tableInstance} style={{ striped: true }} />
+    </Container>
+  )
+}
+
 export const RichExample = () => {
   const tableInstance = useTable<Faker.Card>(
     {
