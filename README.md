@@ -9,7 +9,8 @@
 
 UI components for [react-table](https://github.com/tannerlinsley/react-table) based on [ui-core](https://github.com/habx/ui-core)
 
-![Preview](https://res.cloudinary.com/habx/image/upload/tech/ui-table/ui-table.png)
+![Preview-light](https://res.cloudinary.com/habx/image/upload/v1616506914/tech/ui-table/table-light.png)
+![Preview-dark](https://res.cloudinary.com/habx/image/upload/v1616506987/tech/ui-table/table-dark.png)
 
 
 ## Instalation
@@ -45,6 +46,9 @@ Test all our components in our [Storybook](https://habx.github.io/ui-table/)
 ### Import / Export
 
 Import and export your data in `.xlsx` or `.csv` thanks to [exceljs](https://github.com/exceljs/exceljs)
+
+![Preview-imex](https://res.cloudinary.com/habx/image/upload/v1616507243/tech/ui-table/imex.gif)
+
 
 #### Columns Example
 
