@@ -13,7 +13,7 @@ UI components for [react-table](https://github.com/tannerlinsley/react-table) ba
 ![Preview-dark](https://res.cloudinary.com/habx/image/upload/v1616506987/tech/ui-table/table-dark.png)
 
 
-## Instalation
+## Installation
 ```shell 
 npm i @habx/ui-table
  ```
