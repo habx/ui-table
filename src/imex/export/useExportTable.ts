@@ -1,14 +1,13 @@
 import { get, isNumber } from 'lodash'
 import * as React from 'react'
 
-import { ExcelValidationOptions } from '../excel.utils'
 import { getImexColumns } from '../getImexColumns'
 import { IMEXColumn } from '../imex.interface'
 
-import { exportData } from './useExportTable.utils'
+import { exportData, ExportDataOptions } from './useExportTable.utils'
 
 export interface UseExportIMEXParams<D extends { [key: string]: any } = any>
-  extends ExcelValidationOptions {
+  extends Omit<ExportDataOptions, 'type'> {
   data?: D[]
   columns: IMEXColumn<D>[]
   type?: 'csv' | 'xls'

@@ -28,7 +28,7 @@ export const saveFile = (filename: string, file: any) => {
   }
 }
 
-interface ExportDataOptions extends ExcelValidationOptions {
+export interface ExportDataOptions extends ExcelValidationOptions {
   type: 'csv' | 'xls'
   /**
    *
