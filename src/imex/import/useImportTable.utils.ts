@@ -13,8 +13,8 @@ export enum ParseCellError {
   INVALID,
 }
 export const ParsingErrors: Record<ParseCellError, string> = {
-  [ParseCellError.NOT_A_NUMBER]: 'nombre invalide',
-  [ParseCellError.INVALID]: 'invalide',
+  [ParseCellError.NOT_A_NUMBER]: 'Nombre invalide',
+  [ParseCellError.INVALID]: 'Valeur invalide',
 }
 
 export const softCompare = (a: any, b: any): boolean =>
