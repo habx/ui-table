@@ -41,7 +41,7 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
         return (
           <Tooltip
             small
-            title={error as string}
+            title={`${error}:`}
             description={`${props.cell?.value}`}
             disabled={!error}
           >
