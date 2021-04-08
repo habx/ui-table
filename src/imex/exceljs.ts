@@ -1,10 +1,14 @@
 import type * as Excel from 'exceljs'
 
-const getExcelJs = () => require('exceljs')
+const getExcelJs = () => import('exceljs')
 
-export const getCellValueTypes = () => getExcelJs().ValueType
+export const getCellValueTypes = async () => {
+  const excelJS = await getExcelJs()
 
-export const createWorkbook = () => {
-  const excelJS = getExcelJs()
+  return excelJS.ValueType
+}
+
+export const createWorkbook = async () => {
+  const excelJS = await getExcelJs()
   return new excelJS.Workbook() as Excel.Workbook
 }
