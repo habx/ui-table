@@ -42,34 +42,34 @@
     ]
   },
   "peerDependencies": {
-    "@habx/ui-core": "^5.23.4",
+    "@habx/ui-core": "^5.29.1",
     "lodash": ">=4.17.21",
     "react": ">= 17.0.2",
-    "styled-components": ">= 5.2.1"
+    "styled-components": ">= 5.2.3"
   },
   "dependencies": {
-    "@testing-library/react": "^11.2.5",
+    "@testing-library/react": "^11.2.6",
     "@types/papaparse": "^5.2.5",
     "exceljs": "^4.2.1",
     "papaparse": "^5.3.0",
-    "react-dropzone": "^11.3.1",
+    "react-dropzone": "^11.3.2",
     "react-table": "^7.6.3",
     "react-window": "^1.8.6",
     "react-window-infinite-loader": "^1.0.7"
   },
   "devDependencies": {
-    "@habx/config-ci-front": "^0.7.0",
+    "@habx/config-ci-front": "^0.8.0",
     "@habx/eslint-config-client": "^6.0.0",
-    "@habx/ui-core": "^5.23.4",
-    "@storybook/addon-actions": "^6.1.21",
+    "@habx/ui-core": "^5.29.1",
+    "@storybook/addon-actions": "^6.2.5",
     "@storybook/addon-centered": "^5.3.21",
-    "@storybook/addon-knobs": "^6.1.21",
-    "@storybook/addon-viewport": "^6.1.21",
-    "@storybook/react": "^6.1.21",
+    "@storybook/addon-knobs": "^6.2.5",
+    "@storybook/addon-viewport": "^6.2.5",
+    "@storybook/react": "^6.2.5",
     "@storybook/storybook-deployer": "^2.8.7",
-    "@testing-library/react-hooks": "^5.1.0",
-    "@types/faker": "^5.1.7",
-    "@types/jest": "^26.0.21",
+    "@testing-library/react-hooks": "^5.1.1",
+    "@types/faker": "^5.5.0",
+    "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
@@ -78,7 +78,7 @@
     "@types/react-window-infinite-loader": "^1.0.3",
     "@types/styled-components": "^5.1.9",
     "bili": "^5.0.5",
-    "faker": "^5.4.0",
+    "faker": "^5.5.2",
     "husky": "^4.3.8",
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
@@ -89,9 +89,9 @@
     "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
-    "styled-components": "^5.2.1",
+    "styled-components": "^5.2.3",
     "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.4"
   },
   "storybook-deployer": {
     "commitMessage": "[SKIP CI] Deploy Storybook to GitHub Pages"
