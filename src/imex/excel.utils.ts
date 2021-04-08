@@ -6,10 +6,11 @@ import { createWorkbook, getCellValueTypes } from './exceljs'
 import { IMEXColumn } from './imex.interface'
 
 export const parseExcelFileData = async (file: File): Promise<any[][]> => {
-  const CellValueType = getCellValueTypes()
+  const CellValueType = await getCellValueTypes()
 
   const arrayBuffer = await file.arrayBuffer()
-  const workbook = await createWorkbook().xlsx.load(arrayBuffer)
+  const rawWorkbook = await createWorkbook()
+  const workbook = await rawWorkbook.xlsx.load(arrayBuffer)
   const worksheet = workbook.worksheets[0]
 
   const data: any[][] = []
