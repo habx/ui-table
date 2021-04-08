@@ -1,4 +1,12 @@
 
+<p align="center">
+  <a href="https://habx.github.io/concrete-docs/">
+    <img height="300" src="https://habx.github.io/concrete-docs/img/concrete-cover.svg">
+  </a>
+</p>
+
+<h1 align="center">@habx/ui-table</h1>
+
 # React Table UI
 
 [![CircleCI](https://img.shields.io/circleci/build/github/habx/ui-table)](https://app.circleci.com/pipelines/github/habx/ui-table)
