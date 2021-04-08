@@ -1,4 +1,4 @@
-import * as Excel from 'exceljs'
+import type * as Excel from 'exceljs'
 
 import {
   applyValidationRulesAndStyle,
