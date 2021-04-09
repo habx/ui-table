@@ -1,9 +1,8 @@
-import { withKnobs } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { useFilters, usePagination, useSortBy, useRowSelect } from 'react-table'
 import styled from 'styled-components'
 
-import { Text, Background, palette } from '@habx/ui-core'
+import { Text } from '@habx/ui-core'
 
 import {
   BASIC_COLUMNS,
@@ -21,7 +20,6 @@ const Container = styled.div`
 
 export default {
   title: 'Table/useTable',
-  decorators: [withKnobs],
 }
 
 export const BasicExample = () => {
@@ -127,28 +125,6 @@ export const WithPluginsExample = () => {
     <Container>
       <Table instance={tableInstance} />
     </Container>
-  )
-}
-
-export const DarkMode = () => {
-  const tableInstance = useTable<Faker.Card>(
-    {
-      data: FAKE_DATA,
-      columns: BASIC_COLUMNS,
-    },
-    useFilters,
-    useSortBy,
-    usePagination,
-    useDensity,
-    useRowSelect
-  )
-
-  return (
-    <Background backgroundColor={palette.neutralBlackWithIntensityFading[900]}>
-      <Container>
-        <Table instance={tableInstance} />
-      </Container>
-    </Background>
   )
 }
 

@@ -1,4 +1,3 @@
-import { withKnobs } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { useFilters } from 'react-table'
 import styled from 'styled-components'
@@ -18,7 +17,6 @@ const Container = styled.div`
 
 export default {
   title: 'Plugins/useFilters [built in]',
-  decorators: [withKnobs],
 }
 
 export const BasicExample = () => {

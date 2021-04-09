@@ -1,4 +1,3 @@
-import { withKnobs } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { useSortBy } from 'react-table'
 import styled from 'styled-components'
@@ -14,7 +13,6 @@ const Container = styled.div`
 
 export default {
   title: 'Plugins/useSortBy [built in]',
-  decorators: [withKnobs],
 }
 
 export const BasicExample = () => {

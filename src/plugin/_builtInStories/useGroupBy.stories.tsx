@@ -1,4 +1,3 @@
-import { withKnobs } from '@storybook/addon-knobs'
 import * as React from 'react'
 import { useGroupBy, useExpanded } from 'react-table'
 import styled from 'styled-components'
@@ -14,7 +13,6 @@ const Container = styled.div`
 
 export default {
   title: 'Plugins/useGroupBy [built in]',
-  decorators: [withKnobs],
 }
 
 const columns = [
