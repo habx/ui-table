@@ -1,19 +1,42 @@
 import { addDecorator, addParameters } from '@storybook/react'
-import centered from '@storybook/addon-centered'
-import { create } from '@storybook/theming'
+import { themes } from '@storybook/theming'
+import { palette } from '@habx/ui-core'
 
-import providerDecorator from './providerDecorator'
+import { providerDecorator } from './providerDecorator'
 
-addDecorator(centered)
 addDecorator(providerDecorator)
 
+const theme = {
+  dark: {
+    ...themes.dark,
+    appContentBg: palette.neutralBlackWithIntensityFading[800],
+    appBg: palette.neutralBlackWithIntensityFading[900],
+  },
+  light: {
+    ...themes.normal,
+    appContentBg: palette.neutralBlackWithIntensityFading[0],
+    appBg: palette.neutralBlackWithIntensityFading[100],
+  }
+}
+
+
 addParameters({
+  backgrounds: {
+    disable: true,
+    grid: {
+      disable: true
+    }
+  },
   options: {
+    storySort: {
+      order: [
+        'Table',
+        'Cells',
+        'Import-Export'
+      ],
+    },
     sortStoriesByKind: true,
-    theme: create({
-      base: 'light',
-      brandTitle: 'Habx'
-    })
   },
   info: {},
+  darkMode: theme,
 })
