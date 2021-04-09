@@ -1,0 +1,87 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { linkTo } from "@storybook/addon-links";
+import styled from "styled-components";
+
+import { Button } from "@habx/ui-core";
+
+<Meta title="Introduction" />
+
+export const CenteredContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+`;
+
+<CenteredContainer>
+  <a href="https://habx.github.io/concrete-docs/">
+    <img
+      height="300"
+      src="https://habx.github.io/concrete-docs/img/concrete-cover.svg"
+      alt="logo"
+    />
+  </a>
+</CenteredContainer>
+
+<CenteredContainer>
+  <a href="https://habx.github.io/concrete-docs/">
+    <img
+      width="300"
+      src="https://habx.github.io/concrete-docs/img/concrete-table.svg"
+      alt="logo"
+    />
+  </a>
+</CenteredContainer>
+
+# Global concepts
+
+For global concepts refer to our [documentation](https://concrete.habx.com/docs/table/usage)
+
+# Stories
+
+<br />
+
+## useTable
+
+**Concrete Table** exports an abstraction [react-table](https://react-table.tanstack.com/docs/api/useTable) `useTable` hook.
+These stories show you how it renders with the component `Table`
+
+<br />
+<Button onClick={linkTo("Table/useTable")} link small>
+  See useTable stories
+</Button>
+
+## Cells
+
+The set of `Cell` components can be previewed under the _Cells_ section.
+
+<br />
+<Button onClick={linkTo("Cells/ArrayCell")} link small>
+  See exported Cells components
+</Button>
+
+## IMEX
+
+Import export feature is described in [documentation](https://concrete.habx.com/docs/table/imex)
+Stories are available to preview main features
+
+<br />
+<Button onClick={linkTo("IMEX/useExportTable")} link small>
+  See imex in action !
+</Button>
+
+## Plugins
+
+**Concrete Table** implements UI for almost all [react-table plugins](https://react-table.tanstack.com/docs/api/useFilters)
+Stories with [react-table](https://react-table.tanstack.com) built in filters are suffixed with _[built in]_
+
+<br />
+<Button onClick={linkTo("Plugins/useFilters")} link small>
+  See react table plugins UI
+</Button>
+
+Some custom plugins are also available like `useInfiniteScroll`
+
+<br />
+<Button onClick={linkTo("Plugins/useInfiniteScroll")} link small>
+  See infiniteScroll plugin
+</Button>
