@@ -30,7 +30,7 @@ const reducer = <D extends {}>(
   const instance = rawInstance as TableInstance<D>
   const initialized = !(!prevState?.sortBy && instance.sortBy)
   if (initialized && !isEqual(prevState?.sortBy, state.sortBy)) {
-    instance.onSortByChange && instance.onSortByChange(state.sortBy)
+    instance?.onSortByChange?.(state.sortBy)
   }
 
   return state

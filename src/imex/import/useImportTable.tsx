@@ -155,7 +155,9 @@ export const useImportTable = <D extends { id?: string | number }>(
               remainingActions.setActionsCount(dataToUpsert.length)
 
               for (const data of dataToUpsert) {
-                mergedOptions.upsertRow && (await mergedOptions.upsertRow(data))
+                if (mergedOptions.upsertRow) {
+                  await mergedOptions.upsertRow(data)
+                }
                 remainingActions.onActionDone()
               }
               if (isFunction(mergedOptions.onFinish)) {
