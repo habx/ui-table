@@ -30,6 +30,7 @@ addParameters({
   options: {
     storySort: {
       order: [
+        'Introduction',
         'Table',
         'Cells',
         'Import-Export'
