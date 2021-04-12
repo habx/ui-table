@@ -89,7 +89,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
   // clone original data array
   const originalData = [...params.originalData]
 
-  const headers = (params.data.shift() as string[])?.map(cleanHeader)
+  const headers = params.data.shift()?.map(cleanHeader)
   if (!headers) {
     throw new Error('Missing headers row')
   }
@@ -113,10 +113,15 @@ export const parseRawData = async <D extends { id?: string | number }>(
 
   const ignoredColumns = []
   const orderedColumns = headers.map((header) => {
-    const column = params.columns.find(
-      (imexColumn) =>
-        cleanHeader(imexColumn.Header as string) === cleanHeader(header)
-    )
+    const column = params.columns.find((imexColumn) => {
+      const searchedHeader = cleanHeader(imexColumn.Header as string)
+      const cleanedHeader = requiredColumnHeaders.includes(searchedHeader)
+        ? header.replace(/\*$/, '')
+        : header
+
+      return searchedHeader === cleanedHeader
+    })
+
     if (!column) {
       ignoredColumns.push(header)
     }
