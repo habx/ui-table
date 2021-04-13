@@ -27,7 +27,7 @@ export const TablePagination: React.FunctionComponent<PaginationProps> = ({
           {instance.state.pageIndex * instance.state.pageSize + 1} -{' '}
           {instance.state.pageIndex * instance.state.pageSize +
             instance.page.length}{' '}
-          / {instance.rows.length}
+          / {instance.total ?? instance.rows.length}
         </PagesPagination>
         <PageSizeContainer>
           <Select
