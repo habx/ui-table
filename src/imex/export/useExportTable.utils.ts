@@ -51,7 +51,7 @@ export const exportData = async <D extends {}>(
    * Insert data
    */
   worksheet.columns = columns.map((column) => ({
-    header: column.Header,
+    header: column.Header + (column.meta?.imex?.required ? '*' : ''),
     key: column.id ?? column.Header,
     width: column.meta?.imex?.width,
     hidden: column.meta?.imex?.hidden,
