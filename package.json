@@ -66,7 +66,7 @@
     "@storybook/react": "^6.2.7",
     "@storybook/storybook-deployer": "^2.8.7",
     "@testing-library/react-hooks": "^5.1.1",
-    "@types/faker": "^5.5.2",
+    "@types/faker": "^5.5.3",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",
     "@types/react": "^17.0.3",
