@@ -41,7 +41,7 @@ export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
   /**
    * Defines the number of upsertRow calls parallelized.
    * @default 1
-   * Use 0 to call upsertRow for all rows at the same time.
+   * Use Infinity to call upsertRow for all rows at the same time.
    */
   concurrency?: number
 }

@@ -141,6 +141,9 @@ export const useImportTable = <D extends { id?: string | number }>(
           const handleConfirm = async () => {
             try {
               const concurrency = mergedOptions.concurrency ?? 1
+              if (concurrency < 1) {
+                throw new Error('concurrency should be greater than 1')
+              }
 
               remainingActions.initLoading()
 
@@ -165,7 +168,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 }
               )
               const chunkedUpsertRowFunctions =
-                concurrency === 0
+                concurrency === Infinity
                   ? [upsertRowFunctions]
                   : chunk(upsertRowFunctions, concurrency)
 
