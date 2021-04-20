@@ -1,4 +1,5 @@
 import { groupBy as lodashGroupBy, isFunction, omit } from 'lodash'
+import pLimit from 'p-limit'
 import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
 import { useExpanded, useGroupBy } from 'react-table'
@@ -140,6 +141,11 @@ export const useImportTable = <D extends { id?: string | number }>(
 
           const handleConfirm = async () => {
             try {
+              const concurrency = mergedOptions.concurrency ?? 1
+              if (concurrency < 1) {
+                throw new Error('concurrency should be greater than 1')
+              }
+
               remainingActions.initLoading()
 
               const cleanData =
@@ -154,12 +160,18 @@ export const useImportTable = <D extends { id?: string | number }>(
                 : cleanData
               remainingActions.setActionsCount(dataToUpsert.length)
 
-              for (const data of dataToUpsert) {
-                if (mergedOptions.upsertRow) {
-                  await mergedOptions.upsertRow(data)
-                }
-                remainingActions.onActionDone()
-              }
+              const limit = pLimit(concurrency)
+              const upsertRowFunctions = dataToUpsert.map((data: D | D[]) =>
+                limit(async () => {
+                  if (mergedOptions.upsertRow) {
+                    await mergedOptions.upsertRow(data)
+                  }
+                  remainingActions.onActionDone()
+                })
+              )
+
+              await Promise.all(upsertRowFunctions)
+
               if (isFunction(mergedOptions.onFinish)) {
                 mergedOptions.onFinish(dataToUpsert)
               }

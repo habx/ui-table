@@ -37,6 +37,13 @@ export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
       options?: Partial<UseImportTableOptions<D>>
     ) => Promise<void>
   ) => (files: File[], event?: DropEvent) => Promise<void>
+
+  /**
+   * Defines the number of upsertRow calls parallelized.
+   * @default 1
+   * Use Infinity to call upsertRow for all rows at the same time.
+   */
+  concurrency?: number
 }
 
 export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
