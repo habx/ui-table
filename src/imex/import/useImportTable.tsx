@@ -1,4 +1,4 @@
-import { groupBy as lodashGroupBy, isFunction, omit } from 'lodash'
+import { groupBy as lodashGroupBy, isFunction, omit, chunk } from 'lodash'
 import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
 import { useExpanded, useGroupBy } from 'react-table'
@@ -140,6 +140,8 @@ export const useImportTable = <D extends { id?: string | number }>(
 
           const handleConfirm = async () => {
             try {
+              const concurrency = mergedOptions.concurrency ?? 1
+
               remainingActions.initLoading()
 
               const cleanData =
@@ -154,11 +156,21 @@ export const useImportTable = <D extends { id?: string | number }>(
                 : cleanData
               remainingActions.setActionsCount(dataToUpsert.length)
 
-              for (const data of dataToUpsert) {
-                if (mergedOptions.upsertRow) {
-                  await mergedOptions.upsertRow(data)
+              const upsertRowFunctions = dataToUpsert.map(
+                (data: D | D[]) => async () => {
+                  if (mergedOptions.upsertRow) {
+                    await mergedOptions.upsertRow(data)
+                  }
+                  remainingActions.onActionDone()
                 }
-                remainingActions.onActionDone()
+              )
+              const chunkedUpsertRowFunctions =
+                concurrency === 0
+                  ? [upsertRowFunctions]
+                  : chunk(upsertRowFunctions, concurrency)
+
+              for (const upsertChunk of chunkedUpsertRowFunctions) {
+                await Promise.all(upsertChunk.map((upsert) => upsert()))
               }
               if (isFunction(mergedOptions.onFinish)) {
                 mergedOptions.onFinish(dataToUpsert)

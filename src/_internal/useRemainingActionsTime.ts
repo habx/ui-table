@@ -1,4 +1,3 @@
-import { mean } from 'lodash'
 import * as React from 'react'
 
 import { useInterval } from './useInterval'
@@ -21,24 +20,22 @@ type State = {
   loading: boolean
   total: number
   done: number
-  lastDoneTime: number | null
-  deltaTimes: number[]
+
+  startTime: number | undefined
   remainingTime: number | undefined | null
 }
 export const reducer = (state: State, action: Actions) => {
   switch (action.type) {
     case ActionTypes.actionDone: {
       const done = state.done + 1
-      const deltaTimes = state.lastDoneTime
-        ? [...state.deltaTimes, new Date().getTime() - state.lastDoneTime]
-        : []
+      const newRemainingTime =
+        ((new Date().getTime() - (state.startTime ?? 0)) / done) *
+        (state.total - done)
       return {
         ...state,
         done,
         loading: done < state.total,
-        lastDoneTime: new Date().getTime(),
-        deltaTimes,
-        remainingTime: mean(deltaTimes) * (state.total - done),
+        remainingTime: newRemainingTime,
       }
     }
     case ActionTypes.setActionsCount:
@@ -52,8 +49,7 @@ export const reducer = (state: State, action: Actions) => {
         loading: false,
         total: 0,
         done: 0,
-        lastDoneTime: null,
-        deltaTimes: [],
+        startTime: undefined,
         remainingTime: 0,
       }
     }
@@ -69,6 +65,7 @@ export const reducer = (state: State, action: Actions) => {
     case ActionTypes.onInitLoad: {
       return {
         ...state,
+        startTime: new Date().getTime(),
         done: 0,
         loading: true,
         lastDoneTime: null,
@@ -83,8 +80,8 @@ const INITIAL_STATE: State = {
   loading: false,
   total: 0,
   done: 0,
-  lastDoneTime: null,
-  deltaTimes: [],
+
+  startTime: undefined,
   remainingTime: undefined,
 }
 
