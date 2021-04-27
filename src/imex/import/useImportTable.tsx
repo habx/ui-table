@@ -4,15 +4,7 @@ import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
 import { useExpanded, useGroupBy } from 'react-table'
 
-import {
-  Button,
-  HeaderBar,
-  Icon,
-  notify,
-  prompt,
-  Title,
-  Tooltip,
-} from '@habx/ui-core'
+import { Button, HeaderBar, notify, prompt, Title } from '@habx/ui-core'
 
 import { useRemainingActionsTime } from '../../_internal/useRemainingActionsTime'
 import { LoadingOverlay } from '../../components'
@@ -30,12 +22,11 @@ import {
 } from '../imex.interface'
 import { IMEXColumn } from '../imex.interface'
 
+import { DataIndicators } from './DataIndicators'
 import { getCompareColumnsFromImexColumns } from './useImportTable.columns'
 import {
   ConfirmContainer,
-  DataInfo,
   ActionBar,
-  DataInfoContainer,
   OverlayContent,
 } from './useImportTable.style'
 import { parseRawData } from './useImportTable.utils'
@@ -186,26 +177,6 @@ export const useImportTable = <D extends { id?: string | number }>(
             }
           }
 
-          const dataInfos = React.useMemo(() => {
-            return {
-              added: parsedData?.filter(
-                (row) =>
-                  row._rowMeta.hasDiff &&
-                  !row._rowMeta.prevVal &&
-                  !Object.values(row._rowMeta.errors).length
-              ).length,
-              edited: parsedData?.filter(
-                (row) =>
-                  row._rowMeta.hasDiff &&
-                  !!row._rowMeta.prevVal &&
-                  !Object.values(row._rowMeta.errors).length
-              ).length,
-              ignored: parsedData?.filter(
-                (row) => Object.values(row._rowMeta.errors).length
-              ).length,
-            }
-          }, [parsedData])
-
           if (!parsedData) {
             return (
               <OverlayContent>
@@ -234,23 +205,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 <Table instance={tableInstance} />
               </ConfirmContainer>
               <ActionBar>
-                <DataInfoContainer>
-                  <Tooltip title={`${dataInfos.added} ajout(s)`} small>
-                    <DataInfo data-type="addition">
-                      {dataInfos.added} <Icon icon="add-round" />
-                    </DataInfo>
-                  </Tooltip>
-                  <Tooltip title={`${dataInfos.edited} modification(s)`} small>
-                    <DataInfo data-type="edition">
-                      {dataInfos.edited} <Icon icon="check-round" />
-                    </DataInfo>
-                  </Tooltip>
-                  <Tooltip title={`${dataInfos.ignored} ignoré(s)`} small>
-                    <DataInfo data-type="ignored">
-                      {dataInfos.ignored} <Icon icon="exclam-round" />
-                    </DataInfo>
-                  </Tooltip>
-                </DataInfoContainer>
+                <DataIndicators data={parsedData} />
                 <Button
                   ghost
                   disabled={remainingActionsState.loading}
