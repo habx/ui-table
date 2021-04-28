@@ -277,6 +277,6 @@ export const parseRawData = async <D extends { id?: string | number }>(
     if (!imexRow._rowMeta.hasDiff) {
       return true
     }
-    return options.filterRows?.(imexRow) ?? false
+    return options.filterRows?.(imexRow)
   })
 }
