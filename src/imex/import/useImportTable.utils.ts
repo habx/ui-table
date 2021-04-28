@@ -273,6 +273,9 @@ export const parseRawData = async <D extends { id?: string | number }>(
     return filteredGroupedParsedData.flat()
   }
 
+  /**
+   * Display only modified rows or rows validated by the custom filter function
+   */
   return parsedData.filter((imexRow) => {
     if (!imexRow._rowMeta.hasDiff) {
       return true
