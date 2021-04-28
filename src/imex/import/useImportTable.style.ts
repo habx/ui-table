@@ -98,6 +98,7 @@ export const DataInfo = styled(Text)`
   display: flex;
   align-items: center;
   margin-right: 16px;
+  user-select: none;
 
   > :last-child {
     margin-left: 8px;
