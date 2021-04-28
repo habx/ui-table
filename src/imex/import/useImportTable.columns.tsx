@@ -30,6 +30,12 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
         : ({ cell }) => <div>{cell.value}</div>) as React.ComponentType<
         CellProps<D>
       >
+
+      // Do not add style on grouped cell
+      if (rawProps.row.isGrouped) {
+        return <Cell {...props} />
+      }
+
       const cellPrevVal = get(rowMeta?.prevVal, column.accessor as string)
 
       const CellContainer: React.FunctionComponent = ({ children }) => {

@@ -58,6 +58,7 @@ export const WithDragAndDrop = () => {
     upsertRow: upsertRow,
     getOriginalData: () => FAKE_DATA,
     confirmLightBoxTitle: 'Import',
+    groupBy: 'name',
   }
 
   return (
