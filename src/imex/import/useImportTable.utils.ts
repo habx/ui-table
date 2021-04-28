@@ -1,4 +1,12 @@
-import { deburr, difference, get, lowerCase, reduce, set } from 'lodash'
+import {
+  deburr,
+  difference,
+  get,
+  lowerCase,
+  reduce,
+  set,
+  groupBy,
+} from 'lodash'
 
 import {
   IMEXColumn,
@@ -84,7 +92,10 @@ interface ParseDataParams<D> {
 }
 export const parseRawData = async <D extends { id?: string | number }>(
   params: ParseDataParams<D>,
-  options: Pick<UseImportTableOptions, 'findPrevValPredicate' | 'filterRows'>
+  options: Pick<
+    UseImportTableOptions,
+    'findPrevValPredicate' | 'filterRows' | 'groupBy'
+  >
 ) => {
   // clone original data array
   const originalData = [...params.originalData]
@@ -242,7 +253,33 @@ export const parseRawData = async <D extends { id?: string | number }>(
       id: importedRowMeta.prevVal?.id ?? undefined,
     })
   }
-  return parsedData.filter((imexRow) =>
-    options.filterRows ? options.filterRows(imexRow) : imexRow._rowMeta.hasDiff
-  )
+
+  /**
+   * If one of the row included in the group has been modified or added, we display existing values of the group.
+   */
+  if (options.groupBy) {
+    let filteredGroupedParsedData: ImportedRow<D>[][] = []
+    const groupedParsedData = groupBy(parsedData, options.groupBy)
+    for (const rowGroup in groupedParsedData) {
+      if (
+        groupedParsedData[rowGroup].some(
+          (row) => row._rowMeta.hasDiff && options.filterRows?.(row)
+        )
+      ) {
+        filteredGroupedParsedData.push(groupedParsedData[rowGroup])
+      }
+    }
+
+    return filteredGroupedParsedData.flat()
+  }
+
+  /**
+   * Display only modified rows or rows validated by the custom filter function
+   */
+  return parsedData.filter((imexRow) => {
+    if (!imexRow._rowMeta.hasDiff) {
+      return true
+    }
+    return options.filterRows?.(imexRow)
+  })
 }
