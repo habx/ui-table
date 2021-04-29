@@ -60,7 +60,7 @@ export const NewCell = styled.div`
 
 export const ChangedCell = styled.div`
   display: flex;
-  color: ${theme.color('warning')};
+  color: ${theme.color('success')};
   flex-direction: column;
 `
 
@@ -77,12 +77,19 @@ export const StyledIMEXDropzone = styled.div`
 `
 
 export const ErrorCellContent = styled.div`
-  opacity: 0.5;
-
   display: flex;
   align-items: center;
 
   width: 100%;
+
+  &[data-error='false'] {
+    opacity: 0.5;
+  }
+
+  &,
+  ${NewCell}, ${ChangedCell} {
+    color: ${theme.color('error')};
+  }
 `
 
 export const ErrorIcon = styled(Icon)`
@@ -108,7 +115,7 @@ export const DataInfo = styled(Text)`
     color: ${theme.color('error')};
   }
   &[data-type='edition'] {
-    color: ${theme.color('warning')};
+    color: ${theme.color('success')};
   }
   &[data-type='addition'] {
     color: ${theme.color('primary')};

@@ -6,7 +6,31 @@ import { ImportedRow } from '../imex.interface'
 
 import { DataInfo, DataInfoContainer } from './useImportTable.style'
 
-export const DataIndicators: React.FunctionComponent<DataInfoProps> = ({
+export const IconIndicator: React.FunctionComponent<{
+  type: 'addition' | 'edition' | 'ignored'
+  label?: string
+}> = ({ type, label, children }) => {
+  const icon = React.useMemo(() => {
+    switch (type) {
+      case 'addition':
+        return 'add-outline'
+      case 'edition':
+        return 'check-round-outline'
+      case 'ignored':
+        return 'x-mark-outline'
+    }
+  }, [type])
+
+  return (
+    <Tooltip title={label ?? ''} small disabled={!label}>
+      <DataInfo data-type={type}>
+        {children} <Icon icon={icon} />
+      </DataInfo>
+    </Tooltip>
+  )
+}
+
+export const DataIndicators: React.VoidFunctionComponent<DataInfoProps> = ({
   data,
 }) => {
   const dataInfos = React.useMemo(() => {
@@ -30,21 +54,24 @@ export const DataIndicators: React.FunctionComponent<DataInfoProps> = ({
 
   return (
     <DataInfoContainer>
-      <Tooltip title={`${dataInfos.added} ajout(s)`} small>
-        <DataInfo data-type="addition">
-          {dataInfos.added} <Icon icon="add-round" />
-        </DataInfo>
-      </Tooltip>
-      <Tooltip title={`${dataInfos.edited} modification(s)`} small>
-        <DataInfo data-type="edition">
-          {dataInfos.edited} <Icon icon="check-round" />
-        </DataInfo>
-      </Tooltip>
-      <Tooltip title={`${dataInfos.ignored} ignoré(s)`} small>
-        <DataInfo data-type="ignored">
-          {dataInfos.ignored} <Icon icon="exclam-round" />
-        </DataInfo>
-      </Tooltip>
+      <IconIndicator
+        type="addition"
+        label={`${dataInfos.added} ligne(s) ajoutée(s)`}
+      >
+        {dataInfos.added}
+      </IconIndicator>
+      <IconIndicator
+        type="edition"
+        label={`${dataInfos.added} ligne(s) modifiée(s)`}
+      >
+        {dataInfos.edited}
+      </IconIndicator>
+      <IconIndicator
+        type="ignored"
+        label={`${dataInfos.added} ligne(s) ignorée(s)`}
+      >
+        {dataInfos.ignored}
+      </IconIndicator>
     </DataInfoContainer>
   )
 }
