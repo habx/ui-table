@@ -2,11 +2,12 @@ import { get, isFunction, isNil } from 'lodash'
 import * as React from 'react'
 import * as ReactTable from 'react-table'
 
-import { Icon, Tooltip } from '@habx/ui-core'
+import { Tooltip } from '@habx/ui-core'
 
 import { CellProps } from '../../types/Table'
 import { IMEXColumn, ImportedRow } from '../imex.interface'
 
+import { IconIndicator } from './DataIndicators'
 import {
   ChangedCell,
   ErrorCellContent,
@@ -18,8 +19,8 @@ import { softCompare } from './useImportTable.utils'
 
 export const getCompareColumnsFromImexColumns = <D extends {}>(
   columns: IMEXColumn<ImportedRow<D>>[]
-) =>
-  columns.map((column) => ({
+) => {
+  const compareColumns = columns.map((column) => ({
     ...column,
     Cell: ((rawProps) => {
       const props = (rawProps as unknown) as CellProps<D>
@@ -51,7 +52,7 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
             description={`${props.cell?.value}`}
             disabled={!error}
           >
-            <ErrorCellContent>
+            <ErrorCellContent data-error={!!error}>
               {error && <ErrorIcon icon="exclam-round" />}
               {children}
             </ErrorCellContent>
@@ -72,7 +73,6 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
         return (
           <CellContainer>
             <NewCell data-new-row={!!column.meta?.imex?.identifier}>
-              {column.meta?.imex?.identifier && <Icon icon="add-round" />}
               <Cell {...props} />
             </NewCell>
           </CellContainer>
@@ -104,3 +104,22 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
       )
     }) as ReactTable.Renderer<CellProps<ImportedRow<D>>>,
   }))
+  // Status column
+  compareColumns.unshift({
+    Header: '',
+    maxWidth: 40,
+    id: 'status',
+    Cell: (({ row }) => {
+      const rowMeta = row.original._rowMeta
+
+      if (Object.values(rowMeta.errors).length) {
+        return <IconIndicator type="ignored" />
+      }
+      if (!rowMeta.prevVal) {
+        return <IconIndicator type="addition" />
+      }
+      return <IconIndicator type="edition" />
+    }) as ReactTable.Renderer<CellProps<ImportedRow<D>>>,
+  })
+  return compareColumns
+}

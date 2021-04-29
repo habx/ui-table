@@ -13,24 +13,24 @@ export const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
     const theme = useThemeVariant()
 
     const iconProps = React.useMemo<
-      Pick<IconCellProps, 'color' | 'icon' | 'label'>
+      Pick<IconCellProps, 'color' | 'value' | 'label'>
     >(() => {
       switch (value) {
         case true:
           return {
-            icon: 'check-round-outline',
+            value: 'check-round-outline',
             color: stringifyColor(theme.colors.success.base),
             label: 'Oui',
           }
         case false:
           return {
-            icon: 'x-mark-outline',
+            value: 'x-mark-outline',
             color: stringifyColor(theme.colors.error.base),
             label: 'Non',
           }
         default:
           return {
-            icon: 'question-round-outline',
+            value: 'question-round-outline',
             color: stringifyColor(theme.colors.secondary.calm),
             label: 'Non défini',
           }
@@ -50,6 +50,6 @@ export const BooleanCell = React.forwardRef<HTMLDivElement, BooleanCellProps>(
   }
 )
 
-interface BooleanCellProps extends Omit<IconCellProps, 'icon' | 'color'> {
+interface BooleanCellProps extends Omit<IconCellProps, 'value' | 'color'> {
   value?: boolean | null
 }
