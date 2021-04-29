@@ -28,6 +28,7 @@ import {
   TableHeaderCellContainer,
   SearchBarContainer,
 } from './Table.style'
+import { TableFooter } from './TableFooter'
 import { TableDensity } from './TableOptions/TableDensity'
 import { TablePagination } from './TableOptions/TablePagination'
 import { TableRow } from './TableRow'
@@ -47,6 +48,7 @@ export const Table = <D extends {}>({
     headerGroups,
     rows,
     page,
+    footerGroups,
     prepareRow,
     columns,
     plugins,
@@ -225,6 +227,7 @@ export const Table = <D extends {}>({
             ))
           )}
         </TableBody>
+        <TableFooter<D> footerGroups={footerGroups} />
       </TableContent>
       {(hasPagination || hasDensity) && (
         <TableOptionBar>

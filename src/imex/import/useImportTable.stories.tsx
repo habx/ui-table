@@ -18,6 +18,9 @@ const Container = styled(Card).attrs(() => ({ flat: true }))`
   bottom: 0;
   left: 0;
   right: 0;
+  > :first-child {
+    height: calc(100% - 64px);
+  }
 `
 
 export default {

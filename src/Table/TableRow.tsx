@@ -94,7 +94,7 @@ export const TableRow = React.forwardRef<
                     <Icon icon="chevron-east" />
                   )}
                 </ExpandToggleContainer>
-                <Text variation="title">{cell.render('Cell')}</Text>
+                {cell.render('Cell')}
               </TableCell>
             )
           }
