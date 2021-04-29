@@ -22,7 +22,7 @@ export const IconIndicator: React.FunctionComponent<{
   }, [type])
 
   return (
-    <Tooltip title={label} small disabled={!label}>
+    <Tooltip title={label ?? ''} small disabled={!label}>
       <DataInfo data-type={type}>
         {children} <Icon icon={icon} />
       </DataInfo>
