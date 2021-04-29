@@ -19,7 +19,10 @@ const alignItems = css`
 `
 
 export const TableContent = styled.table`
+  font-family: ${theme.font()};
+
   display: grid;
+  position: relative;
 
   overflow-y: hidden;
   overflow-x: auto;
@@ -242,4 +245,21 @@ export const NoDataContainer = styled.div`
 
 export const SearchBarContainer = styled.div`
   margin: 12px 8px;
+`
+
+export const TableFooterContainer = styled.tfoot`
+  --table-footer-font-size: 12px;
+  --table-footer-color: ${theme.neutralColor(500)};
+`
+
+export const TableFooterRow = styled.tr`
+  display: grid;
+
+  grid-template-columns: var(--table-grid-template-columns);
+  grid-gap: var(--table-grid-gap);
+
+  font-size: var(--table-footer-font-size);
+  color: var(--table-footer-color);
+
+  border-top: solid 1px ${theme.neutralColor(900, { opacity: 0.2 })};
 `

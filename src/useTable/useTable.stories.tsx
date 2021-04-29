@@ -14,8 +14,9 @@ import { Table } from '../Table'
 import { useTable } from '../useTable'
 
 const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
+  margin: auto;
+  height: 90vh;
+  width: 90vw;
 `
 
 export default {
@@ -62,7 +63,7 @@ export const HorizontalScroll = () => {
 
   return (
     <Container>
-      <Table instance={tableInstance} style={{ striped: true }} />
+      <Table instance={tableInstance} data />
     </Container>
   )
 }
@@ -83,7 +84,24 @@ export const WithSectionsHeader = () => {
 
   return (
     <Container>
-      <Table instance={tableInstance} style={{ striped: true }} />
+      <Table instance={tableInstance} />
+    </Container>
+  )
+}
+
+const COLUMNS_WITH_FOOTER = BASIC_COLUMNS.map((column) => ({
+  ...column,
+  Footer: `${column.Header} footer`,
+}))
+export const WithFooter = () => {
+  const tableInstance = useTable({
+    data: FAKE_DATA,
+    columns: COLUMNS_WITH_FOOTER,
+  })
+
+  return (
+    <Container>
+      <Table instance={tableInstance} />
     </Container>
   )
 }

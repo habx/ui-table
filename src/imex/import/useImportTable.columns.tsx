@@ -4,7 +4,7 @@ import * as ReactTable from 'react-table'
 
 import { Tooltip } from '@habx/ui-core'
 
-import { CellProps } from '../../types/Table'
+import { CellProps, FooterProps } from '../../types/Table'
 import { IMEXColumn, ImportedRow } from '../imex.interface'
 
 import { IconIndicator } from './DataIndicators'
@@ -22,6 +22,28 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
 ) => {
   const compareColumns = columns.map((column) => ({
     ...column,
+    Footer: (({ column: fColumn, rows, data }) => {
+      const accessor = (fColumn as IMEXColumn)
+        .accessor as ReactTable.Accessor<D>
+      const columnModified = rows.reduce(
+        (sum, row) =>
+          !Object.values(row.original._rowMeta.errors).length &&
+          accessor(row.original, row.index, {
+            subRows: [],
+            depth: row.depth,
+            data,
+          }) !==
+            accessor(row.original._rowMeta.prevVal as D, row.index, {
+              subRows: [],
+              depth: row.depth,
+              data,
+            })
+            ? sum + 1
+            : sum,
+        0
+      )
+      return <React.Fragment>{columnModified} impact(s)</React.Fragment>
+    }) as ReactTable.Renderer<FooterProps<ImportedRow<D>>>,
     Cell: ((rawProps) => {
       const props = (rawProps as unknown) as CellProps<D>
       const rowMeta = rawProps.row.original?._rowMeta
@@ -109,6 +131,7 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
     Header: '',
     maxWidth: 40,
     id: 'status',
+    Footer: '',
     Cell: (({ row }) => {
       const rowMeta = row.original._rowMeta
 
