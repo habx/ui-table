@@ -31,6 +31,9 @@ export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
 export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
   disabled?: boolean
   accept?: string[]
+  /**
+   * @deprecated
+   */
   onBeforeDropAccepted?: (
     onFiles: (
       files: File[],
