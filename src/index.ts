@@ -48,7 +48,10 @@ export { selectFilterFactory } from './filterFactory/selectFilterFactory'
 
 // Import / Export
 export { RowValueTypes, IMEXColumn } from './imex/imex.interface'
-export { useExportTable } from './imex/export/useExportTable'
+export {
+  useExportTable,
+  UseExportTableParams,
+} from './imex/export/useExportTable'
 export {
   UseImportTableOptions,
   UseImportTableParams,

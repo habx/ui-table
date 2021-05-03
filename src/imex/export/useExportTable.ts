@@ -6,7 +6,7 @@ import { IMEXColumn } from '../imex.interface'
 
 import { exportData, ExportDataOptions } from './useExportTable.utils'
 
-export interface UseExportIMEXParams<D extends { [key: string]: any } = any>
+export interface UseExportTableParams<D extends { [key: string]: any } = any>
   extends Omit<ExportDataOptions, 'type'> {
   data?: D[]
   columns: IMEXColumn<D>[]
@@ -14,14 +14,14 @@ export interface UseExportIMEXParams<D extends { [key: string]: any } = any>
 }
 
 export const useExportTable = <D extends { [key: string]: any } = any>(
-  params: UseExportIMEXParams<D>
+  params: UseExportTableParams<D>
 ) => {
   // Put params in ref to avoid useless changes of `onFiles` function
   const paramsRef = React.useRef(params)
   paramsRef.current = params
 
   const downloadTableData = React.useCallback(
-    (title: string, options: Partial<UseExportIMEXParams<D>> = {}) => {
+    (title: string, options: Partial<UseExportTableParams<D>> = {}) => {
       const { data = [], columns, type = 'csv', ...exportOptions } = {
         ...paramsRef.current,
         ...options,

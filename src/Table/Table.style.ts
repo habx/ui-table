@@ -177,6 +177,7 @@ export const TableHeaderCellContainer = styled.div`
   display: flex;
   align-items: flex-start;
   user-select: none;
+
   width: 100%;
   height: 100%;
   min-width: 0;
@@ -190,6 +191,8 @@ export const TableHeaderCellContainer = styled.div`
 export const TableHeadCellContent = styled(Text)`
   user-select: none;
   width: 100%;
+
+  overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 
