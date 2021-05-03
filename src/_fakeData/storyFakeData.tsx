@@ -25,7 +25,7 @@ export const FAKE_DATA = range(45).map(() => ({
 
 export const BASIC_COLUMNS = [
   {
-    Header: 'Username',
+    Header: 'Username lorem',
     accessor: (el) => el.name,
   },
   {
