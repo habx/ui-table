@@ -45,7 +45,7 @@
     "@habx/ui-core": "^5.34.0",
     "lodash": ">=4.17.21",
     "react": ">= 17.0.2",
-    "styled-components": ">= 5.2.3"
+    "styled-components": ">= 5.3.0"
   },
   "dependencies": {
     "@testing-library/react": "^11.2.6",
@@ -90,7 +90,7 @@
     "rimraf": "^3.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "storybook-dark-mode": "^1.0.7",
-    "styled-components": "^5.2.3",
+    "styled-components": "^5.3.0",
     "ts-jest": "^26.5.5",
     "typescript": "^4.2.4"
   },
