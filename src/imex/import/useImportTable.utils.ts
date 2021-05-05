@@ -277,7 +277,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
    * Display only modified rows or rows validated by the custom filter function
    */
   return parsedData.filter((imexRow) => {
-    if (!imexRow._rowMeta.hasDiff) {
+    if (imexRow._rowMeta.hasDiff) {
       return true
     }
     return options.filterRows?.(imexRow)
