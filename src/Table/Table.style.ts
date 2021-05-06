@@ -137,6 +137,9 @@ export const TableContainer = styled.div`
     }
     ${TableBody} {
       overflow-y: hidden;
+      > div {
+        overflow-x: hidden;
+      }
     }
   }
 `
