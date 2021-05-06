@@ -135,8 +135,11 @@ export const TableContainer = styled.div`
     > div {
       width: 100% !important;
     }
-    ${TableBody}, ${TableBody} > div {
+    ${TableBody} {
       overflow-y: hidden;
+      > div {
+        overflow-x: hidden;
+      }
     }
   }
 `
