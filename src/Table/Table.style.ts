@@ -112,6 +112,11 @@ export const TableBody = styled.tbody`
   scroll-margin: var(--table-scrollbar-width);
 
   --table-body-font-size: 14px;
+
+  > div {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
 `
 
 export const TableContainer = styled.div`
@@ -135,7 +140,7 @@ export const TableContainer = styled.div`
     > div {
       width: 100% !important;
     }
-    ${TableBody} {
+    ${TableBody}, ${TableBody} > div {
       overflow-y: hidden;
     }
   }
