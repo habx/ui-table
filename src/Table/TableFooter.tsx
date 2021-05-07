@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { HeaderGroup } from 'react-table'
+import { HeaderGroup, emptyRenderer } from 'react-table'
 
 import { TableCell, TableFooterRow, TableFooterContainer } from './Table.style'
 
@@ -10,11 +10,10 @@ export const TableFooter = <D extends {}>({
     <TableFooterContainer>
       {footerGroups.map((group) => {
         if (
-          group.headers.every(
-            (column) =>
-              ((column as unknown) as { Footer: Function }).Footer?.name ===
-              'emptyRenderer'
-          )
+          group.headers.every((column) => {
+            const Footer = ((column as unknown) as { Footer: Function }).Footer
+            return !Footer || Footer === emptyRenderer
+          })
         ) {
           return null
         }
