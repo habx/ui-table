@@ -22,6 +22,7 @@ export const TableContent = styled.table`
   font-family: ${theme.font()};
 
   position: relative;
+  display: grid;
 
   overflow-y: hidden;
   overflow-x: auto;

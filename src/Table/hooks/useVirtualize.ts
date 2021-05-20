@@ -23,6 +23,7 @@ export const useVirtualize = <D extends object>(
   const skip =
     (!config.virtualized && !instance.infiniteScroll) ||
     instance.rows.length === 0
+
   React.useEffect(() => {
     if (!skip && isEmpty(dimensions)) {
       setDimensions({
