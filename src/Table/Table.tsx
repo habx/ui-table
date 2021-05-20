@@ -59,9 +59,7 @@ export const Table = <D extends {}>({
 
   const gridTemplateColumns = useGridTemplateColumns({ plugins, columns })
 
-  const virtualState = useVirtualize({
-    skip: (!virtualized && !instance.infiniteScroll) || rows.length === 0,
-  })
+  const virtualState = useVirtualize(instance, { virtualized })
 
   const currentRows = hasPagination ? page : rows
   const isItemLoaded = (index: number) => !!currentRows[index]

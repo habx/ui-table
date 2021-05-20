@@ -1,11 +1,16 @@
 import { isEmpty } from 'lodash'
 import * as React from 'react'
 
-type UseVirtualizeConfig = {
-  skip: boolean
+import { TableInstance } from '../../types/Table'
+
+interface UseVirtualizeConfig {
+  virtualized?: boolean
 }
 
-export const useVirtualize = ({ skip }: UseVirtualizeConfig) => {
+export const useVirtualize = <D extends object>(
+  instance: TableInstance<D>,
+  config: UseVirtualizeConfig
+) => {
   const scrollContainerRef = React.useRef<HTMLTableSectionElement>(null)
   const firstItemRef = React.useRef<HTMLTableRowElement>(null)
 
@@ -15,6 +20,9 @@ export const useVirtualize = ({ skip }: UseVirtualizeConfig) => {
     itemSize?: number
   }>({})
 
+  const skip =
+    (!config.virtualized && !instance.infiniteScroll) ||
+    instance.rows.length === 0
   React.useEffect(() => {
     if (!skip && isEmpty(dimensions)) {
       setDimensions({

@@ -5,13 +5,11 @@ import { ensurePluginOrder } from 'react-table'
 import { TableInstance } from '../../types/Table'
 
 const useInstance = <D extends {}>(instance: TableInstance<D>) => {
-  const { data, toggleRowExpanded, expandedRows, plugins } = instance
+  const { data, toggleAllRowsExpanded, plugins } = instance
 
   React.useLayoutEffect(() => {
-    expandedRows.map(({ id }) => {
-      return toggleRowExpanded(id as any, true)
-    })
-  }, [ data, toggleRowExpanded]) // eslint-disable-line
+    toggleAllRowsExpanded()
+  }, [data]) // eslint-disable-line
 
   ensurePluginOrder(plugins, ['useExpanded'], 'useExpandAll')
 }
