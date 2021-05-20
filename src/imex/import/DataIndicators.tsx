@@ -68,7 +68,7 @@ export const DataIndicators: React.VoidFunctionComponent<DataInfoProps> = ({
       </IconIndicator>
       <IconIndicator
         type="ignored"
-        label={`${dataInfos.added} ligne(s) ignorée(s)`}
+        label={`${dataInfos.ignored} ligne(s) ignorée(s)`}
       >
         {dataInfos.ignored}
       </IconIndicator>
