@@ -68,15 +68,10 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
         const error = rowMeta?.errors?.[column.accessor as string]
 
         return (
-          <Tooltip
-            small
-            title={`${error}:`}
-            description={`${props.cell?.value}`}
-            disabled={!error}
-          >
+          <Tooltip small title={`${error}`} disabled={!error}>
             <ErrorCellContent data-error={!!error}>
               {error && <ErrorIcon icon="exclam-round" />}
-              {children}
+              {`${props.cell?.value}`}
             </ErrorCellContent>
           </Tooltip>
         )
