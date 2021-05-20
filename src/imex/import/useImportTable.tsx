@@ -67,7 +67,7 @@ export const useImportTable = <D extends { id?: string | number }>(
 
         return await parseRawData<D>(
           { data: rawData, originalData, columns: imexColumns },
-          options
+          mergedOptions
         )
       }
 
