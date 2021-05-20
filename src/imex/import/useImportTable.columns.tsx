@@ -27,6 +27,7 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
         .accessor as ReactTable.Accessor<D>
       const columnModified = rows.reduce(
         (sum, row) =>
+          row.original &&
           !Object.values(row.original._rowMeta.errors).length &&
           accessor(row.original, row.index, {
             subRows: [],
@@ -122,12 +123,15 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
     }) as ReactTable.Renderer<CellProps<ImportedRow<D>>>,
   }))
   // Status column
-  compareColumns.unshift({
+  compareColumns.push({
     Header: '',
     maxWidth: 40,
     id: 'status',
     Footer: '',
     Cell: (({ row }) => {
+      if (!row.original) {
+        return null
+      }
       const rowMeta = row.original._rowMeta
 
       if (Object.values(rowMeta.errors).length) {

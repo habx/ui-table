@@ -263,7 +263,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
     for (const rowGroup in groupedParsedData) {
       if (
         groupedParsedData[rowGroup].some(
-          (row) => row._rowMeta.hasDiff && options.filterRows?.(row)
+          (row) => row._rowMeta.hasDiff || options.filterRows?.(row)
         )
       ) {
         filteredGroupedParsedData.push(groupedParsedData[rowGroup])
