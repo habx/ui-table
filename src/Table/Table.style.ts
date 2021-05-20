@@ -21,7 +21,6 @@ const alignItems = css`
 export const TableContent = styled.table`
   font-family: ${theme.font()};
 
-  display: grid;
   position: relative;
 
   overflow-y: hidden;
@@ -135,10 +134,17 @@ export const TableContainer = styled.div`
     > div {
       width: 100% !important;
     }
+    // Take full available height only if virtualized
+    ${TableContent} {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
     ${TableBody} {
       overflow-y: hidden;
       > div {
-        overflow-x: hidden;
+        overflow-x: hidden !important;
       }
     }
   }
