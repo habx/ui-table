@@ -2,7 +2,7 @@ import { get, isNumber } from 'lodash'
 import * as React from 'react'
 
 import { getImexColumns } from '../getImexColumns'
-import { IMEXColumn } from '../imex.interface'
+import { IMEXColumn, IMEXFileExtensionTypes } from '../imex.interface'
 
 import { exportData, ExportDataOptions } from './useExportTable.utils'
 
@@ -10,7 +10,7 @@ export interface UseExportTableParams<D extends { [key: string]: any } = any>
   extends Omit<ExportDataOptions, 'type'> {
   data?: D[]
   columns: IMEXColumn<D>[]
-  type?: 'csv' | 'xls'
+  type?: IMEXFileExtensionTypes
 }
 
 export const useExportTable = <D extends { [key: string]: any } = any>(

@@ -14,8 +14,10 @@ import { Column } from '../../types/Table'
 import { useTable } from '../../useTable'
 import { parseCsvFileData } from '../csv.utils'
 import { parseExcelFileData } from '../excel.utils'
+import { useExportTable } from '../export/useExportTable'
 import { getImexColumns } from '../getImexColumns'
 import {
+  IMEXFileExtensionTypes,
   ImportedRow,
   UseImportTableOptions,
   UseImportTableParams,
@@ -42,6 +44,11 @@ export const useImportTable = <D extends { id?: string | number }>(
 
   const onFiles = React.useCallback(
     async (files: File[], options: Partial<UseImportTableOptions<D>> = {}) => {
+      const file = files[0]
+      const fileType: IMEXFileExtensionTypes = file.type.includes('text/')
+        ? 'csv'
+        : 'xls'
+
       const mergedOptions = {
         ...paramsRef.current,
         ...options,
@@ -51,7 +58,7 @@ export const useImportTable = <D extends { id?: string | number }>(
 
       const imexColumns = getImexColumns(columns)
 
-      const parseFile = async (file: File): Promise<ImportedRow<D>[]> => {
+      const parseFile = async (): Promise<ImportedRow<D>[]> => {
         let rawData
         if (mergedOptions.readFile) {
           rawData = await mergedOptions.readFile(file)
@@ -73,13 +80,14 @@ export const useImportTable = <D extends { id?: string | number }>(
 
       const diffColumns = getCompareColumnsFromImexColumns<D>(imexColumns)
 
-      const file = files[0]
-
       const plugins = mergedOptions.groupBy
         ? [useGroupBy, useExpanded, useExpandAll]
         : []
 
-      const message = await prompt(({ onResolve }) => ({
+      const userInputs: {
+        message: string
+        ignoredRows: D[]
+      } | null = await prompt(({ onResolve }) => ({
         fullscreen: true,
         spacing: 'regular',
         Component: () => {
@@ -89,7 +97,10 @@ export const useImportTable = <D extends { id?: string | number }>(
             const asyncParse = async () => {
               const data = await parseFile(file)
               if (data?.length === 0) {
-                onResolve('Aucune difference avec les données actuelles')
+                onResolve({
+                  message: 'Aucune difference avec les données actuelles',
+                  ignoredRows: [],
+                })
               }
               setParsedData(data)
             }
@@ -141,9 +152,7 @@ export const useImportTable = <D extends { id?: string | number }>(
 
               const cleanData =
                 parsedData
-                  ?.filter(
-                    (row) => Object.values(row._rowMeta.errors).length === 0
-                  ) // ignore rows with error
+                  ?.filter((row) => !row._rowMeta.isIgnored) // remove ignored rows
                   .map((row) => (omit(row, ['_rowMeta']) as unknown) as D) ?? [] // remove local meta
 
               const dataToUpsert = mergedOptions.groupBy
@@ -166,9 +175,11 @@ export const useImportTable = <D extends { id?: string | number }>(
               if (isFunction(mergedOptions.onFinish)) {
                 mergedOptions.onFinish(dataToUpsert)
               }
-              onResolve(
-                `Import terminé\n${dataToUpsert.length} ligne(s) importée(s)`
-              )
+              onResolve({
+                message: `Import terminé\n${dataToUpsert.length} ligne(s) importée(s)`,
+                ignoredRows:
+                  parsedData?.filter((row) => row._rowMeta.isIgnored) ?? [],
+              })
             } catch (e) {
                 console.error(e) // eslint-disable-line
               notify(e.toString())
@@ -209,7 +220,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 <Button
                   ghost
                   disabled={remainingActionsState.loading}
-                  onClick={() => onResolve(false)}
+                  onClick={() => onResolve(null)}
                 >
                   Annuler
                 </Button>
@@ -226,8 +237,70 @@ export const useImportTable = <D extends { id?: string | number }>(
           )
         },
       }))
-      if (message) {
-        notify({ message, markdown: true })
+
+      if (userInputs?.message) {
+        notify({ message: userInputs.message, markdown: true })
+      }
+
+      if (
+        !mergedOptions.skipIgnoredRowsExport &&
+        userInputs?.ignoredRows.length
+      ) {
+        const [errorFileName] = file.name.split('.')
+        const errorExportFileName = `${errorFileName}_erreurs`
+        const ignoredRowsColumns = getCompareColumnsFromImexColumns(
+          mergedOptions.columns,
+          { statusColumn: false, footer: false }
+        )
+        await prompt(({ onResolve }) => ({
+          fullscreen: true,
+          spacing: 'regular',
+          Component: () => {
+            const [handleExport] = useExportTable({
+              columns: mergedOptions.columns as Column<D>[],
+              data: userInputs.ignoredRows,
+              type: fileType,
+            })
+            const tableInstance = useTable<D>(
+              {
+                data: userInputs.ignoredRows,
+                columns: ignoredRowsColumns as Column<D>[],
+                initialState: {
+                  groupBy: [mergedOptions.groupBy as string],
+                },
+              },
+              ...plugins
+            )
+            return (
+              <React.Fragment>
+                <Title type="section">
+                  Les éléments suivant n'ont pas été importés.
+                </Title>
+                <br />
+                <Title type="regular">
+                  Téléchargez les {userInputs.ignoredRows.length} éléments
+                  ignorées afin de corriger les données.
+                </Title>
+                <ConfirmContainer>
+                  <Table instance={tableInstance} />
+                </ConfirmContainer>
+                <ActionBar>
+                  <Button ghost onClick={() => onResolve()}>
+                    Ignorer
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      handleExport(errorExportFileName)
+                      onResolve()
+                    }}
+                  >
+                    Télécharger
+                  </Button>
+                </ActionBar>
+              </React.Fragment>
+            )
+          },
+        }))
       }
     },
     []

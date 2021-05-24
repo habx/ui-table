@@ -149,6 +149,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
     const importedRowMeta: ImportedRowMeta<D> = {
       hasDiff: false,
       errors: {},
+      isIgnored: false,
     }
 
     const importedRowValue: Partial<D> = {}
@@ -205,6 +206,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
       }
 
       if (cellError) {
+        importedRowMeta.isIgnored = true
         set(
           importedRowMeta.errors,
           orderedColumns[index]?.accessor as string,
