@@ -14,6 +14,7 @@ import {
   ImportedRowMeta,
   RowValueTypes,
   UseImportTableOptions,
+  UseImportTableParams,
 } from '../imex.interface'
 
 export enum ParseCellError {
@@ -284,4 +285,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
     }
     return options.filterRows?.(imexRow)
   })
+}
+
+export const validateOptions = <D>(options: UseImportTableParams<D>) => {
+  if (options.concurrency && options.concurrency < 1) {
+    throw new Error('concurrency should be greater than 1')
+  }
 }

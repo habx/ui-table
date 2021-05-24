@@ -4,7 +4,7 @@ import * as ReactTable from 'react-table'
 
 import { Tooltip } from '@habx/ui-core'
 
-import { CellProps, FooterProps } from '../../types/Table'
+import { CellProps, Column, FooterProps } from '../../types/Table'
 import { IMEXColumn, ImportedRow } from '../imex.interface'
 
 import { IconIndicator } from './DataIndicators'
@@ -27,12 +27,12 @@ interface GetCompareColumnsFromImexColumnsOptions {
    */
   statusColumn?: boolean
 }
-export const getCompareColumnsFromImexColumns = <D extends {}>(
-  columns: IMEXColumn<ImportedRow<D>>[],
+export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
+  columns: IMEXColumn<D>[],
   options?: GetCompareColumnsFromImexColumnsOptions
 ) => {
   const { footer = true, statusColumn = true } = options ?? {}
-  const compareColumns = columns.map((column) => ({
+  const compareColumns: Column<D>[] = columns.map((column) => ({
     ...column,
     Footer: footer
       ? ((({ column: fColumn, rows, data }) => {
@@ -157,7 +157,7 @@ export const getCompareColumnsFromImexColumns = <D extends {}>(
           return <IconIndicator type="addition" />
         }
         return <IconIndicator type="edition" />
-      }) as ReactTable.Renderer<CellProps<ImportedRow<D>>>,
+      }) as ReactTable.Renderer<CellProps<D>>,
     })
   }
 
