@@ -101,7 +101,6 @@ export const IMEX_COLUMNS = [
     meta: {
       imex: {
         type: 'string' as const,
-        validate: () => 'error',
       },
     },
   },
