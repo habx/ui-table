@@ -60,7 +60,6 @@ export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
 export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
   D & { [key: string]: any },
   {
-    accessor: string
     imex?: {
       identifier?: boolean
       required?: boolean

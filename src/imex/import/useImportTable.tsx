@@ -225,7 +225,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 <LoadingOverlay {...remainingActionsState} />
               )}
               <ConfirmContainer data-testid="useImportTable-confirmContainer">
-                <Table instance={tableInstance} />
+                <Table instance={tableInstance} virtualized />
               </ConfirmContainer>
               <ActionBar>
                 <DataIndicators data={parsedData} />
@@ -265,7 +265,7 @@ export const useImportTable = <D extends { id?: string | number }>(
         const errorExportFileName = `${errorFileName}_erreurs`
         const ignoredRowsColumns = getCompareColumnsFromImexColumns<
           ImportedRow<D>
-        >(initialColumns, { statusColumn: false, footer: false })
+        >(imexColumns, { statusColumn: false, footer: false })
         await prompt(({ onResolve }) => ({
           fullscreen: true,
           spacing: 'regular',
@@ -300,7 +300,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                   ignorées afin de corriger les données.
                 </Title>
                 <ConfirmContainer>
-                  <Table instance={tableInstance} />
+                  <Table instance={tableInstance} virtualized />
                 </ConfirmContainer>
                 <ActionBar>
                   <Button ghost onClick={() => onResolve(false)}>

@@ -86,7 +86,7 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
           <Tooltip small title={`${error}`} disabled={!error}>
             <ErrorCellContent data-error={!!error}>
               {error && <ErrorIcon icon="exclam-round" />}
-              {`${props.cell?.value}`}
+              {props.cell?.value ? `${props.cell?.value}` : ''}
             </ErrorCellContent>
           </Tooltip>
         )
