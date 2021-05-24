@@ -32,7 +32,7 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
   options?: GetCompareColumnsFromImexColumnsOptions
 ) => {
   const { footer = true, statusColumn = true } = options ?? {}
-  const compareColumns: Column<D>[] = columns.map((column) => ({
+  const compareColumns = columns.map((column) => ({
     ...column,
     Footer: footer
       ? ((({ column: fColumn, rows, data }) => {
@@ -161,5 +161,5 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
     })
   }
 
-  return compareColumns
+  return compareColumns as Column<D>[]
 }
