@@ -7,6 +7,7 @@ export interface ImportedRowMeta<D extends {}> {
   prevVal?: D & { id?: string | number }
   hasDiff: boolean
   errors: Record<string, string>
+  isIgnored: boolean
 }
 
 export type ImportedRow<D extends {}> = D & { _rowMeta: ImportedRowMeta<D> }
@@ -26,6 +27,11 @@ export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
    * @param row
    */
   findPrevValPredicate?: (originalDataRow: D, row: Partial<D>) => boolean
+  /**
+   * Skip step that allows to download ignored rows
+   * @default false
+   */
+  skipIgnoredRowsExport?: boolean
 }
 
 export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
@@ -67,3 +73,5 @@ export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
     }
   }
 >
+
+export type IMEXFileExtensionTypes = 'csv' | 'xls'

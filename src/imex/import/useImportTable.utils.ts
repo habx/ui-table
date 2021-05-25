@@ -14,6 +14,7 @@ import {
   ImportedRowMeta,
   RowValueTypes,
   UseImportTableOptions,
+  UseImportTableParams,
 } from '../imex.interface'
 
 export enum ParseCellError {
@@ -149,6 +150,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
     const importedRowMeta: ImportedRowMeta<D> = {
       hasDiff: false,
       errors: {},
+      isIgnored: false,
     }
 
     const importedRowValue: Partial<D> = {}
@@ -205,6 +207,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
       }
 
       if (cellError) {
+        importedRowMeta.isIgnored = true
         set(
           importedRowMeta.errors,
           orderedColumns[index]?.accessor as string,
@@ -261,6 +264,17 @@ export const parseRawData = async <D extends { id?: string | number }>(
     let filteredGroupedParsedData: ImportedRow<D>[][] = []
     const groupedParsedData = groupBy(parsedData, options.groupBy)
     for (const rowGroup in groupedParsedData) {
+      if (groupedParsedData[rowGroup].some((row) => row._rowMeta.isIgnored)) {
+        groupedParsedData[rowGroup] = groupedParsedData[rowGroup].map(
+          (row) => ({
+            ...row,
+            _rowMeta: {
+              ...row._rowMeta,
+              isIgnored: true,
+            },
+          })
+        )
+      }
       if (
         groupedParsedData[rowGroup].some(
           (row) => row._rowMeta.hasDiff || options.filterRows?.(row)
@@ -282,4 +296,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
     }
     return options.filterRows?.(imexRow)
   })
+}
+
+export const validateOptions = <D>(options: UseImportTableParams<D>) => {
+  if (options.concurrency && options.concurrency < 1) {
+    throw new Error('concurrency should be greater than 1')
+  }
 }

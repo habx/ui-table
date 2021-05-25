@@ -1,4 +1,4 @@
-import { groupBy as lodashGroupBy, isFunction, omit } from 'lodash'
+import { groupBy as lodashGroupBy, omit } from 'lodash'
 import pLimit from 'p-limit'
 import * as React from 'react'
 import { DropEvent, useDropzone } from 'react-dropzone'
@@ -6,16 +6,19 @@ import { useExpanded, useGroupBy } from 'react-table'
 
 import { Button, HeaderBar, notify, prompt, Title } from '@habx/ui-core'
 
+import { usePreventLeave } from '../../_internal/usePreventLeave'
 import { useRemainingActionsTime } from '../../_internal/useRemainingActionsTime'
 import { LoadingOverlay } from '../../components'
 import { useExpandAll } from '../../plugin/useExpandAll'
 import { Table } from '../../Table'
-import { Column } from '../../types/Table'
+import { TableState } from '../../types/Table'
 import { useTable } from '../../useTable'
 import { parseCsvFileData } from '../csv.utils'
 import { parseExcelFileData } from '../excel.utils'
+import { useExportTable } from '../export/useExportTable'
 import { getImexColumns } from '../getImexColumns'
 import {
+  IMEXFileExtensionTypes,
   ImportedRow,
   UseImportTableOptions,
   UseImportTableParams,
@@ -29,9 +32,18 @@ import {
   ActionBar,
   OverlayContent,
 } from './useImportTable.style'
-import { parseRawData } from './useImportTable.utils'
+import { parseRawData, validateOptions } from './useImportTable.utils'
 
 const DEFAULT_ACCEPT = ['.csv', '.xls', '.xlsx']
+const DROPZONE_IGNORED_PROPS = [
+  'onClick',
+  'onBlur',
+  'onFocus',
+  'style',
+  'className',
+  'onKeyDown',
+  'tabIndex',
+]
 
 export const useImportTable = <D extends { id?: string | number }>(
   params: Partial<UseImportTableParams<D>>
@@ -45,41 +57,67 @@ export const useImportTable = <D extends { id?: string | number }>(
       const mergedOptions = {
         ...paramsRef.current,
         ...options,
-      }
+      } as UseImportTableParams<D>
+      validateOptions<D>(mergedOptions)
 
-      const columns = mergedOptions.columns as IMEXColumn<ImportedRow<D>>[]
-
-      const imexColumns = getImexColumns(columns)
-
-      const parseFile = async (file: File): Promise<ImportedRow<D>[]> => {
-        let rawData
-        if (mergedOptions.readFile) {
-          rawData = await mergedOptions.readFile(file)
-        } else if (file.type.includes('text/')) {
-          rawData = await parseCsvFileData(file)
-        } else {
-          rawData = await parseExcelFileData(file)
-        }
-
-        const originalData = mergedOptions.getOriginalData
-          ? await mergedOptions.getOriginalData()
-          : []
-
-        return await parseRawData<D>(
-          { data: rawData, originalData, columns: imexColumns },
-          mergedOptions
-        )
-      }
-
-      const diffColumns = getCompareColumnsFromImexColumns<D>(imexColumns)
-
+      /**
+       * File
+       */
       const file = files[0]
+      const fileType: IMEXFileExtensionTypes = file.type.includes('text/')
+        ? 'csv'
+        : 'xls'
+
+      /**
+       * Table params
+       */
+      const initialColumns = mergedOptions.columns as IMEXColumn<
+        ImportedRow<D>
+      >[]
+      const imexColumns = getImexColumns<ImportedRow<D>>(initialColumns)
+      const diffColumns = getCompareColumnsFromImexColumns<ImportedRow<D>>(
+        imexColumns
+      )
 
       const plugins = mergedOptions.groupBy
         ? [useGroupBy, useExpanded, useExpandAll]
         : []
 
-      const message = await prompt(({ onResolve }) => ({
+      const initialState: Partial<TableState<ImportedRow<D>>> = {
+        groupBy: mergedOptions.groupBy ? [mergedOptions.groupBy] : [],
+      }
+
+      const parseFilePromise: Promise<ImportedRow<D>[]> = new Promise(
+        async (resolve, reject) => {
+          try {
+            let rawData
+            if (mergedOptions.readFile) {
+              rawData = await mergedOptions.readFile(file)
+            } else if (file.type.includes('text/')) {
+              rawData = await parseCsvFileData(file)
+            } else {
+              rawData = await parseExcelFileData(file)
+            }
+
+            const originalData = mergedOptions.getOriginalData
+              ? await mergedOptions.getOriginalData()
+              : []
+
+            const parsedData = await parseRawData<D>(
+              { data: rawData, originalData, columns: imexColumns },
+              mergedOptions
+            )
+            resolve(parsedData)
+          } catch (e) {
+            reject(e)
+          }
+        }
+      )
+
+      const userInputs = await prompt<{
+        message: string
+        ignoredRows: ImportedRow<D>[]
+      } | null>(({ onResolve }) => ({
         fullscreen: true,
         spacing: 'regular',
         Component: () => {
@@ -87,9 +125,12 @@ export const useImportTable = <D extends { id?: string | number }>(
           const [parsedData, setParsedData] = React.useState<ImportedRow<D>[]>()
           React.useEffect(() => {
             const asyncParse = async () => {
-              const data = await parseFile(file)
+              const data = await parseFilePromise
               if (data?.length === 0) {
-                onResolve('Aucune difference avec les données actuelles')
+                onResolve({
+                  message: 'Aucune difference avec les données actuelles',
+                  ignoredRows: [],
+                })
               }
               setParsedData(data)
             }
@@ -97,13 +138,11 @@ export const useImportTable = <D extends { id?: string | number }>(
           }, [])
 
           // Table
-          const tableInstance = useTable<D>(
+          const tableInstance = useTable<ImportedRow<D>>(
             {
-              columns: diffColumns as Column<D>[],
+              columns: diffColumns,
               data: parsedData,
-              initialState: {
-                groupBy: [mergedOptions.groupBy as string],
-              },
+              initialState,
             },
             ...plugins
           )
@@ -116,34 +155,17 @@ export const useImportTable = <D extends { id?: string | number }>(
           /**
            * Prevent leaving while uploading
            */
-          React.useEffect(() => {
-            if (remainingActionsState.loading) {
-              const preventNavigation = (e: BeforeUnloadEvent) => {
-                e.preventDefault()
-                e.returnValue = ''
-                return ''
-              }
-              window.addEventListener('beforeunload', preventNavigation, false)
-              return () => {
-                window.removeEventListener('beforeunload', preventNavigation)
-              }
-            }
-          }, [remainingActionsState.loading])
+          usePreventLeave(remainingActionsState.loading)
 
           const handleConfirm = async () => {
             try {
               const concurrency = mergedOptions.concurrency ?? 1
-              if (concurrency < 1) {
-                throw new Error('concurrency should be greater than 1')
-              }
 
               remainingActions.initLoading()
 
               const cleanData =
                 parsedData
-                  ?.filter(
-                    (row) => Object.values(row._rowMeta.errors).length === 0
-                  ) // ignore rows with error
+                  ?.filter((row) => !row._rowMeta.isIgnored) // remove ignored rows
                   .map((row) => (omit(row, ['_rowMeta']) as unknown) as D) ?? [] // remove local meta
 
               const dataToUpsert = mergedOptions.groupBy
@@ -163,14 +185,15 @@ export const useImportTable = <D extends { id?: string | number }>(
 
               await Promise.all(upsertRowFunctions)
 
-              if (isFunction(mergedOptions.onFinish)) {
-                mergedOptions.onFinish(dataToUpsert)
-              }
-              onResolve(
-                `Import terminé\n${dataToUpsert.length} ligne(s) importée(s)`
-              )
+              mergedOptions.onFinish?.(dataToUpsert)
+
+              onResolve({
+                message: `Import terminé\n${dataToUpsert.length} ligne(s) importée(s)`,
+                ignoredRows:
+                  parsedData?.filter((row) => row._rowMeta.isIgnored) ?? [],
+              })
             } catch (e) {
-                console.error(e) // eslint-disable-line
+              console.error(e) // eslint-disable-line
               notify(e.toString())
               remainingActions.onError()
               onResolve(null)
@@ -202,14 +225,14 @@ export const useImportTable = <D extends { id?: string | number }>(
                 <LoadingOverlay {...remainingActionsState} />
               )}
               <ConfirmContainer data-testid="useImportTable-confirmContainer">
-                <Table instance={tableInstance} />
+                <Table instance={tableInstance} virtualized />
               </ConfirmContainer>
               <ActionBar>
                 <DataIndicators data={parsedData} />
                 <Button
                   ghost
                   disabled={remainingActionsState.loading}
-                  onClick={() => onResolve(false)}
+                  onClick={() => onResolve(null)}
                 >
                   Annuler
                 </Button>
@@ -226,8 +249,69 @@ export const useImportTable = <D extends { id?: string | number }>(
           )
         },
       }))
-      if (message) {
-        notify({ message, markdown: true })
+
+      if (userInputs?.message) {
+        notify({ message: userInputs.message, markdown: true })
+      }
+
+      /**
+       * Skipped rows export
+       */
+      if (
+        !mergedOptions.skipIgnoredRowsExport &&
+        userInputs?.ignoredRows.length
+      ) {
+        const [errorFileName] = file.name.split('.')
+        const errorExportFileName = `${errorFileName}_erreurs`
+        const ignoredRowsColumns = getCompareColumnsFromImexColumns<
+          ImportedRow<D>
+        >(imexColumns, { statusColumn: false, footer: false })
+        await prompt(({ onResolve }) => ({
+          fullscreen: true,
+          spacing: 'regular',
+          Component: () => {
+            const [handleExport] = useExportTable({
+              columns: initialColumns,
+              data: userInputs.ignoredRows,
+              type: fileType,
+            })
+            const tableInstance = useTable<ImportedRow<D>>(
+              {
+                data: userInputs.ignoredRows,
+                columns: ignoredRowsColumns,
+                initialState,
+              },
+              ...plugins
+            )
+
+            const handleDownloadClick = () => {
+              handleExport(errorExportFileName)
+              onResolve(true)
+            }
+
+            return (
+              <React.Fragment>
+                <Title type="section">
+                  Les éléments suivant n'ont pas été importés.
+                </Title>
+                <br />
+                <Title type="regular">
+                  Téléchargez les {userInputs.ignoredRows.length} éléments
+                  ignorées afin de corriger les données.
+                </Title>
+                <ConfirmContainer>
+                  <Table instance={tableInstance} virtualized />
+                </ConfirmContainer>
+                <ActionBar>
+                  <Button ghost onClick={() => onResolve(false)}>
+                    Ignorer
+                  </Button>
+                  <Button onClick={handleDownloadClick}>Télécharger</Button>
+                </ActionBar>
+              </React.Fragment>
+            )
+          },
+        }))
       }
     },
     []
@@ -243,8 +327,9 @@ export const useImportTable = <D extends { id?: string | number }>(
       params.onBeforeDropAccepted
         ? params.onBeforeDropAccepted(onFiles)(files, event)
         : onFiles(files),
-    [onFiles, params.onBeforeDropAccepted] // eslint-disable-line
+    [onFiles, params.onBeforeDropAccepted] // eslint-disable-line react-hooks/exhaustive-deps
   )
+
   const dropzone = useDropzone({
     accept: DEFAULT_ACCEPT,
     onDropAccepted,
@@ -252,6 +337,7 @@ export const useImportTable = <D extends { id?: string | number }>(
   })
 
   const inputProps = React.useMemo(() => dropzone.getInputProps(), [
+    // eslint-disable-line react-hooks/exhaustive-deps
     dropzone.getInputProps,
   ])
 
@@ -259,15 +345,7 @@ export const useImportTable = <D extends { id?: string | number }>(
     () =>
       params.disabled
         ? {}
-        : omit(dropzone.getRootProps(), [
-            'onClick',
-            'onBlur',
-            'onFocus',
-            'style',
-            'className',
-            'onKeyDown',
-            'tabIndex',
-          ]),
+        : omit(dropzone.getRootProps(), DROPZONE_IGNORED_PROPS),
     [dropzone, params.disabled]
   )
 
