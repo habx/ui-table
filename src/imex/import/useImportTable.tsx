@@ -114,10 +114,10 @@ export const useImportTable = <D extends { id?: string | number }>(
         }
       )
 
-      const userInputs: {
+      const userInputs = await prompt<{
         message: string
         ignoredRows: ImportedRow<D>[]
-      } | null = await prompt(({ onResolve }) => ({
+      } | null>(({ onResolve }) => ({
         fullscreen: true,
         spacing: 'regular',
         Component: () => {
