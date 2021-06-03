@@ -56,12 +56,6 @@ describe('Import parsing', () => {
         })
         expect(result).toEqual([1, 2, 3])
       })
-      it('should parse multiple number', () => {
-        const result = parseCell('1, 2, 3', 'number[]', {
-          format: (value) => value,
-        })
-        expect(result).toEqual([1, 2, 3])
-      })
       it('should throw error if invalid value', () => {
         const parseInvalid = () =>
           parseCell('AA', 'number[]', { format: (value) => value })
