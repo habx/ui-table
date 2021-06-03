@@ -74,17 +74,18 @@ export const parseCell = (
       return options
         .format(rawCell)
         .split(',')
+        .filter(
+          (value: string | number | undefined) =>
+            !(typeof value === 'string' && value === '')
+        )
         .map((value: string | number) => {
-          if (typeof rawCell === 'string' && rawCell === '') {
-            return undefined
-          }
           const transformedValue = Number(value)
           if (Number.isNaN(transformedValue)) {
             throw new Error(ParsingErrors[ParseCellError.NOT_A_NUMBER])
           }
           return transformedValue
         })
-        .filter((value: number | undefined) => value != null)
+
     case 'string[]':
       return options
         .format(rawCell)
