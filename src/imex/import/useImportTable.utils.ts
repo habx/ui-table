@@ -73,14 +73,14 @@ export const parseCell = (
       }
       return newCellValue
     case 'number[]':
-      let formattedCell = options.format(rawCell)
-      if (!Array.isArray(formattedCell)) {
-        if (typeof formattedCell !== 'string') {
+      let formattedNumberArrayCell = options.format(rawCell)
+      if (!Array.isArray(formattedNumberArrayCell)) {
+        if (typeof formattedNumberArrayCell !== 'string') {
           throw new Error(ParsingErrors[ParseCellError.INVALID])
         }
-        formattedCell = formattedCell.split(',')
+        formattedNumberArrayCell = formattedNumberArrayCell.split(',')
       }
-      return formattedCell
+      return formattedNumberArrayCell
         .filter(isNotEmptyCell)
         .map((value: string | number) => {
           const transformedValue = Number(value)
@@ -91,7 +91,14 @@ export const parseCell = (
         })
 
     case 'string[]':
-      return options.format(rawCell).split(',').filter(isNotEmptyCell)
+      let formattedStringArrayCell = options.format(rawCell)
+      if (!Array.isArray(formattedStringArrayCell)) {
+        if (typeof formattedStringArrayCell !== 'string') {
+          throw new Error(ParsingErrors[ParseCellError.INVALID])
+        }
+        formattedStringArrayCell = formattedStringArrayCell.split(',')
+      }
+      return formattedStringArrayCell.filter(isNotEmptyCell)
     default:
       if (!isNotEmptyCell(rawCell)) {
         return undefined
