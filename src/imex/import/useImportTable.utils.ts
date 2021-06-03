@@ -52,6 +52,8 @@ export const softCompare = (a: any, b: any): boolean =>
         true
       )
 
+const isNotEmptyCell = (cell: any) => cell !== '' && cell != null
+
 export const parseCell = (
   rawCell: any,
   type: RowValueTypes,
@@ -59,7 +61,7 @@ export const parseCell = (
 ): string | number | string[] | number[] | undefined => {
   switch (type) {
     case 'number':
-      if (typeof rawCell === 'string' && rawCell === '') {
+      if (!isNotEmptyCell(rawCell)) {
         return undefined
       }
       if (typeof rawCell === 'number') {
@@ -71,13 +73,15 @@ export const parseCell = (
       }
       return newCellValue
     case 'number[]':
-      return options
-        .format(rawCell)
-        .split(',')
-        .filter(
-          (value: string | number | undefined) =>
-            !(typeof value === 'string' && value === '')
-        )
+      let formattedCell = options.format(rawCell)
+      if (!Array.isArray(formattedCell)) {
+        if (typeof formattedCell !== 'string') {
+          throw new Error(ParsingErrors[ParseCellError.INVALID])
+        }
+        formattedCell = formattedCell.split(',')
+      }
+      return formattedCell
+        .filter(isNotEmptyCell)
         .map((value: string | number) => {
           const transformedValue = Number(value)
           if (Number.isNaN(transformedValue)) {
@@ -87,12 +91,9 @@ export const parseCell = (
         })
 
     case 'string[]':
-      return options
-        .format(rawCell)
-        .split(',')
-        .filter((cell: string) => cell !== '' && cell != null)
+      return options.format(rawCell).split(',').filter(isNotEmptyCell)
     default:
-      if (typeof rawCell === 'string' && rawCell === '') {
+      if (!isNotEmptyCell(rawCell)) {
         return undefined
       }
       return options.format(rawCell)
