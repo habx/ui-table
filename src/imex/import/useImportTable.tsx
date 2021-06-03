@@ -161,8 +161,6 @@ export const useImportTable = <D extends { id?: string | number }>(
             try {
               const concurrency = mergedOptions.concurrency ?? 1
 
-              remainingActions.initLoading()
-
               const cleanData =
                 parsedData
                   ?.filter((row) => !row._rowMeta.isIgnored) // remove ignored rows
@@ -171,21 +169,21 @@ export const useImportTable = <D extends { id?: string | number }>(
               const dataToUpsert = mergedOptions.groupBy
                 ? Object.values(lodashGroupBy(cleanData, mergedOptions.groupBy))
                 : cleanData
-              remainingActions.setActionsCount(dataToUpsert.length)
 
-              const limit = pLimit(concurrency)
-              const upsertRowFunctions = dataToUpsert.map((data: D | D[]) =>
-                limit(async () => {
-                  if (mergedOptions.upsertRow) {
-                    await mergedOptions.upsertRow(data)
-                  }
-                  remainingActions.onActionDone()
-                })
-              )
+              if (mergedOptions.upsertRow) {
+                remainingActions.initLoading()
+                const limit = pLimit(concurrency)
+                remainingActions.setActionsCount(dataToUpsert.length)
+                const upsertRowFunctions = dataToUpsert.map((data: D | D[]) =>
+                  limit(async () => {
+                    await mergedOptions.upsertRow?.(data)
+                    remainingActions.onActionDone()
+                  })
+                )
+                await Promise.all(upsertRowFunctions)
+              }
 
-              await Promise.all(upsertRowFunctions)
-
-              mergedOptions.onFinish?.(dataToUpsert)
+              await mergedOptions.onFinish?.(dataToUpsert)
 
               onResolve({
                 message: `Import terminé\n${dataToUpsert.length} ligne(s) importée(s)`,

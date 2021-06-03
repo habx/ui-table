@@ -14,9 +14,9 @@ export type ImportedRow<D extends {}> = D & { _rowMeta: ImportedRowMeta<D> }
 
 export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
   columns: IMEXColumn<D>[]
-  upsertRow: (row: D | D[]) => any
+  upsertRow?: (row: D | D[]) => any
   getOriginalData: () => D[] | Promise<D[]>
-  onFinish?: (rows: D[] | D[][]) => void
+  onFinish?: (rows: D[] | D[][]) => void | Promise<any>
   readFile?: (file: File) => Promise<any[]>
   filterRows?: (row: ImportedRow<D>) => boolean
   groupBy?: string
