@@ -20,10 +20,12 @@ import {
 export enum ParseCellError {
   NOT_A_NUMBER,
   INVALID,
+  REQUIRED,
 }
 export const ParsingErrors: Record<ParseCellError, string> = {
   [ParseCellError.NOT_A_NUMBER]: 'Nombre invalide',
   [ParseCellError.INVALID]: 'Valeur invalide',
+  [ParseCellError.REQUIRED]: 'Valeur requise',
 }
 
 export const softCompare = (a: any, b: any): boolean =>
@@ -187,6 +189,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
           orderedColumns[index]!.meta!.imex!.type as RowValueTypes,
           { format }
         )
+
+        if (orderedColumns[index]?.meta?.imex?.required && !newCellValue) {
+          throw new Error(ParsingErrors[ParseCellError.REQUIRED])
+        }
 
         const validate =
           orderedColumns[index]?.meta?.imex?.validate ?? (() => true)
