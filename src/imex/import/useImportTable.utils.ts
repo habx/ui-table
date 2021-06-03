@@ -56,9 +56,12 @@ export const parseCell = (
   rawCell: any,
   type: RowValueTypes,
   options: { format: (value: any) => any }
-): string | number | string[] | number[] => {
+): string | number | string[] | number[] | undefined => {
   switch (type) {
     case 'number':
+      if (typeof rawCell === 'string' && rawCell === '') {
+        return undefined
+      }
       if (typeof rawCell === 'number') {
         return Number(options.format(rawCell))
       }
@@ -72,15 +75,25 @@ export const parseCell = (
         .format(rawCell)
         .split(',')
         .map((value: string | number) => {
+          if (typeof rawCell === 'string' && rawCell === '') {
+            return undefined
+          }
           const transformedValue = Number(value)
           if (Number.isNaN(transformedValue)) {
             throw new Error(ParsingErrors[ParseCellError.NOT_A_NUMBER])
           }
           return transformedValue
         })
+        .filter((value: number | undefined) => value != null)
     case 'string[]':
-      return options.format(rawCell).split(',')
+      return options
+        .format(rawCell)
+        .split(',')
+        .filter((cell: string) => cell !== '' && cell != null)
     default:
+      if (typeof rawCell === 'string' && rawCell === '') {
+        return undefined
+      }
       return options.format(rawCell)
   }
 }
@@ -181,7 +194,12 @@ export const parseRawData = async <D extends { id?: string | number }>(
         orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? `${value}`
 
       // cast to string for default value to avoid render error
-      let newCellValue: string | number | string[] | number[] = `${rawCell}`
+      let newCellValue:
+        | string
+        | number
+        | string[]
+        | number[]
+        | undefined = `${rawCell}`
 
       try {
         newCellValue = parseCell(
@@ -190,7 +208,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
           { format }
         )
 
-        if (orderedColumns[index]?.meta?.imex?.required && !newCellValue) {
+        if (
+          orderedColumns[index]?.meta?.imex?.required &&
+          newCellValue == null
+        ) {
           throw new Error(ParsingErrors[ParseCellError.REQUIRED])
         }
 
