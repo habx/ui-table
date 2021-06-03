@@ -52,13 +52,18 @@ export const softCompare = (a: any, b: any): boolean =>
         true
       )
 
+const isNotEmptyCell = (cell: any) => cell !== '' && cell != null
+
 export const parseCell = (
   rawCell: any,
   type: RowValueTypes,
   options: { format: (value: any) => any }
-): string | number | string[] | number[] => {
+): string | number | string[] | number[] | undefined => {
   switch (type) {
     case 'number':
+      if (!isNotEmptyCell(rawCell)) {
+        return undefined
+      }
       if (typeof rawCell === 'number') {
         return Number(options.format(rawCell))
       }
@@ -68,9 +73,15 @@ export const parseCell = (
       }
       return newCellValue
     case 'number[]':
-      return options
-        .format(rawCell)
-        .split(',')
+      let formattedNumberArrayCell = options.format(rawCell)
+      if (!Array.isArray(formattedNumberArrayCell)) {
+        if (typeof formattedNumberArrayCell !== 'string') {
+          throw new Error(ParsingErrors[ParseCellError.INVALID])
+        }
+        formattedNumberArrayCell = formattedNumberArrayCell.split(',')
+      }
+      return formattedNumberArrayCell
+        .filter(isNotEmptyCell)
         .map((value: string | number) => {
           const transformedValue = Number(value)
           if (Number.isNaN(transformedValue)) {
@@ -78,9 +89,20 @@ export const parseCell = (
           }
           return transformedValue
         })
+
     case 'string[]':
-      return options.format(rawCell).split(',')
+      let formattedStringArrayCell = options.format(rawCell)
+      if (!Array.isArray(formattedStringArrayCell)) {
+        if (typeof formattedStringArrayCell !== 'string') {
+          throw new Error(ParsingErrors[ParseCellError.INVALID])
+        }
+        formattedStringArrayCell = formattedStringArrayCell.split(',')
+      }
+      return formattedStringArrayCell.filter(isNotEmptyCell)
     default:
+      if (!isNotEmptyCell(rawCell)) {
+        return undefined
+      }
       return options.format(rawCell)
   }
 }
@@ -181,7 +203,12 @@ export const parseRawData = async <D extends { id?: string | number }>(
         orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? `${value}`
 
       // cast to string for default value to avoid render error
-      let newCellValue: string | number | string[] | number[] = `${rawCell}`
+      let newCellValue:
+        | string
+        | number
+        | string[]
+        | number[]
+        | undefined = `${rawCell}`
 
       try {
         newCellValue = parseCell(
@@ -190,7 +217,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
           { format }
         )
 
-        if (orderedColumns[index]?.meta?.imex?.required && !newCellValue) {
+        if (
+          orderedColumns[index]?.meta?.imex?.required &&
+          newCellValue == null
+        ) {
           throw new Error(ParsingErrors[ParseCellError.REQUIRED])
         }
 
