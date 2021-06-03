@@ -32,116 +32,118 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
   options?: GetCompareColumnsFromImexColumnsOptions
 ) => {
   const { footer = true, statusColumn = true } = options ?? {}
-  const compareColumns = columns.map((column) => ({
-    ...column,
-    Footer: footer
-      ? ((({ column: fColumn, rows, data }) => {
-          const accessor = (fColumn as IMEXColumn)
-            .accessor as ReactTable.Accessor<D>
-          const columnModified = rows.reduce(
-            (sum, row) =>
-              row.original &&
-              !Object.values(row.original._rowMeta.errors).length &&
-              accessor(row.original, row.index, {
-                subRows: [],
-                depth: row.depth,
-                data,
-              }) !==
-                accessor(row.original._rowMeta.prevVal as D, row.index, {
+  const compareColumns = columns
+    .filter((column) => !column.meta?.imex?.hidden)
+    .map((column) => ({
+      ...column,
+      Footer: footer
+        ? ((({ column: fColumn, rows, data }) => {
+            const accessor = (fColumn as IMEXColumn)
+              .accessor as ReactTable.Accessor<D>
+            const columnModified = rows.reduce(
+              (sum, row) =>
+                row.original &&
+                !Object.values(row.original._rowMeta.errors).length &&
+                accessor(row.original, row.index, {
                   subRows: [],
                   depth: row.depth,
                   data,
-                })
-                ? sum + 1
-                : sum,
-            0
-          )
-          return <React.Fragment>{columnModified} impact(s)</React.Fragment>
-        }) as ReactTable.Renderer<FooterProps<ImportedRow<D>>>)
-      : undefined,
-    Cell: ((rawProps) => {
-      const props = (rawProps as unknown) as CellProps<D>
-      const rowMeta = rawProps.row.original?._rowMeta
+                }) !==
+                  accessor(row.original._rowMeta.prevVal as D, row.index, {
+                    subRows: [],
+                    depth: row.depth,
+                    data,
+                  })
+                  ? sum + 1
+                  : sum,
+              0
+            )
+            return <React.Fragment>{columnModified} impact(s)</React.Fragment>
+          }) as ReactTable.Renderer<FooterProps<ImportedRow<D>>>)
+        : undefined,
+      Cell: ((rawProps) => {
+        const props = (rawProps as unknown) as CellProps<D>
+        const rowMeta = rawProps.row.original?._rowMeta
 
-      const Cell = (isFunction(column.Cell)
-        ? column.Cell
-        : ({ cell }) => <div>{cell.value}</div>) as React.ComponentType<
-        CellProps<D>
-      >
+        const Cell = (isFunction(column.Cell)
+          ? column.Cell
+          : ({ cell }) => <div>{cell.value}</div>) as React.ComponentType<
+          CellProps<D>
+        >
 
-      // Do not add style on grouped cell
-      if (rawProps.row.isGrouped) {
-        return <Cell {...props} />
-      }
-
-      const cellPrevVal = get(rowMeta?.prevVal, column.accessor as string)
-
-      const CellContainer: React.FunctionComponent = ({ children }) => {
-        if (!Object.values(rowMeta?.errors ?? {}).length) {
-          return <React.Fragment>{children}</React.Fragment>
+        // Do not add style on grouped cell
+        if (rawProps.row.isGrouped) {
+          return <Cell {...props} />
         }
-        const error = get(rowMeta!.errors, column.accessor as string)
 
-        return (
-          <Tooltip small title={`${error}`} disabled={!error}>
-            <ErrorCellContent data-error={!!error}>
-              {error && <ErrorIcon icon="exclam-round" />}
-              {props.cell?.value ? `${props.cell?.value}` : ''}
-            </ErrorCellContent>
-          </Tooltip>
-        )
-      }
+        const cellPrevVal = get(rowMeta?.prevVal, column.accessor as string)
 
-      const cellPrevProps = {
-        ...props,
-        cell: {
-          ...props.cell,
-          value: cellPrevVal ?? '',
-        },
-      }
-      // using lodash merge causes performance issues
+        const CellContainer: React.FunctionComponent = ({ children }) => {
+          if (!Object.values(rowMeta?.errors ?? {}).length) {
+            return <React.Fragment>{children}</React.Fragment>
+          }
+          const error = get(rowMeta!.errors, column.accessor as string)
 
-      if (isNil(cellPrevVal)) {
-        return (
-          <CellContainer>
-            <NewCell data-new-row={!!column.meta?.imex?.identifier}>
-              <Cell {...props} />
-            </NewCell>
-          </CellContainer>
-        )
-      }
+          return (
+            <Tooltip small title={`${error}`} disabled={!error}>
+              <ErrorCellContent data-error={!!error}>
+                {error && <ErrorIcon icon="exclam-round" />}
+                {props.cell?.value ? `${props.cell?.value}` : ''}
+              </ErrorCellContent>
+            </Tooltip>
+          )
+        }
 
-      if (
-        isNil(props.cell.value) ||
-        softCompare(cellPrevVal, props.cell.value)
-      ) {
-        return (
-          <CellContainer>
-            <Cell {...cellPrevProps} />
-          </CellContainer>
-        )
-      }
+        const cellPrevProps = {
+          ...props,
+          cell: {
+            ...props.cell,
+            value: cellPrevVal ?? '',
+          },
+        }
+        // using lodash merge causes performance issues
 
-      return (
-        <CellContainer>
-          <div>
-            <ChangedCell>
-              <Cell {...props} />
-            </ChangedCell>
-            <PrevCell>
+        if (isNil(cellPrevVal)) {
+          return (
+            <CellContainer>
+              <NewCell data-new-row={!!column.meta?.imex?.identifier}>
+                <Cell {...props} />
+              </NewCell>
+            </CellContainer>
+          )
+        }
+
+        if (
+          isNil(props.cell.value) ||
+          softCompare(cellPrevVal, props.cell.value)
+        ) {
+          return (
+            <CellContainer>
               <Cell {...cellPrevProps} />
-            </PrevCell>
-          </div>
-        </CellContainer>
-      )
-    }) as ReactTable.Renderer<CellProps<ImportedRow<D>>>,
-  }))
+            </CellContainer>
+          )
+        }
+
+        return (
+          <CellContainer>
+            <div>
+              <ChangedCell>
+                <Cell {...props} />
+              </ChangedCell>
+              <PrevCell>
+                <Cell {...cellPrevProps} />
+              </PrevCell>
+            </div>
+          </CellContainer>
+        )
+      }) as ReactTable.Renderer<CellProps<ImportedRow<D>>>,
+    }))
 
   if (statusColumn) {
     // Status column
     compareColumns.push({
       Header: '',
-      maxWidth: 40,
+      maxWidth: 60,
       id: 'status',
       Footer: '',
       Cell: (({ row }) => {
