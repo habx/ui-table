@@ -176,7 +176,11 @@ export const useImportTable = <D extends { id?: string | number }>(
                 remainingActions.setActionsCount(dataToUpsert.length)
                 const upsertRowFunctions = dataToUpsert.map((data: D | D[]) =>
                   limit(async () => {
-                    await mergedOptions.upsertRow?.(data)
+                    try {
+                      await mergedOptions.upsertRow?.(data)
+                    } catch (e) {
+                      mergedOptions.onUpsertRowError?.(e)
+                    }
                     remainingActions.onActionDone()
                   })
                 )
