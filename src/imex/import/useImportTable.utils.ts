@@ -187,17 +187,6 @@ export const parseRawData = async <D extends { id?: string | number }>(
       }
 
       let cellError: string | null = null
-      if (
-        requiredColumnHeaders.includes(
-          cleanHeader(orderedColumns[index]?.Header as string)
-        ) &&
-        rawCell?.length === 0
-      ) {
-        cellError = 'requise'
-      }
-      if (rawCell === '' || rawCell === undefined) {
-        continue
-      }
 
       const format = (value: any) =>
         orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? `${value}`
@@ -217,11 +206,13 @@ export const parseRawData = async <D extends { id?: string | number }>(
           { format }
         )
 
-        if (
-          orderedColumns[index]?.meta?.imex?.required &&
-          newCellValue == null
-        ) {
-          throw new Error(ParsingErrors[ParseCellError.REQUIRED])
+        // If parsed value is null, throw if required and ignore if not.
+        if (newCellValue == null) {
+          if (orderedColumns[index]?.meta?.imex?.required) {
+            throw new Error(ParsingErrors[ParseCellError.REQUIRED])
+          } else {
+            continue
+          }
         }
 
         const validate =
@@ -242,6 +233,9 @@ export const parseRawData = async <D extends { id?: string | number }>(
         cellError = e.message
       }
 
+      /**
+       * Add errors on row and add ignore flag
+       */
       if (cellError) {
         importedRowMeta.isIgnored = true
         set(
