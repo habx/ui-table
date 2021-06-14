@@ -191,13 +191,12 @@ export const parseRawData = async <D extends { id?: string | number }>(
       const format = (value: any) =>
         orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? `${value}`
 
-      // cast to string for default value to avoid render error
       let newCellValue:
         | string
         | number
         | string[]
         | number[]
-        | undefined = `${rawCell}`
+        | undefined = rawCell
 
       try {
         newCellValue = parseCell(
