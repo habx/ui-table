@@ -195,8 +195,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
       let cellError: string | null = null
 
       const format = (value: any) =>
-        orderedColumns[index]?.meta?.imex?.format?.(value, row) ??
-        (value === '' ? null : value)
+        orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? value
 
       let newCellValue:
         | string
