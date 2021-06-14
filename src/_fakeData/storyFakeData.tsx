@@ -100,7 +100,6 @@ export const IMEX_COLUMNS = [
     accessor: 'address.city',
     meta: {
       imex: {
-        required: true,
         type: 'string' as const,
       },
     },
