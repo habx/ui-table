@@ -15,6 +15,7 @@ export type ImportedRow<D extends {}> = D & { _rowMeta: ImportedRowMeta<D> }
 export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
   columns: IMEXColumn<D>[]
   upsertRow?: (row: D | D[]) => any
+  onUpsertRowError?: (error: Error) => void
   getOriginalData: () => D[] | Promise<D[]>
   onFinish?: (rows: D[] | D[][]) => void | Promise<any>
   readFile?: (file: File) => Promise<any[]>

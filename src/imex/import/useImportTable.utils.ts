@@ -73,6 +73,9 @@ export const parseCell = (
       }
       return newCellValue
     case 'number[]':
+      if (!isNotEmptyCell(rawCell)) {
+        return []
+      }
       let formattedNumberArrayCell = options.format(rawCell)
       if (!Array.isArray(formattedNumberArrayCell)) {
         if (typeof formattedNumberArrayCell !== 'string') {
@@ -91,6 +94,9 @@ export const parseCell = (
         })
 
     case 'string[]':
+      if (!isNotEmptyCell(rawCell)) {
+        return []
+      }
       let formattedStringArrayCell = options.format(rawCell)
       if (!Array.isArray(formattedStringArrayCell)) {
         if (typeof formattedStringArrayCell !== 'string') {
@@ -187,28 +193,16 @@ export const parseRawData = async <D extends { id?: string | number }>(
       }
 
       let cellError: string | null = null
-      if (
-        requiredColumnHeaders.includes(
-          cleanHeader(orderedColumns[index]?.Header as string)
-        ) &&
-        rawCell?.length === 0
-      ) {
-        cellError = 'requise'
-      }
-      if (rawCell === '' || rawCell === undefined) {
-        continue
-      }
 
       const format = (value: any) =>
-        orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? `${value}`
+        orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? value
 
-      // cast to string for default value to avoid render error
       let newCellValue:
         | string
         | number
         | string[]
         | number[]
-        | undefined = `${rawCell}`
+        | undefined = rawCell
 
       try {
         newCellValue = parseCell(
@@ -217,11 +211,13 @@ export const parseRawData = async <D extends { id?: string | number }>(
           { format }
         )
 
-        if (
-          orderedColumns[index]?.meta?.imex?.required &&
-          newCellValue == null
-        ) {
-          throw new Error(ParsingErrors[ParseCellError.REQUIRED])
+        // If parsed value is null, throw if required and ignore if not.
+        if (newCellValue == null) {
+          if (orderedColumns[index]?.meta?.imex?.required) {
+            throw new Error(ParsingErrors[ParseCellError.REQUIRED])
+          } else {
+            continue
+          }
         }
 
         const validate =
@@ -242,6 +238,9 @@ export const parseRawData = async <D extends { id?: string | number }>(
         cellError = e.message
       }
 
+      /**
+       * Add errors on row and add ignore flag
+       */
       if (cellError) {
         importedRowMeta.isIgnored = true
         set(
