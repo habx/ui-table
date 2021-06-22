@@ -82,13 +82,20 @@ const diffData = FAKE_DATA.map((row) => {
   const changedValueKey = IMEX_COLUMNS[
     Math.floor(Math.random() * IMEX_COLUMNS.length)
   ].accessor as keyof typeof row
-  const isNew = Math.random() > 0.8
-  const hasError = Math.random() > 0.5
+  const isNew = false //Math.random() > 0.8
+  const hasError = false //Math.random() > 0.5
   return {
     ...row,
     _rowMeta: {
       hasDiff: true,
-      prevVal: isNew ? undefined : { ...row, [changedValueKey]: 'old value' },
+      prevVal: isNew
+        ? undefined
+        : {
+            ...row,
+            [changedValueKey]:
+              "Le Lorem Ipm est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.\n" +
+              '\n',
+          },
       errors: hasError ? { [changedValueKey]: 'Invalide' } : {},
     },
   }
