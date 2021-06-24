@@ -9,8 +9,8 @@ import {
   ExpandToggleContainer,
   TableBodyRow,
   TableBodySubRow,
-  TableCell,
 } from './Table.style'
+import { TableCell } from './TableCell'
 
 export const TableRow = React.forwardRef<
   HTMLTableRowElement,
