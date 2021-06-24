@@ -5,6 +5,7 @@ import { TableInstance } from '../../types/Table'
 
 interface UseVirtualizeConfig {
   virtualized?: boolean
+  rowsHeight?: number
 }
 
 export const useVirtualize = <D extends object>(
@@ -12,7 +13,6 @@ export const useVirtualize = <D extends object>(
   config: UseVirtualizeConfig
 ) => {
   const scrollContainerRef = React.useRef<HTMLTableSectionElement>(null)
-  const firstItemRef = React.useRef<HTMLTableRowElement>(null)
 
   const [dimensions, setDimensions] = React.useState<{
     height?: number
@@ -29,7 +29,7 @@ export const useVirtualize = <D extends object>(
       setDimensions({
         height: scrollContainerRef.current?.clientHeight,
         width: scrollContainerRef.current?.clientWidth,
-        itemSize: firstItemRef.current?.clientHeight,
+        itemSize: config.rowsHeight,
       })
     }
 
@@ -40,11 +40,10 @@ export const useVirtualize = <D extends object>(
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [dimensions, skip])
+  }, [config.rowsHeight, dimensions, skip])
 
   return {
     scrollContainerRef,
-    firstItemRef,
     initialized: !isEmpty(dimensions),
     ...dimensions,
   }

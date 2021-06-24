@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { HeaderGroup, emptyRenderer } from 'react-table'
 
-import { TableCell, TableFooterRow, TableFooterContainer } from './Table.style'
+import { TableFooterRow, TableFooterContainer } from './Table.style'
+import { TableCell } from './TableCell'
 
 export const TableFooter = <D extends {}>({
   footerGroups,

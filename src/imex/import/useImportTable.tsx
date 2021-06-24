@@ -299,7 +299,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 <br />
                 <Title type="regular">
                   Téléchargez les {userInputs.ignoredRows.length} éléments
-                  ignorées afin de corriger les données.
+                  ignorés afin de corriger les données.
                 </Title>
                 <ConfirmContainer>
                   <Table instance={tableInstance} virtualized />

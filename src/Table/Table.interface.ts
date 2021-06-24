@@ -14,6 +14,11 @@ export interface TableProps<D extends object> {
   noDataComponent?: React.ComponentType
   instance: TableInstance<D>
   virtualized?: boolean
+  /**
+   * Fix the height of every cell in px.
+   * @default when virtualized only to 60
+   */
+  rowsHeight?: number
 }
 
 export type RowCharacteristics = {
