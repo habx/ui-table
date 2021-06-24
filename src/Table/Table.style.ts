@@ -184,6 +184,7 @@ export const TableCellContainer = styled.td`
   display: flex;
   overflow: hidden;
   align-items: center;
+  position: relative;
 
   position: relative;
 

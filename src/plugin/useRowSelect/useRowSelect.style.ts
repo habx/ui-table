@@ -8,4 +8,14 @@ export const CheckboxContainer = styled.div`
   display: flex;
   align-items: center;
   font-size: 16px;
+
+  // Prevent onRowClick trigger when clicking on cell
+  &:before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
 `
