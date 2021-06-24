@@ -161,6 +161,7 @@ export const TableCell = styled.td`
   display: flex;
   overflow: hidden;
   align-items: center;
+  position: relative;
 
   img {
     align-items: flex-start;
