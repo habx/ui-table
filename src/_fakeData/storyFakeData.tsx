@@ -12,9 +12,6 @@ const GROUPS = ['A', 'B', 'C']
 
 export const FAKE_DATA = range(45).map(() => ({
   ...faker.helpers.createCard(),
-  username:
-    "Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.\n" +
-    '\n',
   image: faker.helpers.randomize([
     '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/02e27c05f756816d97983027afe8310a.jpg',
     '//res.cloudinary.com/habx/image/upload/tech/ui-table/images/326355d6d0a0f4018c7b2bc6b35d7e00.jpg',

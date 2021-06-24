@@ -14,6 +14,7 @@ export interface TableProps<D extends object> {
   noDataComponent?: React.ComponentType
   instance: TableInstance<D>
   virtualized?: boolean
+  rowsHeight?: number
 }
 
 export type RowCharacteristics = {

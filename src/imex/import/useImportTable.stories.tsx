@@ -82,8 +82,8 @@ const diffData = FAKE_DATA.map((row) => {
   const changedValueKey = IMEX_COLUMNS[
     Math.floor(Math.random() * IMEX_COLUMNS.length)
   ].accessor as keyof typeof row
-  const isNew = false //Math.random() > 0.8
-  const hasError = false //Math.random() > 0.5
+  const isNew = Math.random() > 0.8
+  const hasError = Math.random() > 0.5
   return {
     ...row,
     _rowMeta: {
@@ -109,7 +109,7 @@ export const CompareTable = () => {
   return (
     <Provider>
       <Container>
-        <Table instance={tableInstance} />
+        <Table instance={tableInstance} virtualized />
         <ActionBar>
           <DataIndicators data={diffData} />
         </ActionBar>
