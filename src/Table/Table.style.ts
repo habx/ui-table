@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { Text, theme } from '@habx/ui-core'
 
+import { zIndex } from '../_internal/zIndex'
 import { CheckboxContainer } from '../plugin/useRowSelect/useRowSelect.style'
 
 const alignItems = css`
@@ -100,7 +101,7 @@ export const TableBodyRow = styled.tr`
   }
 `
 
-export const TableBody = styled.tbody`
+export const TableBody = styled.tbody<{ rowsHeight?: number }>`
   // https://stackoverflow.com/questions/14962468/how-can-i-combine-flexbox-and-vertical-scroll-in-a-full-height-app
   flex: 1 1 auto;
   flex-direction: column;
@@ -112,6 +113,13 @@ export const TableBody = styled.tbody`
   scroll-margin: var(--table-scrollbar-width);
 
   --table-body-font-size: 14px;
+  ${({ rowsHeight }) =>
+    rowsHeight &&
+    css`
+      ${TableBodyRow} {
+        height: ${rowsHeight}px;
+      }
+    `}
 `
 
 export const TableContainer = styled.div`
@@ -156,11 +164,39 @@ export const TableBodySubRow = styled.tr`
   flex-direction: column;
 `
 
-export const TableCell = styled.td`
+export const TableCellZoom = styled.div`
+  display: none;
+
+  margin: 0 32px;
+
+  z-index: ${zIndex.overlay};
+
+  position: absolute;
+  top: calc(100% + 8px);
+
+  background: ${theme.color('background')};
+
+  box-shadow: ${theme.shadow('regular')};
+`
+
+export const TableCellContainer = styled.td`
   padding: 12px;
   display: flex;
   overflow: hidden;
   align-items: center;
+  position: relative;
+
+  position: relative;
+
+  &[data-large='true'] {
+    align-items: flex-start;
+    &:hover {
+      background: ${theme.color('primary', { opacity: 0.1 })};
+      + ${TableCellZoom} {
+        display: block;
+      }
+    }
+  }
 
   img {
     align-items: flex-start;

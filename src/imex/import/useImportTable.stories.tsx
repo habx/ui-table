@@ -102,7 +102,7 @@ export const CompareTable = () => {
   return (
     <Provider>
       <Container>
-        <Table instance={tableInstance} />
+        <Table instance={tableInstance} virtualized />
         <ActionBar>
           <DataIndicators data={diffData} />
         </ActionBar>

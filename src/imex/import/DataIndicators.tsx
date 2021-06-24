@@ -62,7 +62,7 @@ export const DataIndicators: React.VoidFunctionComponent<DataInfoProps> = ({
       </IconIndicator>
       <IconIndicator
         type="edition"
-        label={`${dataInfos.added} ligne(s) modifiée(s)`}
+        label={`${dataInfos.edited} ligne(s) modifiée(s)`}
       >
         {dataInfos.edited}
       </IconIndicator>

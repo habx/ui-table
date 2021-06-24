@@ -41,6 +41,7 @@ export const Table = <D extends {}>({
   instance,
   getRowCharacteristics,
   virtualized = false,
+  rowsHeight: rawRowsHeight,
 }: React.PropsWithChildren<TableProps<D>>) => {
   const {
     getTableProps,
@@ -59,7 +60,8 @@ export const Table = <D extends {}>({
 
   const gridTemplateColumns = useGridTemplateColumns({ plugins, columns })
 
-  const virtualState = useVirtualize(instance, { virtualized })
+  const rowsHeight = !rawRowsHeight && virtualized ? 60 : rawRowsHeight
+  const virtualState = useVirtualize(instance, { virtualized, rowsHeight })
 
   const currentRows = hasPagination ? page : rows
   const isItemLoaded = (index: number) => !!currentRows[index]
@@ -187,7 +189,11 @@ export const Table = <D extends {}>({
             <NoDataComponent />
           </NoDataContainer>
         )}
-        <TableBody {...getTableBodyProps()} ref={tableBodyRef}>
+        <TableBody
+          {...getTableBodyProps()}
+          ref={tableBodyRef}
+          rowsHeight={rowsHeight}
+        >
           {virtualState.initialized ? (
             <InfiniteLoader
               isItemLoaded={isItemLoaded}
@@ -219,7 +225,6 @@ export const Table = <D extends {}>({
                 onClick={onRowClick}
                 prepareRow={prepareRow}
                 renderRowSubComponent={renderRowSubComponent}
-                ref={rowIndex === 0 ? virtualState.firstItemRef : undefined}
                 key={`row-${rowIndex}`}
               />
             ))
