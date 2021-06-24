@@ -10,7 +10,8 @@ export const TableCell: React.FunctionComponent<TableCellProps> = ({
   const [isLargerThanCell, setLargerThanCell] = React.useState(false)
   React.useEffect(() => {
     if (
-      cellRef.current?.firstChild?.clientHeight > cellRef.current?.clientHeight
+      ((cellRef.current?.firstChild as HTMLDivElement)?.clientHeight ?? 0) >
+      (cellRef.current?.clientHeight ?? 0)
     ) {
       setLargerThanCell(true)
     }
