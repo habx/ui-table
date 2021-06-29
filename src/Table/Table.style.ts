@@ -190,8 +190,14 @@ export const TableCellContainer = styled.td`
 
   &[data-large='true'] {
     align-items: flex-start;
+    * {
+      text-overflow: ellipsis;
+      flex-flow: nowrap;
+      overflow: hidden;
+      white-space: nowrap;
+    }
     &:hover {
-      background: ${theme.color('primary', { opacity: 0.1 })};
+      background: ${theme.color('secondary', { opacity: 0.1 })};
       + ${TableCellZoom} {
         display: block;
       }
