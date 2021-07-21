@@ -17,17 +17,13 @@ import { ColumnInstance } from '../../types/Table'
 const togglePanelStyleSetter: TogglePanelStyleSetter = (
   dimensions,
   triggerDimensions
-) => {
-  const menuHeight = dimensions.clientHeight
-  const menuWidth = dimensions.clientWidth
-
-  return menuDefaultPositionSetter({
-    triggerDimensions,
-    menuHeight,
-    menuWidth,
+) =>
+  menuDefaultPositionSetter({
+    menuHeight: dimensions.height,
+    menuWidth: dimensions.width,
     position: 'vertical',
+    triggerDimensions,
   })
-}
 
 const RangeFilterTrigger = styled.div`
   ${inputStyle};
