@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@habx/config-ci-front": "^0.16.0",
-    "@habx/eslint-config-client": "^6.1.0",
+    "@habx/eslint-config-client": "^6.2.0",
     "@habx/ui-core": "5.41.2",
     "@storybook/addon-essentials": "^6.3.6",
     "@storybook/addon-links": "^6.3.6",
