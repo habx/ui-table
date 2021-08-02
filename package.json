@@ -59,7 +59,7 @@
     "react-window-infinite-loader": "^1.0.7"
   },
   "devDependencies": {
-    "@habx/config-ci-front": "^0.16.0",
+    "@habx/config-ci-front": "^0.17.0",
     "@habx/eslint-config-client": "^6.2.0",
     "@habx/ui-core": "5.43.0",
     "@storybook/addon-essentials": "^6.3.6",
