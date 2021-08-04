@@ -326,10 +326,15 @@ export const useImportTable = <D extends { id?: string | number }>(
 
   const onDropAccepted = React.useCallback(
     (files: File[], event?: DropEvent) =>
+      // eslint-disable-next-line deprecation/deprecation
       params.onBeforeDropAccepted
-        ? params.onBeforeDropAccepted(onFiles)(files, event)
+        ? // eslint-disable-next-line deprecation/deprecation
+          params.onBeforeDropAccepted(onFiles)(files, event)
         : onFiles(files),
-    [onFiles, params.onBeforeDropAccepted] // eslint-disable-line react-hooks/exhaustive-deps
+    [
+      onFiles, // eslint-disable-line react-hooks/exhaustive-deps
+      params.onBeforeDropAccepted, // eslint-disable-line deprecation/deprecation
+    ]
   )
 
   const dropzone = useDropzone({

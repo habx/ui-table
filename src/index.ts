@@ -1,3 +1,5 @@
+/* eslint-disable deprecation/deprecation */
+
 export { useTable } from './useTable'
 export { Table, TablePagination } from './Table'
 
