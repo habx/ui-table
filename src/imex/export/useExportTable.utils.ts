@@ -7,8 +7,20 @@ import {
 import { createWorkbook } from '../exceljs'
 import { IMEXColumn, IMEXFileExtensionTypes } from '../imex.interface'
 
-export const saveFile = (filename: string, file: any) => {
-  const blob = new Blob([file], { type: 'text/csv;charset=utf-8;' })
+const saveFile = (
+  type: IMEXFileExtensionTypes,
+  filename: string,
+  content: BlobPart
+) => {
+  const blob = new Blob([content], {
+    type:
+      type === 'xls'
+        ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        : 'text/csv;charset=utf-8',
+  })
+
+  filename += `.${type === 'xls' ? 'xlsx' : 'csv'}`
+
   if (navigator.msSaveBlob) {
     // IE 10+
     navigator.msSaveBlob(blob, filename)
@@ -58,12 +70,14 @@ export const exportData = async <D extends {}>(
   worksheet.addRows(data)
   await options.editWorkbookBeforeSave?.(workbook)
 
+  let content: Excel.Buffer
+
   if (options.type === 'xls') {
     applyValidationRulesAndStyle<D>(worksheet, columns, options)
-    const fileBuffer = await workbook.xlsx.writeBuffer()
-    saveFile(`${filename}.xlsx`, fileBuffer)
+    content = await workbook.xlsx.writeBuffer()
   } else {
-    const fileBuffer = await workbook.csv.writeBuffer()
-    saveFile(`${filename}.csv`, fileBuffer)
+    content = await workbook.csv.writeBuffer()
   }
+
+  saveFile(options.type, filename, content)
 }
