@@ -18,6 +18,7 @@ describe('Import/Export (imex)', () => {
         useExportTable({
           data: FAKE_DATA,
           columns: IMEX_COLUMNS,
+          type: 'csv',
         })
       )
 
@@ -35,12 +36,13 @@ describe('Import/Export (imex)', () => {
         useExportTable({
           data: FAKE_DATA,
           columns: IMEX_COLUMNS,
+          type: 'xls',
         })
       )
 
       await act(() => {
         const [downloadFile] = result.current
-        return downloadFile('test', { type: 'xls' })
+        return downloadFile('test')
       })
       expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
         new Blob(),
