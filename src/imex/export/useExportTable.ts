@@ -2,7 +2,11 @@ import { get, isNumber } from 'lodash'
 import * as React from 'react'
 
 import { getImexColumns } from '../getImexColumns'
-import { IMEXColumn, IMEXFileExtensionTypes } from '../imex.interface'
+import {
+  IMEXColumn,
+  IMEXFileExtensionTypes,
+  RowValueTypes,
+} from '../imex.interface'
 
 import { exportData, ExportDataOptions } from './useExportTable.utils'
 
@@ -13,6 +17,8 @@ export interface UseExportTableParams<D extends { [key: string]: any } = any>
   type?: IMEXFileExtensionTypes
 }
 
+const ARRAY_TYPES = new Set<RowValueTypes>(['string[]', 'number[]'])
+
 export const useExportTable = <D extends { [key: string]: any } = any>(
   params: UseExportTableParams<D>
 ) => {
@@ -21,39 +27,40 @@ export const useExportTable = <D extends { [key: string]: any } = any>(
   paramsRef.current = params
 
   const downloadTableData = React.useCallback(
-    (title: string, options: Partial<UseExportTableParams<D>> = {}) => {
-      const { data = [], columns, type = 'csv', ...exportOptions } = {
+    (title: string, options?: Partial<UseExportTableParams<D>>) => {
+      const { data, columns, ...exportOptions } = {
+        data: [],
+        type: 'xls',
         ...paramsRef.current,
         ...options,
-      }
+      } as const
 
       const imexColumns = getImexColumns(columns)
       const imexData = data.map((row) =>
-        imexColumns.map(({ accessor, meta }) => {
-          let value = get(row, accessor as string)
-          const parse = (v: any) => {
-            if (
-              !meta?.imex?.parse &&
-              ['string[]', 'number[]'].includes(
-                meta?.imex?.type as 'string[]' | 'number[]'
-              )
-            ) {
-              return v?.join(',')
-            }
-            return meta?.imex?.parse?.(v, Object.values(row)) ?? v
+        imexColumns.map((column) => {
+          const meta = column.meta?.imex
+          const valueType = meta?.type
+
+          let value = get(row, column.accessor as string)
+
+          if (meta?.parse) {
+            value = meta.parse(value, Object.values(row))
+          } else if (ARRAY_TYPES.has(valueType!) && Array.isArray(value)) {
+            value = value.join(',')
           }
-          if (type === 'xls' && meta?.imex?.type === 'number') {
-            return isNumber(value) ? Number(parse(value)) : value
-          }
-          return parse(value)
+
+          return exportOptions.type === 'xls' &&
+            valueType === 'number' &&
+            !isNumber(value)
+            ? Number(value)
+            : value
         })
       )
-      return exportData<D>(title, imexColumns, imexData, {
-        type,
-        ...exportOptions,
-      })
+
+      return exportData(title, imexColumns, imexData, exportOptions)
     },
     []
   )
+
   return [downloadTableData] as const
 }

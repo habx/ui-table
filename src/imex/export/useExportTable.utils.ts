@@ -5,7 +5,7 @@ import {
   ExcelValidationOptions,
 } from '../excel.utils'
 import { createWorkbook } from '../exceljs'
-import { IMEXColumn } from '../imex.interface'
+import { IMEXColumn, IMEXFileExtensionTypes } from '../imex.interface'
 
 export const saveFile = (filename: string, file: any) => {
   const blob = new Blob([file], { type: 'text/csv;charset=utf-8;' })
@@ -31,13 +31,12 @@ export const saveFile = (filename: string, file: any) => {
 }
 
 export interface ExportDataOptions extends ExcelValidationOptions {
-  type: 'csv' | 'xls'
   /**
-   *
-   * @param workbook to export
-   * Allow to edit workbook instance before saving
+   * Allows to edit workbook instance before saving.
    */
   editWorkbookBeforeSave?: (workbook: Excel.Workbook) => void | Promise<void>
+
+  type: IMEXFileExtensionTypes
 }
 
 export const exportData = async <D extends {}>(
@@ -49,9 +48,6 @@ export const exportData = async <D extends {}>(
   const workbook = await createWorkbook()
   const worksheet = workbook.addWorksheet(filename)
 
-  /**
-   * Insert data
-   */
   worksheet.columns = columns.map((column) => ({
     header: column.Header + (column.meta?.imex?.required ? '*' : ''),
     key: column.id ?? column.Header,
@@ -60,7 +56,6 @@ export const exportData = async <D extends {}>(
   })) as Excel.Column[]
 
   worksheet.addRows(data)
-
   await options.editWorkbookBeforeSave?.(workbook)
 
   if (options.type === 'xls') {
