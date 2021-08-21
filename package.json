@@ -48,7 +48,7 @@
     "styled-components": ">= 5.3.0"
   },
   "dependencies": {
-    "exceljs": "^4.2.1",
+    "exceljs": "^4.3.0",
     "p-limit": "^3.1.0",
     "papaparse": "^5.3.1",
     "react-dropzone": "^11.3.4",
