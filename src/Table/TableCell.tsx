@@ -6,7 +6,7 @@ export const TableCell: React.FunctionComponent<TableCellProps> = ({
   children,
   ...props
 }) => {
-  const cellRef = React.useRef<HTMLTableDataCellElement>(null)
+  const cellRef = React.useRef<HTMLTableCellElement>(null)
   const [isLargerThanCell, setLargerThanCell] = React.useState(false)
   React.useEffect(() => {
     if (
@@ -35,5 +35,4 @@ export const TableCell: React.FunctionComponent<TableCellProps> = ({
   )
 }
 
-interface TableCellProps
-  extends React.HTMLAttributes<HTMLTableDataCellElement> {}
+interface TableCellProps extends React.HTMLAttributes<HTMLTableCellElement> {}

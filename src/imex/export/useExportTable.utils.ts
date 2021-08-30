@@ -21,9 +21,11 @@ const saveFile = (
 
   filename += `.${type === 'xls' ? 'xlsx' : 'csv'}`
 
-  if (navigator.msSaveBlob) {
+  // @ts-ignore
+  const msSaveBlob = navigator.msSaveBlob
+  if (msSaveBlob) {
     // IE 10+
-    navigator.msSaveBlob(blob, filename)
+    msSaveBlob(blob, filename)
   } else {
     const link = document.createElement('a')
     if (link.download !== undefined) {
