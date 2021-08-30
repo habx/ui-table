@@ -26,6 +26,7 @@ describe('Import/Export (imex)', () => {
         const [downloadFile] = result.current
         return downloadFile('test')
       })
+      // @ts-ignore
       expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
         new Blob(),
         'test.csv'
@@ -44,6 +45,7 @@ describe('Import/Export (imex)', () => {
         const [downloadFile] = result.current
         return downloadFile('test')
       })
+      // @ts-ignore
       expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
         new Blob(),
         'test.xlsx'
