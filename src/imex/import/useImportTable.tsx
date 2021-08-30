@@ -179,7 +179,9 @@ export const useImportTable = <D extends { id?: string | number }>(
                     try {
                       await mergedOptions.upsertRow?.(data)
                     } catch (e) {
-                      mergedOptions.onUpsertRowError?.(e)
+                      if (e instanceof Error) {
+                        mergedOptions.onUpsertRowError?.(e)
+                      }
                     }
                     remainingActions.onActionDone()
                   })
@@ -195,8 +197,10 @@ export const useImportTable = <D extends { id?: string | number }>(
                   parsedData?.filter((row) => row._rowMeta.isIgnored) ?? [],
               })
             } catch (e) {
-              console.error(e) // eslint-disable-line
-              notify(e.toString())
+              if (e instanceof Error) {
+                console.error(e) // eslint-disable-line
+                notify(e.toString())
+              }
               remainingActions.onError()
               onResolve(null)
             }

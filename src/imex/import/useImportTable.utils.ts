@@ -235,7 +235,9 @@ export const parseRawData = async <D extends { id?: string | number }>(
           )
         }
       } catch (e) {
-        cellError = e.message
+        if (e instanceof Error) {
+          cellError = e.message
+        }
       }
 
       /**
