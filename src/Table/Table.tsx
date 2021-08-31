@@ -33,6 +33,8 @@ import { TableDensity } from './TableOptions/TableDensity'
 import { TablePagination } from './TableOptions/TablePagination'
 import { TableRow } from './TableRow'
 
+const DEFAULT_LOAD_MORE = () => {}
+
 export const Table = <D extends {}>({
   onRowClick,
   loading,
@@ -198,7 +200,7 @@ export const Table = <D extends {}>({
             <InfiniteLoader
               isItemLoaded={isItemLoaded}
               itemCount={instance.total ?? currentRows.length}
-              loadMoreItems={instance.loadMore ?? (() => null)}
+              loadMoreItems={instance.loadMore ?? DEFAULT_LOAD_MORE}
             >
               {({ onItemsRendered, ref }) => {
                 return (
