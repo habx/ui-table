@@ -43,7 +43,10 @@ export { TableProps, RowCharacteristics } from './Table/Table.interface'
 export { useDensity } from './plugin/useDensity'
 export { useExpandAll } from './plugin/useExpandAll'
 export { useInfiniteScroll } from './plugin/useInfiniteScroll'
-export { Pagination } from './plugin/useControlledPagination'
+export {
+  Pagination,
+  useControlledPagination,
+} from './plugin/useControlledPagination'
 
 // factories
 export { selectFilterFactory } from './filterFactory/selectFilterFactory'
