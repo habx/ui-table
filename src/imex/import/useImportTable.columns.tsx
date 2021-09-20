@@ -37,7 +37,8 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
     .map((column) => ({
       ...column,
       Footer: footer
-        ? ((({ column: fColumn, rows, data }) => {
+        ? ((({ column: fColumn, rows, data: rawData }) => {
+            const data = [...rawData]
             const accessor = (fColumn as IMEXColumn)
               .accessor as ReactTable.Accessor<D>
             const columnModified = rows.reduce(
