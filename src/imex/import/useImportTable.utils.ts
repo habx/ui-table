@@ -302,6 +302,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
     const groupedParsedData = groupBy(parsedData, options.groupBy)
     for (const rowGroup in groupedParsedData) {
       if (groupedParsedData[rowGroup].some((row) => row._rowMeta.isIgnored)) {
+        // @ts-ignore do not know how to fix this
         groupedParsedData[rowGroup] = groupedParsedData[rowGroup].map(
           (row) => ({
             ...row,
