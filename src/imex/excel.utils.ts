@@ -95,9 +95,14 @@ export const applyValidationRulesAndStyle = <D extends {}>(
     const columnNumber = Number(columnIndex) + 1
     const dataValidation = column.meta?.imex?.dataValidation
     const isIdentifer = !!column.meta?.imex?.identifier
-    if (dataValidation || isIdentifer) {
+    const note = column.meta?.imex?.note
+
+    if (dataValidation || isIdentifer || note) {
       const worksheetColumn = worksheet.getColumn(columnNumber)
       worksheetColumn.eachCell({ includeEmpty: true }, (cell, rowNumber) => {
+        if (rowNumber === 1 && note) {
+          cell.note = note
+        }
         if (rowNumber > 1 && cell) {
           if (dataValidation) {
             cell.dataValidation = dataValidation

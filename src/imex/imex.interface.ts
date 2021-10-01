@@ -71,6 +71,7 @@ export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
       validate?: (value: any, row: any[]) => string | boolean | null
       dataValidation?: Excel.DataValidation
       hidden?: boolean
+      note?: string | Excel.Comment
     }
   }
 >
