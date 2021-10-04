@@ -83,6 +83,7 @@ export const IMEX_COLUMNS = [
     meta: {
       imex: {
         type: 'string' as const,
+        note: 'This is a comment',
       },
     },
   },
