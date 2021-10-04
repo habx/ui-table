@@ -51,7 +51,8 @@ export const useExportTable = <D extends { [key: string]: any } = any>(
 
           return exportOptions.type === 'xls' &&
             valueType === 'number' &&
-            !isNumber(value)
+            !isNumber(value) &&
+            value !== null
             ? Number(value)
             : value
         })
