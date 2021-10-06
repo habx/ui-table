@@ -37,6 +37,7 @@ export const TextFilter: React.FunctionComponent<{
       value={liveValue}
       onChange={handleSetValue}
       placeholder="Rechercher"
+      canReset
     />
   )
 }
