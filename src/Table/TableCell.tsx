@@ -6,21 +6,23 @@ export const TableCell: React.FunctionComponent<TableCellProps> = ({
   children,
   ...props
 }) => {
-  const cellRef = React.useRef<HTMLTableCellElement>(null)
   const [isLargerThanCell, setLargerThanCell] = React.useState(false)
-  React.useEffect(() => {
-    if (
-      ((cellRef.current?.firstChild as HTMLDivElement)?.clientHeight ?? 0) >
-      (cellRef.current?.clientHeight ?? 0)
-    ) {
-      setLargerThanCell(true)
-    }
-  }, [])
+  const cellRefCallback = React.useCallback(
+    (cellRef: HTMLTableCellElement | null) => {
+      if (
+        ((cellRef?.firstChild as HTMLDivElement)?.clientHeight ?? 0) >
+        (cellRef?.clientHeight ?? 0)
+      ) {
+        setLargerThanCell(true)
+      }
+    },
+    []
+  )
 
   return (
     <React.Fragment>
       <TableCellContainer
-        ref={cellRef}
+        ref={cellRefCallback}
         {...props}
         data-large={isLargerThanCell}
       >
