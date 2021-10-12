@@ -1,4 +1,4 @@
-import { get, isNumber } from 'lodash'
+import { get, isFinite } from 'lodash'
 import * as React from 'react'
 
 import { getImexColumns } from '../getImexColumns'
@@ -51,8 +51,8 @@ export const useExportTable = <D extends { [key: string]: any } = any>(
 
           return exportOptions.type === 'xls' &&
             valueType === 'number' &&
-            !isNumber(value) &&
-            value !== null
+            !isFinite(value) &&
+            value != null
             ? Number(value)
             : value
         })
