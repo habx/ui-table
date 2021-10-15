@@ -1,4 +1,5 @@
 import type * as Excel from 'exceljs'
+import { escape, snakeCase, capitalize } from 'lodash'
 
 import { palette } from '@habx/ui-core'
 
@@ -106,6 +107,38 @@ export const applyValidationRulesAndStyle = <D extends {}>(
         if (rowNumber > 1 && cell) {
           if (dataValidation) {
             cell.dataValidation = dataValidation
+            /*
+             * Manage large cell validation
+             * https://github.com/exceljs/exceljs/issues/667
+             */
+            if (
+              dataValidation.type === 'list' &&
+              dataValidation.formulae.some((f) => f.length > 255)
+            ) {
+              const worksheetName = capitalize(
+                snakeCase(escape(`${column.Header}`))
+              )
+              const validationValuesWorksheet = worksheet.workbook.addWorksheet(
+                worksheetName
+              )
+              dataValidation.formulae.forEach((f, listColumnIndex) => {
+                const list: string[] = f.replace(/"/g, '').split(',')
+                list.forEach((listEl, rowIndex) => {
+                  validationValuesWorksheet.getCell(
+                    rowIndex + 1,
+                    listColumnIndex + 1
+                  ).value = listEl
+                })
+                const columnLetter = String.fromCharCode(
+                  'A'.charCodeAt(0) + listColumnIndex
+                )
+                dataValidation.formulae[
+                  listColumnIndex
+                ] = `${worksheetName}!$${columnLetter}$1:$${columnLetter}$${
+                  list.length + 1
+                }`
+              })
+            }
           }
           if (isIdentifer && !!cell.value) {
             cell.protection = {
