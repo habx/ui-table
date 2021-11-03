@@ -72,7 +72,7 @@
     "@types/lodash": "^4.14.176",
     "@types/papaparse": "^5.3.1",
     "@types/react": "^17.0.34",
-    "@types/react-dom": "^17.0.10",
+    "@types/react-dom": "^17.0.11",
     "@types/react-table": "^7.7.7",
     "@types/react-window": "^1.8.5",
     "@types/react-window-infinite-loader": "^1.0.5",
