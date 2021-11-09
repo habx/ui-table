@@ -43,6 +43,7 @@ export const Table = <D extends {}>({
   instance,
   getRowCharacteristics,
   virtualized = false,
+  renderHeaderGroups,
   rowsHeight: rawRowsHeight,
 }: React.PropsWithChildren<TableProps<D>>) => {
   const {
@@ -127,64 +128,65 @@ export const Table = <D extends {}>({
       {loading && <LoadingOverlay />}
       <TableContent {...getTableProps()}>
         <TableHead>
-          {headerGroups.map((headerGroup, headerGroupIndex) => (
-            <TableHeadRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((col, headerCellIndex) => {
-                const column = (col as unknown) as ColumnInstance<D>
+          {renderHeaderGroups?.(headerGroups) ??
+            headerGroups.map((headerGroup, headerGroupIndex) => (
+              <TableHeadRow {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((col, headerCellIndex) => {
+                  const column = (col as unknown) as ColumnInstance<D>
 
-                const headerProps = column.getHeaderProps(
-                  ...(column.getSortByToggleProps
-                    ? [column.getSortByToggleProps()]
-                    : [])
-                )
+                  const headerProps = column.getHeaderProps(
+                    ...(column.getSortByToggleProps
+                      ? [column.getSortByToggleProps()]
+                      : [])
+                  )
 
-                const renderHeader = column.Header && column.render('Header')
-                const isBig =
-                  headerGroups.length > 1 &&
-                  headerGroupIndex < headerGroups.length - 1
+                  const renderHeader = column.Header && column.render('Header')
+                  const isBig =
+                    headerGroups.length > 1 &&
+                    headerGroupIndex < headerGroups.length - 1
 
-                return (
-                  <TableHeadCell
-                    data-big={isBig}
-                    key={`headerCell-${headerCellIndex}`}
-                    size={column.columns?.length ?? 1}
-                  >
-                    {renderHeader && (
-                      <Tooltip
-                        title={renderHeader as string}
-                        disabled={!isString(renderHeader) || isBig}
-                      >
-                        <TableHeaderCellContainer
-                          data-align={column.align ?? 'flex-start'}
+                  return (
+                    <TableHeadCell
+                      data-big={isBig}
+                      key={`headerCell-${headerCellIndex}`}
+                      size={column.columns?.length ?? 1}
+                    >
+                      {renderHeader && (
+                        <Tooltip
+                          title={renderHeader as string}
+                          disabled={!isString(renderHeader) || isBig}
                         >
-                          <TableHeadCellContent
-                            variation="lowContrast"
-                            {...headerProps}
+                          <TableHeaderCellContainer
+                            data-align={column.align ?? 'flex-start'}
                           >
-                            {renderHeader}
-                          </TableHeadCellContent>
-                          {column.isSorted && (
-                            <Icon
-                              icon={
-                                column.isSortedDesc
-                                  ? 'arrow-south'
-                                  : 'arrow-north'
-                              }
-                            />
-                          )}
-                        </TableHeaderCellContainer>
-                      </Tooltip>
-                    )}
-                    {column.canFilter ? (
-                      <TableHeaderCellSort>
-                        {column.render('Filter')}
-                      </TableHeaderCellSort>
-                    ) : null}
-                  </TableHeadCell>
-                )
-              })}
-            </TableHeadRow>
-          ))}
+                            <TableHeadCellContent
+                              variation="lowContrast"
+                              {...headerProps}
+                            >
+                              {renderHeader}
+                            </TableHeadCellContent>
+                            {column.isSorted && (
+                              <Icon
+                                icon={
+                                  column.isSortedDesc
+                                    ? 'arrow-south'
+                                    : 'arrow-north'
+                                }
+                              />
+                            )}
+                          </TableHeaderCellContainer>
+                        </Tooltip>
+                      )}
+                      {column.canFilter ? (
+                        <TableHeaderCellSort>
+                          {column.render('Filter')}
+                        </TableHeaderCellSort>
+                      ) : null}
+                    </TableHeadCell>
+                  )
+                })}
+              </TableHeadRow>
+            ))}
         </TableHead>
         {!loading && NoDataComponent && rows.length === 0 && (
           <NoDataContainer>
