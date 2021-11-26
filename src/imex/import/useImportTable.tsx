@@ -181,6 +181,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                     } catch (e) {
                       if (e instanceof Error) {
                         mergedOptions.onUpsertRowError?.(e)
+                        console.error(e) // eslint-disable-line
                       }
                     }
                     remainingActions.onActionDone()
