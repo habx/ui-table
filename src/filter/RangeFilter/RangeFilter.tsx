@@ -47,7 +47,6 @@ const RangeFilterPanel = styled.div`
 export const RangeFilter: React.FunctionComponent<RangeFilterProps> = ({
   column,
   tooltipFormatter,
-  tooltipSuffix = '',
   ...rest
 }) => {
   const value: Range | null = column.filterValue
@@ -80,7 +79,7 @@ export const RangeFilter: React.FunctionComponent<RangeFilterProps> = ({
       return '?'
     }
 
-    const raw = `${tooltipValue}${tooltipSuffix}`
+    const raw = `${tooltipValue}`
 
     return isFunction(tooltipFormatter)
       ? tooltipFormatter(tooltipValue, raw)
@@ -106,7 +105,6 @@ export const RangeFilter: React.FunctionComponent<RangeFilterProps> = ({
               onChange={column.setFilter}
               range
               tooltipFormatter={tooltipFormatter}
-              tooltipSuffix={tooltipSuffix}
               {...rest}
             />
           </RangeFilterPanel>
