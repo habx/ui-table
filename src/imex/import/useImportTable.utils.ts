@@ -57,25 +57,22 @@ const isNotEmptyCell = (cell: any) => cell !== '' && cell != null
 export const parseCell = (
   rawCell: any,
   type: RowValueTypes,
-  options: { format: (value: any) => any }
+  options: { format: (value: any) => any; ignoreEmpty: boolean }
 ): string | number | string[] | number[] | undefined => {
+  if (options.ignoreEmpty && !isNotEmptyCell(rawCell)) {
+    return undefined
+  }
   switch (type) {
     case 'number':
-      if (!isNotEmptyCell(rawCell)) {
-        return undefined
-      }
       if (typeof rawCell === 'number') {
         return Number(options.format(rawCell))
       }
-      const newCellValue = Number(options.format(rawCell.replace(',', '.')))
+      const newCellValue = Number(options.format(rawCell?.replace(',', '.')))
       if (Number.isNaN(newCellValue)) {
         throw new Error(ParsingErrors[ParseCellError.NOT_A_NUMBER])
       }
       return newCellValue
     case 'number[]':
-      if (!isNotEmptyCell(rawCell)) {
-        return []
-      }
       let formattedNumberArrayCell = options.format(rawCell)
       if (!Array.isArray(formattedNumberArrayCell)) {
         if (typeof formattedNumberArrayCell !== 'string') {
@@ -94,9 +91,6 @@ export const parseCell = (
         })
 
     case 'string[]':
-      if (!isNotEmptyCell(rawCell)) {
-        return []
-      }
       let formattedStringArrayCell = options.format(rawCell)
       if (!Array.isArray(formattedStringArrayCell)) {
         if (typeof formattedStringArrayCell !== 'string') {
@@ -106,9 +100,6 @@ export const parseCell = (
       }
       return formattedStringArrayCell.filter(isNotEmptyCell)
     default:
-      if (!isNotEmptyCell(rawCell)) {
-        return undefined
-      }
       return options.format(rawCell)
   }
 }
@@ -197,25 +188,23 @@ export const parseRawData = async <D extends { id?: string | number }>(
       const format = (value: any) =>
         orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? value
 
-      let newCellValue:
-        | string
-        | number
-        | string[]
-        | number[]
-        | undefined = rawCell
+      let newCellValue: string | number | string[] | number[] | undefined =
+        rawCell
+
+      const ignoreEmpty = orderedColumns[index]?.meta?.imex?.ignoreEmpty ?? true
 
       try {
         newCellValue = parseCell(
           rawCell,
           orderedColumns[index]!.meta!.imex!.type as RowValueTypes,
-          { format }
+          { format, ignoreEmpty }
         )
 
         // If parsed value is null, throw if required and ignore if not.
         if (newCellValue == null) {
           if (orderedColumns[index]?.meta?.imex?.required) {
             throw new Error(ParsingErrors[ParseCellError.REQUIRED])
-          } else {
+          } else if (ignoreEmpty) {
             continue
           }
         }
