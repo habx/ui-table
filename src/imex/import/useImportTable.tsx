@@ -46,7 +46,7 @@ const DROPZONE_IGNORED_PROPS = [
 ]
 
 export const useImportTable = <D extends { id?: string | number }>(
-  params: Partial<UseImportTableParams<D>>
+  params: UseImportTableParams<D>
 ) => {
   // Put params in ref to avoid useless changes of `onFiles` function
   const paramsRef = React.useRef(params)
@@ -75,9 +75,8 @@ export const useImportTable = <D extends { id?: string | number }>(
         ImportedRow<D>
       >[]
       const imexColumns = getImexColumns<ImportedRow<D>>(initialColumns)
-      const diffColumns = getCompareColumnsFromImexColumns<ImportedRow<D>>(
-        imexColumns
-      )
+      const diffColumns =
+        getCompareColumnsFromImexColumns<ImportedRow<D>>(imexColumns)
 
       const plugins = mergedOptions.groupBy
         ? [useGroupBy, useExpanded, useExpandAll]
@@ -147,10 +146,8 @@ export const useImportTable = <D extends { id?: string | number }>(
             ...plugins
           )
 
-          const [
-            remainingActionsState,
-            remainingActions,
-          ] = useRemainingActionsTime()
+          const [remainingActionsState, remainingActions] =
+            useRemainingActionsTime()
 
           /**
            * Prevent leaving while uploading
@@ -164,10 +161,12 @@ export const useImportTable = <D extends { id?: string | number }>(
               const cleanData =
                 parsedData
                   ?.filter((row) => !row._rowMeta.isIgnored) // remove ignored rows
-                  .map((row) => (omit(row, ['_rowMeta']) as unknown) as D) ?? [] // remove local meta
+                  .map((row) => omit(row, ['_rowMeta']) as unknown as D) ?? [] // remove local meta
 
               const dataToUpsert = mergedOptions.groupBy
-                ? Object.values(lodashGroupBy(cleanData, mergedOptions.groupBy))
+                ? (Object.values(
+                    lodashGroupBy(cleanData, mergedOptions.groupBy)
+                  ) as D[][])
                 : cleanData
 
               if (mergedOptions.upsertRow) {
@@ -177,6 +176,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 const upsertRowFunctions = dataToUpsert.map((data: D | D[]) =>
                   limit(async () => {
                     try {
+                      // @ts-ignore
                       await mergedOptions.upsertRow?.(data)
                     } catch (e) {
                       if (e instanceof Error) {
@@ -190,6 +190,7 @@ export const useImportTable = <D extends { id?: string | number }>(
                 await Promise.all(upsertRowFunctions)
               }
 
+              // @ts-ignore
               await mergedOptions.onFinish?.(dataToUpsert)
 
               onResolve({
@@ -348,10 +349,13 @@ export const useImportTable = <D extends { id?: string | number }>(
     onDropRejected,
   })
 
-  const inputProps = React.useMemo(() => dropzone.getInputProps(), [
-    // eslint-disable-line react-hooks/exhaustive-deps
-    dropzone.getInputProps,
-  ])
+  const inputProps = React.useMemo(
+    () => dropzone.getInputProps(),
+    [
+      // eslint-disable-line react-hooks/exhaustive-deps
+      dropzone.getInputProps,
+    ]
+  )
 
   const dropzoneProps = React.useMemo(
     () =>

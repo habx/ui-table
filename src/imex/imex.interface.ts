@@ -12,15 +12,12 @@ export interface ImportedRowMeta<D extends {}> {
 
 export type ImportedRow<D extends {}> = D & { _rowMeta: ImportedRowMeta<D> }
 
-export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
+export type UseImportTableOptions<D> = {
   columns: IMEXColumn<D>[]
-  upsertRow?: (row: D | D[]) => any
   onUpsertRowError?: (error: Error) => void
   getOriginalData: () => D[] | Promise<D[]>
-  onFinish?: (rows: D[] | D[][]) => void | Promise<any>
   readFile?: (file: File) => Promise<any[]>
   filterRows?: (row: ImportedRow<D>) => boolean
-  groupBy?: string
   confirmLightBoxTitle?: string
   /**
    * Use this predicate instead of simple comparison with identifier column
@@ -33,9 +30,17 @@ export interface UseImportTableOptions<D extends { [key: string]: any } = any> {
    * @default false
    */
   skipIgnoredRowsExport?: boolean
+} & (
+  | (_UseImportTableOptions<D> & { groupBy?: never })
+  | (_UseImportTableOptions<D[]> & { groupBy: string })
+)
+
+export interface _UseImportTableOptions<D> {
+  upsertRow?: (row: D) => any
+  onFinish?: (rows: D[]) => void | Promise<any>
 }
 
-export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
+export type UseImportTableParams<D> = {
   disabled?: boolean
   accept?: string[]
   /**
@@ -54,7 +59,7 @@ export interface UseImportTableParams<D> extends UseImportTableOptions<D> {
    * Use Infinity to call upsertRow for all rows at the same time.
    */
   concurrency?: number
-}
+} & UseImportTableOptions<D>
 
 export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
 

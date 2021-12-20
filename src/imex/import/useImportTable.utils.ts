@@ -115,7 +115,7 @@ interface ParseDataParams<D> {
 export const parseRawData = async <D extends { id?: string | number }>(
   params: ParseDataParams<D>,
   options: Pick<
-    UseImportTableOptions,
+    UseImportTableOptions<D>,
     'findPrevValPredicate' | 'filterRows' | 'groupBy'
   >
 ) => {
