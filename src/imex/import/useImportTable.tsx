@@ -46,7 +46,7 @@ const DROPZONE_IGNORED_PROPS = [
 ]
 
 export const useImportTable = <D extends { id?: string | number }>(
-  params: Partial<UseImportTableParams<D>>
+  params: UseImportTableParams<D>
 ) => {
   // Put params in ref to avoid useless changes of `onFiles` function
   const paramsRef = React.useRef(params)

@@ -31,7 +31,7 @@ export type UseImportTableOptions<D> = {
    */
   skipIgnoredRowsExport?: boolean
 } & (
-  | _UseImportTableOptions<D>
+  | (_UseImportTableOptions<D> & { groupBy?: never })
   | (_UseImportTableOptions<D[]> & { groupBy: string })
 )
 

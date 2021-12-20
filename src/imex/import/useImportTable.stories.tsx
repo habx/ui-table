@@ -36,7 +36,6 @@ export const BasicExample = () => {
   const importTable = useImportTable({
     columns: IMEX_COLUMNS,
     upsertRow: upsertRow,
-    //groupBy: '',
     getOriginalData: () => FAKE_DATA,
     confirmLightBoxTitle: 'Import',
   })
