@@ -52,10 +52,8 @@ export const useImportTable = <D extends { id?: string | number }>(
   paramsRef.current = params
 
   const onFiles = React.useCallback(async (files: File[]) => {
-    const mergedOptions = {
-      ...paramsRef.current,
-    } as UseImportTableParams<D>
-    validateOptions<D>(mergedOptions)
+    const options = paramsRef.current
+    validateOptions<D>(options)
 
     /**
      * File
@@ -68,38 +66,38 @@ export const useImportTable = <D extends { id?: string | number }>(
     /**
      * Table params
      */
-    const initialColumns = mergedOptions.columns as IMEXColumn<ImportedRow<D>>[]
+    const initialColumns = options.columns as IMEXColumn<ImportedRow<D>>[]
     const imexColumns = getImexColumns<ImportedRow<D>>(initialColumns)
     const diffColumns =
       getCompareColumnsFromImexColumns<ImportedRow<D>>(imexColumns)
 
-    const plugins = mergedOptions.groupBy
+    const plugins = options.groupBy
       ? [useGroupBy, useExpanded, useExpandAll]
       : []
 
     const initialState: Partial<TableState<ImportedRow<D>>> = {
-      groupBy: mergedOptions.groupBy ? [mergedOptions.groupBy] : [],
+      groupBy: options.groupBy ? [options.groupBy] : [],
     }
 
     const parseFilePromise: Promise<ImportedRow<D>[]> = new Promise(
       async (resolve, reject) => {
         try {
           let rawData
-          if (mergedOptions.readFile) {
-            rawData = await mergedOptions.readFile(file)
+          if (options.readFile) {
+            rawData = await options.readFile(file)
           } else if (file.type.includes('text/')) {
             rawData = await parseCsvFileData(file)
           } else {
             rawData = await parseExcelFileData(file)
           }
 
-          const originalData = mergedOptions.getOriginalData
-            ? await mergedOptions.getOriginalData()
+          const originalData = options.getOriginalData
+            ? await options.getOriginalData()
             : []
 
           const parsedData = await parseRawData<D>(
             { data: rawData, originalData, columns: imexColumns },
-            mergedOptions
+            options
           )
           resolve(parsedData)
         } catch (e) {
@@ -151,20 +149,20 @@ export const useImportTable = <D extends { id?: string | number }>(
 
         const handleConfirm = async () => {
           try {
-            const concurrency = mergedOptions.concurrency ?? 1
+            const concurrency = options.concurrency ?? 1
 
             const cleanData =
               parsedData
                 ?.filter((row) => !row._rowMeta.isIgnored) // remove ignored rows
                 .map((row) => omit(row, ['_rowMeta']) as unknown as D) ?? [] // remove local meta
 
-            const dataToUpsert = mergedOptions.groupBy
+            const dataToUpsert = options.groupBy
               ? (Object.values(
-                  lodashGroupBy(cleanData, mergedOptions.groupBy)
+                  lodashGroupBy(cleanData, options.groupBy)
                 ) as D[][])
               : cleanData
 
-            if (mergedOptions.upsertRow) {
+            if (options.upsertRow) {
               remainingActions.initLoading()
               const limit = pLimit(concurrency)
               remainingActions.setActionsCount(dataToUpsert.length)
@@ -172,10 +170,10 @@ export const useImportTable = <D extends { id?: string | number }>(
                 limit(async () => {
                   try {
                     // @ts-ignore
-                    await mergedOptions.upsertRow?.(data)
+                    await options.upsertRow?.(data)
                   } catch (e) {
                     if (e instanceof Error) {
-                      mergedOptions.onUpsertRowError?.(e)
+                      options.onUpsertRowError?.(e)
                         console.error(e) // eslint-disable-line
                     }
                   }
@@ -186,7 +184,7 @@ export const useImportTable = <D extends { id?: string | number }>(
             }
 
             // @ts-ignore
-            await mergedOptions.onFinish?.(dataToUpsert)
+            await options.onFinish?.(dataToUpsert)
 
             onResolve({
               message: `Import terminé\n${dataToUpsert.length} ligne(s) importée(s)`,
@@ -217,11 +215,9 @@ export const useImportTable = <D extends { id?: string | number }>(
 
         return (
           <React.Fragment>
-            {mergedOptions.confirmLightBoxTitle && (
+            {options.confirmLightBoxTitle && (
               <HeaderBar>
-                <Title type="regular">
-                  {mergedOptions.confirmLightBoxTitle}
-                </Title>
+                <Title type="regular">{options.confirmLightBoxTitle}</Title>
               </HeaderBar>
             )}
             {remainingActionsState.loading && (
@@ -260,10 +256,7 @@ export const useImportTable = <D extends { id?: string | number }>(
     /**
      * Skipped rows export
      */
-    if (
-      !mergedOptions.skipIgnoredRowsExport &&
-      userInputs?.ignoredRows.length
-    ) {
+    if (!options.skipIgnoredRowsExport && userInputs?.ignoredRows.length) {
       const [errorFileName] = file.name.split('.')
       const errorExportFileName = `${errorFileName}_erreurs`
       const ignoredRowsColumns = getCompareColumnsFromImexColumns<
