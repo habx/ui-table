@@ -4,12 +4,6 @@ export { useTable } from './useTable'
 export { Table, TablePagination } from './Table'
 
 /*
- * Filter methods
- */
-export { booleanFilter } from './filterMethod/booleanFilter'
-export { arrayFilter } from './filterMethod/arrayFilter'
-
-/*
  * Filter components
  */
 export { BooleanFilter } from './filter/BooleanFilter'
