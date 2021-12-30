@@ -6,6 +6,7 @@ import { Tooltip } from '@habx/ui-core'
 
 import { CellProps, Column, FooterProps } from '../../types/Table'
 import { IMEXColumn, ImportedRow } from '../imex.interface'
+import { getPath } from '../imex.utils'
 
 import { IconIndicator } from './DataIndicators'
 import {
@@ -80,13 +81,13 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
           return <Cell {...props} />
         }
 
-        const cellPrevVal = get(rowMeta?.prevVal, column.accessor as string)
+        const cellPrevVal = get(rowMeta?.prevVal, getPath(column))
 
         const CellContainer: React.FunctionComponent = ({ children }) => {
           if (!Object.values(rowMeta?.errors ?? {}).length) {
             return <React.Fragment>{children}</React.Fragment>
           }
-          const error = get(rowMeta!.errors, column.accessor as string)
+          const error = get(rowMeta!.errors, getPath(column))
 
           return (
             <Tooltip small title={`${error}`} disabled={!error}>
