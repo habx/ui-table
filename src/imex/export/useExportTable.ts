@@ -5,7 +5,7 @@ import { getImexColumns } from '../getImexColumns'
 import {
   IMEXColumn,
   IMEXFileExtensionTypes,
-  RowValueTypes,
+  IMEXColumnType,
 } from '../imex.interface'
 
 import { exportData, ExportDataOptions } from './useExportTable.utils'
@@ -20,7 +20,10 @@ export interface UseExportTableParams<D extends object>
   type?: IMEXFileExtensionTypes
 }
 
-const ARRAY_TYPES = new Set<RowValueTypes>(['string[]', 'number[]'])
+const ARRAY_TYPES = new Set<IMEXColumnType>([
+  IMEXColumnType['string[]'],
+  IMEXColumnType['number[]'],
+])
 
 export const useExportTable = <D extends object = any>() => {
   const downloadTableData = React.useCallback(
@@ -42,7 +45,7 @@ export const useExportTable = <D extends object = any>() => {
           }
 
           return type === 'xls' &&
-            valueType === 'number' &&
+            valueType === IMEXColumnType.number &&
             !isFinite(value) &&
             value != null
             ? Number(value)

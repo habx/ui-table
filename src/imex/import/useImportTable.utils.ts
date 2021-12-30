@@ -12,7 +12,7 @@ import {
   IMEXColumn,
   ImportedRow,
   ImportedRowMeta,
-  RowValueTypes,
+  IMEXColumnType,
   UseImportTableOptions,
   UseImportTableParams,
 } from '../imex.interface'
@@ -56,14 +56,14 @@ const isNotEmptyCell = (cell: any) => cell !== '' && cell != null
 
 export const parseCell = (
   rawCell: any,
-  type: RowValueTypes,
+  type: IMEXColumnType,
   options: { parse: (value: any) => any; ignoreEmpty: boolean }
 ): string | number | string[] | number[] | undefined => {
   if (options.ignoreEmpty && !isNotEmptyCell(rawCell)) {
     return undefined
   }
   switch (type) {
-    case 'number':
+    case IMEXColumnType.number:
       if (typeof rawCell === 'number') {
         return Number(options.parse(rawCell))
       }
@@ -72,7 +72,7 @@ export const parseCell = (
         throw new Error(ParsingErrors[ParseCellError.NOT_A_NUMBER])
       }
       return newCellValue
-    case 'number[]':
+    case IMEXColumnType['number[]']:
       let parsedNumberArrayCell = options.parse(rawCell)
       if (!Array.isArray(parsedNumberArrayCell)) {
         if (typeof parsedNumberArrayCell !== 'string') {
@@ -90,7 +90,7 @@ export const parseCell = (
           return transformedValue
         })
 
-    case 'string[]':
+    case IMEXColumnType['string[]']:
       let parsedStringArrayCell = options.parse(rawCell)
       if (!Array.isArray(parsedStringArrayCell)) {
         if (typeof parsedStringArrayCell !== 'string') {
@@ -196,7 +196,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
       try {
         newCellValue = parseCell(
           rawCell,
-          orderedColumns[index]!.imex!.type as RowValueTypes,
+          orderedColumns[index]!.imex!.type as IMEXColumnType,
           { parse, ignoreEmpty }
         )
 

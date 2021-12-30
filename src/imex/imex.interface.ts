@@ -50,7 +50,12 @@ export type UseImportTableParams<D extends object> = {
   concurrency?: number
 } & UseImportTableOptions<D>
 
-export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
+export enum IMEXColumnType {
+  'string',
+  'number',
+  'number[]',
+  'string[]',
+}
 
 export interface IMEXOptions {
   /** path passed to lodash get & set function to access & define data **/
@@ -60,7 +65,8 @@ export interface IMEXOptions {
   /** identify a uniq row **/
   identifier?: boolean
   required?: boolean
-  type?: RowValueTypes
+  /** @default IMEXColumnType.string **/
+  type?: IMEXColumnType
   format?: (value: any, row: any[]) => any
   parse?: (value: any, row: any[]) => any
   width?: number

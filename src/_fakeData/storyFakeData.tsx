@@ -74,7 +74,6 @@ export const IMEX_COLUMNS = [
       path: 'username',
       header: 'Username',
       identifier: true,
-      type: 'string' as const,
     },
   },
   {
@@ -83,7 +82,6 @@ export const IMEX_COLUMNS = [
     imex: {
       path: 'name',
       header: 'Name',
-      type: 'string' as const,
       note: 'This is a comment',
     },
   },
@@ -93,7 +91,6 @@ export const IMEX_COLUMNS = [
     imex: {
       path: 'email',
       header: 'Email',
-      type: 'string' as const,
     },
   },
   {
@@ -102,7 +99,6 @@ export const IMEX_COLUMNS = [
     imex: {
       path: 'address.city',
       header: 'City',
-      type: 'string' as const,
     },
   },
 ] as IMEXColumn<Faker.Card & { id: number }>[]
