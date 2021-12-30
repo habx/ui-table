@@ -266,11 +266,7 @@ export const useImportTable = <D extends { id?: string | number }>(
         fullscreen: true,
         spacing: 'regular',
         Component: () => {
-          const [handleExport] = useExportTable({
-            columns: initialColumns,
-            data: userInputs.ignoredRows,
-            type: fileType,
-          })
+          const [handleExport] = useExportTable()
           const tableInstance = useTable<ImportedRow<D>>(
             {
               data: userInputs.ignoredRows,
@@ -281,7 +277,11 @@ export const useImportTable = <D extends { id?: string | number }>(
           )
 
           const handleDownloadClick = () => {
-            handleExport(errorExportFileName)
+            handleExport(errorExportFileName, {
+              columns: initialColumns,
+              data: userInputs.ignoredRows,
+              type: fileType,
+            })
             onResolve(true)
           }
 

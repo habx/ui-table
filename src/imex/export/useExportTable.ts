@@ -10,30 +10,22 @@ import {
 
 import { exportData, ExportDataOptions } from './useExportTable.utils'
 
-export interface UseExportTableParams<D extends { [key: string]: any } = any>
+export interface UseExportTableParams<D extends object = any>
   extends Omit<ExportDataOptions, 'type'> {
-  data?: D[]
+  data: D[]
   columns: IMEXColumn<D>[]
+  /**
+   * @default 'xls'
+   */
   type?: IMEXFileExtensionTypes
 }
 
 const ARRAY_TYPES = new Set<RowValueTypes>(['string[]', 'number[]'])
 
-export const useExportTable = <D extends { [key: string]: any } = any>(
-  params: UseExportTableParams<D>
-) => {
-  // Put params in ref to avoid useless changes of `onFiles` function
-  const paramsRef = React.useRef(params)
-  paramsRef.current = params
-
+export const useExportTable = <D extends object>() => {
   const downloadTableData = React.useCallback(
-    (title: string, options?: Partial<UseExportTableParams<D>>) => {
-      const { data, columns, ...exportOptions } = {
-        data: [],
-        type: 'xls',
-        ...paramsRef.current,
-        ...options,
-      } as const
+    (title: string, options: UseExportTableParams<D>) => {
+      const { data = [], columns, type = 'xls' } = options
 
       const imexColumns = getImexColumns(columns)
       const imexData = data.map((row) =>
@@ -49,7 +41,7 @@ export const useExportTable = <D extends { [key: string]: any } = any>(
             value = value.join(',')
           }
 
-          return exportOptions.type === 'xls' &&
+          return type === 'xls' &&
             valueType === 'number' &&
             !isFinite(value) &&
             value != null
@@ -58,7 +50,7 @@ export const useExportTable = <D extends { [key: string]: any } = any>(
         })
       )
 
-      return exportData(title, imexColumns, imexData, exportOptions)
+      return exportData(title, imexColumns, imexData, { ...options, type })
     },
     []
   )

@@ -59,13 +59,12 @@ export type FooterProps<D extends object> = TableInstance<D> & {
 
 export type ColumnEnabledCondition = 'always' | 'never' | 'imex-only'
 
-type CustomColumnFields<Meta = {}> = {
+type CustomColumnFields = {
   align?: 'left' | 'right' | 'center'
   enabled?: ColumnEnabledCondition | null
-  meta?: Meta & { [key: string]: any }
 }
 
-type ColumnCustom<D extends object, Meta = {}> = Omit<
+type ColumnCustom<D extends object> = Omit<
   ReactTable.UseFiltersColumnOptions<D>,
   'Filter'
 > &
@@ -73,20 +72,20 @@ type ColumnCustom<D extends object, Meta = {}> = Omit<
   ReactTable.UseGroupByColumnOptions<D> &
   ReactTable.UseGlobalFiltersColumnOptions<D> &
   ReactTable.UseSortByColumnOptions<D> &
-  CustomColumnFields<Meta> & {
+  CustomColumnFields & {
     HeaderIcon?: React.ReactNode
     Filter?: ReactTable.Renderer<FilterProps<D>>
     Cell?: ReactTable.Renderer<CellProps<D>>
     Header?: ReactTable.Renderer<HeaderProps<D>>
     Footer?: ReactTable.Renderer<FooterProps<D>>
-    columns?: Column<D, Meta>[]
+    columns?: Column<D>[]
     headerClassName?: string
   }
 
-export type Column<D extends object = any, Meta = {}> =
-  | (Omit<ColumnGroup<D>, 'columns'> & ColumnCustom<D, Meta>)
-  | (ColumnWithLooseAccessor<D> & ColumnCustom<D, Meta>)
-  | (ColumnWithStrictAccessor<D> & ColumnCustom<D, Meta>)
+export type Column<D extends object = any> =
+  | (Omit<ColumnGroup<D>, 'columns'> & ColumnCustom<D>)
+  | (ColumnWithLooseAccessor<D> & ColumnCustom<D>)
+  | (ColumnWithStrictAccessor<D> & ColumnCustom<D>)
 
 export interface TableOptions<D extends object = {}>
   extends Omit<
