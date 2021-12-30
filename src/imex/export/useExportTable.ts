@@ -7,6 +7,7 @@ import {
   IMEXFileExtensionTypes,
   IMEXColumnType,
 } from '../imex.interface'
+import { getPath } from '../imex.utils'
 
 import { exportData, ExportDataOptions } from './useExportTable.utils'
 
@@ -36,11 +37,8 @@ export const useExportTable = <D extends object = any>() => {
           const imexOptions = column.imex
           const valueType = imexOptions?.type
 
-          const path = (
-            typeof column.accessor === 'string'
-              ? column.accessor
-              : imexOptions!.path
-          ) as string
+          const path = getPath(column)
+
           let value = get(row, path)
 
           if (imexOptions?.format) {

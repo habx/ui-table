@@ -27,6 +27,7 @@ interface GetCompareColumnsFromImexColumnsOptions {
    */
   statusColumn?: boolean
 }
+
 export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
   columns: IMEXColumn<D>[],
   options?: GetCompareColumnsFromImexColumnsOptions

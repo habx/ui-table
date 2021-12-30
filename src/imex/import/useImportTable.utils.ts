@@ -16,6 +16,7 @@ import {
   UseImportTableOptions,
   UseImportTableParams,
 } from '../imex.interface'
+import { getHeader, getPath } from '../imex.utils'
 
 export enum ParseCellError {
   NOT_A_NUMBER,
@@ -136,7 +137,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
   }
   const requiredColumnHeaders = params.columns
     .filter((column) => column?.imex?.required)
-    .map((column) => cleanHeader(column.Header as string))
+    .map((column) => cleanHeader(getHeader(column)))
 
   const missingRequiredColumns = difference(
     requiredColumnHeaders as string[],
@@ -149,7 +150,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
   const ignoredColumns = []
   const orderedColumns = headers.map((header) => {
     const column = params.columns.find((imexColumn) => {
-      const searchedHeader = cleanHeader(imexColumn.Header as string)
+      const searchedHeader = cleanHeader(getHeader(imexColumn))
       const cleanedHeader = requiredColumnHeaders.includes(searchedHeader)
         ? header.replace(/\*$/, '')
         : header
@@ -186,11 +187,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
         continue
       }
 
-      const columnDataPath = (
-        typeof currentColumn.Header === 'string'
-          ? currentColumn.Header
-          : currentColumn.imex?.path
-      ) as string
+      const columnDataPath = getPath(currentColumn)
 
       let cellError: string | null = null
 

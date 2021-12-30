@@ -6,6 +6,7 @@ import {
 } from '../excel.utils'
 import { createWorkbook } from '../exceljs'
 import { IMEXColumn, IMEXFileExtensionTypes } from '../imex.interface'
+import { getHeader } from '../imex.utils'
 
 const saveFile = (
   type: IMEXFileExtensionTypes,
@@ -63,7 +64,7 @@ export const exportData = async <D extends {}>(
   const worksheet = workbook.addWorksheet(filename)
 
   worksheet.columns = columns.map((column) => ({
-    header: column.imex?.header + (column.imex?.required ? '*' : ''),
+    header: `${getHeader(column)} ${column.imex?.required ? '*' : ''}`,
     key: column.id ?? column.imex,
     width: column.imex?.width,
     hidden: column.imex?.hidden,

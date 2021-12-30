@@ -5,6 +5,7 @@ import { palette } from '@habx/ui-core'
 
 import { createWorkbook, getCellValueTypes } from './exceljs'
 import { IMEXColumn } from './imex.interface'
+import { getHeader } from './imex.utils'
 
 export const parseExcelFileData = async (file: File): Promise<any[][]> => {
   const CellValueType = await getCellValueTypes()
@@ -116,7 +117,7 @@ export const applyValidationRulesAndStyle = <D extends {}>(
               dataValidation.formulae.some((f) => f.length > 255)
             ) {
               const worksheetName = capitalize(
-                snakeCase(escape(`${column.Header}`))
+                snakeCase(escape(getHeader(column)))
               )
               const validationValuesWorksheet =
                 worksheet.workbook.addWorksheet(worksheetName)
