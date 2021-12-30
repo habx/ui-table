@@ -112,6 +112,7 @@ interface ParseDataParams<D> {
   originalData: D[]
   columns: IMEXColumn<ImportedRow<D>>[]
 }
+
 export const parseRawData = async <D extends { id?: string | number }>(
   params: ParseDataParams<D>,
   options: Pick<
@@ -126,8 +127,9 @@ export const parseRawData = async <D extends { id?: string | number }>(
   if (!headers) {
     throw new Error('Missing headers row')
   }
+
   const identifierColumn = params.columns.find(
-    (column) => column?.imex?.identifier
+    (column) => column.imex?.identifier
   )
   if (!identifierColumn) {
     throw new Error('Missing identifier column')
@@ -179,37 +181,44 @@ export const parseRawData = async <D extends { id?: string | number }>(
     const rawRowValues = Object.values(row)
     for (let index = 0; index < rawRowValues.length; index++) {
       const rawCell = rawRowValues[index]
-      if (!orderedColumns[index]) {
+      const currentColumn = orderedColumns[index]
+      if (!currentColumn) {
         continue
       }
+
+      const columnDataPath = (
+        typeof currentColumn.Header === 'string'
+          ? currentColumn.Header
+          : currentColumn.imex?.path
+      ) as string
 
       let cellError: string | null = null
 
       const parse = (value: any) =>
-        orderedColumns[index]?.imex?.parse?.(value, row) ?? value
+        currentColumn.imex?.parse?.(value, row) ?? value
 
       let newCellValue: string | number | string[] | number[] | undefined =
         rawCell
 
-      const ignoreEmpty = orderedColumns[index]?.imex?.ignoreEmpty ?? true
+      const ignoreEmpty = currentColumn.imex?.ignoreEmpty ?? true
 
       try {
         newCellValue = parseCell(
           rawCell,
-          orderedColumns[index]!.imex!.type as IMEXColumnType,
+          currentColumn.imex?.type as IMEXColumnType,
           { parse, ignoreEmpty }
         )
 
         // If parsed value is null, throw if required and ignore if not.
         if (newCellValue == null) {
-          if (orderedColumns[index]?.imex?.required) {
+          if (currentColumn.imex?.required) {
             throw new Error(ParsingErrors[ParseCellError.REQUIRED])
           } else if (ignoreEmpty) {
             continue
           }
         }
 
-        const validate = orderedColumns[index]?.imex?.validate ?? (() => true)
+        const validate = currentColumn.imex?.validate ?? (() => true)
         const validateResponse = validate(newCellValue, row)
         const isValid =
           typeof validateResponse === 'string'
@@ -233,14 +242,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
        */
       if (cellError) {
         importedRowMeta.isIgnored = true
-        set(
-          importedRowMeta.errors,
-          orderedColumns[index]!.imex!.path,
-          cellError
-        )
+        set(importedRowMeta.errors, columnDataPath, cellError)
       }
 
-      set(importedRowValue, orderedColumns[index]!.imex!.path, newCellValue)
+      set(importedRowValue, columnDataPath, newCellValue)
     }
 
     /**

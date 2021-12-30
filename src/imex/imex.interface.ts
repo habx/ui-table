@@ -58,10 +58,18 @@ export enum IMEXColumnType {
 }
 
 export interface IMEXOptions {
-  /** path passed to lodash get & set function to access & define data **/
-  path: string
-  /** header name of the column in the sheet file **/
-  header: string
+  /**
+   * path passed to lodash get & set function to access & define data
+   * fallback to column accessor if provided as string
+   *
+   */
+  path?: string
+  /**
+   * header name of the column in the sheet file
+   * fallback to column Header if provided as string
+   *
+   */
+  header?: string
   /** identify a uniq row **/
   identifier?: boolean
   required?: boolean
@@ -77,8 +85,28 @@ export interface IMEXOptions {
   ignoreEmpty?: boolean
 }
 
-export type IMEXColumn<D extends object = any> = Column<D> & {
+export type IMEXColumn<D extends object = any> = Omit<
+  Column<D>,
+  'Header' | 'accessor'
+> & {
   imex?: IMEXOptions
-}
+} & (
+    | {
+        Header: string
+      }
+    | {
+        Header?: Exclude<Column<D>['Header'], 'string'>
+        imex?: { header: NonNullable<IMEXOptions['header']> }
+      }
+  ) &
+  (
+    | {
+        accessor: string
+      }
+    | {
+        accessor?: Exclude<Column<D>['accessor'], 'string'>
+        imex?: { path: NonNullable<IMEXOptions['path']> }
+      }
+  )
 
 export type IMEXFileExtensionTypes = 'csv' | 'xls'

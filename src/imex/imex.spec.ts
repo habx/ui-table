@@ -53,10 +53,10 @@ describe('Import/Export (imex)', () => {
     it('it needs a path & a name', () => {
       expect(() =>
         getImexColumns([
+          // @ts-ignore
           {
             Header: 'header',
             accessor: (originalRow: any) => originalRow.id,
-            // @ts-ignore
             imex: {},
           },
         ])

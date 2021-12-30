@@ -33,12 +33,17 @@ export const useExportTable = <D extends object = any>() => {
       const imexColumns = getImexColumns(columns)
       const imexData = data.map((row) =>
         imexColumns.map((column) => {
-          const imexOptions = column.imex!
-          const valueType = imexOptions.type
+          const imexOptions = column.imex
+          const valueType = imexOptions?.type
 
-          let value = get(row, imexOptions.path)
+          const path = (
+            typeof column.accessor === 'string'
+              ? column.accessor
+              : imexOptions!.path
+          ) as string
+          let value = get(row, path)
 
-          if (imexOptions.format) {
+          if (imexOptions?.format) {
             value = imexOptions.format(value, Object.values(row))
           } else if (ARRAY_TYPES.has(valueType!) && Array.isArray(value)) {
             value = value.join(',')
