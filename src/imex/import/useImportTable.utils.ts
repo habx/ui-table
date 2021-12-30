@@ -235,16 +235,12 @@ export const parseRawData = async <D extends { id?: string | number }>(
         importedRowMeta.isIgnored = true
         set(
           importedRowMeta.errors,
-          orderedColumns[index]?.accessor as string,
+          orderedColumns[index]!.imex!.path,
           cellError
         )
       }
 
-      set(
-        importedRowValue,
-        orderedColumns[index]?.accessor as string,
-        newCellValue
-      )
+      set(importedRowValue, orderedColumns[index]!.imex!.path, newCellValue)
     }
 
     /**

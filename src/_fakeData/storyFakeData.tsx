@@ -70,39 +70,39 @@ export const IMEX_COLUMNS = [
   {
     Header: 'Username',
     accessor: 'username',
-    meta: {
-      imex: {
-        identifier: true,
-        type: 'string' as const,
-      },
+    imex: {
+      path: 'username',
+      header: 'Username',
+      identifier: true,
+      type: 'string' as const,
     },
   },
   {
     Header: 'Name',
     accessor: 'name',
-    meta: {
-      imex: {
-        type: 'string' as const,
-        note: 'This is a comment',
-      },
+    imex: {
+      path: 'name',
+      header: 'Name',
+      type: 'string' as const,
+      note: 'This is a comment',
     },
   },
   {
     Header: 'Email',
     accessor: 'email',
-    meta: {
-      imex: {
-        type: 'string' as const,
-      },
+    imex: {
+      path: 'email',
+      header: 'Email',
+      type: 'string' as const,
     },
   },
   {
     Header: 'City',
-    accessor: 'address.city',
-    meta: {
-      imex: {
-        type: 'string' as const,
-      },
+    accessor: (row) => row.address.city,
+    imex: {
+      path: 'address.city',
+      header: 'City',
+      type: 'string' as const,
     },
   },
 ] as IMEXColumn<Faker.Card & { id: number }>[]

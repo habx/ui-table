@@ -10,7 +10,7 @@ import {
 
 import { exportData, ExportDataOptions } from './useExportTable.utils'
 
-export interface UseExportTableParams<D extends object = any>
+export interface UseExportTableParams<D extends object>
   extends Omit<ExportDataOptions, 'type'> {
   data: D[]
   columns: IMEXColumn<D>[]
@@ -22,7 +22,7 @@ export interface UseExportTableParams<D extends object = any>
 
 const ARRAY_TYPES = new Set<RowValueTypes>(['string[]', 'number[]'])
 
-export const useExportTable = <D extends object>() => {
+export const useExportTable = <D extends object = any>() => {
   const downloadTableData = React.useCallback(
     (title: string, options: UseExportTableParams<D>) => {
       const { data = [], columns, type = 'xls' } = options
@@ -30,12 +30,12 @@ export const useExportTable = <D extends object>() => {
       const imexColumns = getImexColumns(columns)
       const imexData = data.map((row) =>
         imexColumns.map((column) => {
-          const imexOptions = column?.imex
-          const valueType = imexOptions?.type
+          const imexOptions = column.imex!
+          const valueType = imexOptions.type
 
-          let value = get(row, column.accessor as string)
+          let value = get(row, imexOptions.path)
 
-          if (imexOptions?.format) {
+          if (imexOptions.format) {
             value = imexOptions.format(value, Object.values(row))
           } else if (ARRAY_TYPES.has(valueType!) && Array.isArray(value)) {
             value = value.join(',')

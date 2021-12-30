@@ -25,11 +25,11 @@ export const getImexColumns = <D extends { [key: string]: any } = any>(
   )
 
   imexColumns.forEach((column) => {
-    if (typeof column.accessor !== 'string') {
-      throw new Error('Cannot include data with a non-string accessor')
+    if (typeof column.imex?.path !== 'string') {
+      throw new Error('Cannot include data without a column path')
     }
-    if (typeof column.Header !== 'string') {
-      throw new Error('Cannot include non string Header')
+    if (typeof column.imex?.header !== 'string') {
+      throw new Error('Cannot include data without column name')
     }
   })
 

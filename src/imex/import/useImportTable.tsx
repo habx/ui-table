@@ -266,7 +266,7 @@ export const useImportTable = <D extends { id?: string | number }>(
         fullscreen: true,
         spacing: 'regular',
         Component: () => {
-          const [handleExport] = useExportTable()
+          const [handleExport] = useExportTable<ImportedRow<D>>()
           const tableInstance = useTable<ImportedRow<D>>(
             {
               data: userInputs.ignoredRows,

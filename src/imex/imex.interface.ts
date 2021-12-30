@@ -53,6 +53,11 @@ export type UseImportTableParams<D extends object> = {
 export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
 
 export interface IMEXOptions {
+  /** path passed to lodash get & set function to access & define data **/
+  path: string
+  /** header name of the column in the sheet file **/
+  header: string
+  /** identify a uniq row **/
   identifier?: boolean
   required?: boolean
   type?: RowValueTypes
@@ -66,7 +71,7 @@ export interface IMEXOptions {
   ignoreEmpty?: boolean
 }
 
-export type IMEXColumn<D extends object = any, Meta = {}> = Column<D, Meta> & {
+export type IMEXColumn<D extends object = any> = Column<D> & {
   imex?: IMEXOptions
 }
 
