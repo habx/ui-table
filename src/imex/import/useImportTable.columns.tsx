@@ -33,7 +33,7 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
 ) => {
   const { footer = true, statusColumn = true } = options ?? {}
   const compareColumns = columns
-    .filter((column) => !column.meta?.imex?.hidden)
+    .filter((column) => !column?.imex?.hidden)
     .map((column) => ({
       ...column,
       Footer: footer
@@ -63,14 +63,14 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
           }) as ReactTable.Renderer<FooterProps<ImportedRow<D>>>)
         : undefined,
       Cell: ((rawProps) => {
-        const props = (rawProps as unknown) as CellProps<D>
+        const props = rawProps as unknown as CellProps<D>
         const rowMeta = rawProps.row.original?._rowMeta
 
-        const Cell = (isFunction(column.Cell)
-          ? column.Cell
-          : ({ cell }) => <div>{cell.value}</div>) as React.ComponentType<
-          CellProps<D>
-        >
+        const Cell = (
+          isFunction(column.Cell)
+            ? column.Cell
+            : ({ cell }) => <div>{cell.value}</div>
+        ) as React.ComponentType<CellProps<D>>
 
         // Do not add style on grouped cell
         if (rawProps.row.isGrouped) {
@@ -107,7 +107,7 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
         if (isNil(cellPrevVal)) {
           return (
             <CellContainer>
-              <NewCell data-new-row={!!column.meta?.imex?.identifier}>
+              <NewCell data-new-row={!!column?.imex?.identifier}>
                 <Cell {...props} />
               </NewCell>
             </CellContainer>

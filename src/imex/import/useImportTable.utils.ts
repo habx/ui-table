@@ -127,13 +127,13 @@ export const parseRawData = async <D extends { id?: string | number }>(
     throw new Error('Missing headers row')
   }
   const identifierColumn = params.columns.find(
-    (column) => column.meta?.imex?.identifier
+    (column) => column?.imex?.identifier
   )
   if (!identifierColumn) {
     throw new Error('Missing identifier column')
   }
   const requiredColumnHeaders = params.columns
-    .filter((column) => column.meta?.imex?.required)
+    .filter((column) => column?.imex?.required)
     .map((column) => cleanHeader(column.Header as string))
 
   const missingRequiredColumns = difference(
@@ -186,31 +186,30 @@ export const parseRawData = async <D extends { id?: string | number }>(
       let cellError: string | null = null
 
       const parse = (value: any) =>
-        orderedColumns[index]?.meta?.imex?.parse?.(value, row) ?? value
+        orderedColumns[index]?.imex?.parse?.(value, row) ?? value
 
       let newCellValue: string | number | string[] | number[] | undefined =
         rawCell
 
-      const ignoreEmpty = orderedColumns[index]?.meta?.imex?.ignoreEmpty ?? true
+      const ignoreEmpty = orderedColumns[index]?.imex?.ignoreEmpty ?? true
 
       try {
         newCellValue = parseCell(
           rawCell,
-          orderedColumns[index]!.meta!.imex!.type as RowValueTypes,
+          orderedColumns[index]!.imex!.type as RowValueTypes,
           { parse, ignoreEmpty }
         )
 
         // If parsed value is null, throw if required and ignore if not.
         if (newCellValue == null) {
-          if (orderedColumns[index]?.meta?.imex?.required) {
+          if (orderedColumns[index]?.imex?.required) {
             throw new Error(ParsingErrors[ParseCellError.REQUIRED])
           } else if (ignoreEmpty) {
             continue
           }
         }
 
-        const validate =
-          orderedColumns[index]?.meta?.imex?.validate ?? (() => true)
+        const validate = orderedColumns[index]?.imex?.validate ?? (() => true)
         const validateResponse = validate(newCellValue, row)
         const isValid =
           typeof validateResponse === 'string'
@@ -325,7 +324,9 @@ export const parseRawData = async <D extends { id?: string | number }>(
   })
 }
 
-export const validateOptions = <D>(options: UseImportTableParams<D>) => {
+export const validateOptions = <D extends object>(
+  options: UseImportTableParams<D>
+) => {
   if (options.concurrency && options.concurrency < 1) {
     throw new Error('concurrency should be greater than 1')
   }

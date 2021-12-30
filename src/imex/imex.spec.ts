@@ -60,19 +60,17 @@ describe('Import/Export (imex)', () => {
           {
             Header: 'header',
             accessor: (originalRow) => originalRow.id,
-            meta: { imex: {} },
+            imex: {},
           },
         ])
       ).toThrow()
     })
     it('it needs string header only', () => {
       expect(() =>
-        getImexColumns([
-          { Header: () => null, accessor: 'id', meta: { imex: {} } },
-        ])
+        getImexColumns([{ Header: () => null, accessor: 'id', imex: {} }])
       ).toThrow()
     })
-    it('it ignore columns without meta.imex field', () => {
+    it('it ignore columns without imex field', () => {
       expect(
         getImexColumns([{ Header: () => null, accessor: 'id' }])
       ).toHaveLength(0)

@@ -63,10 +63,10 @@ export const exportData = async <D extends {}>(
   const worksheet = workbook.addWorksheet(filename)
 
   worksheet.columns = columns.map((column) => ({
-    header: column.Header + (column.meta?.imex?.required ? '*' : ''),
+    header: column.Header + (column?.imex?.required ? '*' : ''),
     key: column.id ?? column.Header,
-    width: column.meta?.imex?.width,
-    hidden: column.meta?.imex?.hidden,
+    width: column?.imex?.width,
+    hidden: column?.imex?.hidden,
   })) as Excel.Column[]
 
   worksheet.addRows(data)

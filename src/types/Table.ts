@@ -83,7 +83,7 @@ type ColumnCustom<D extends object, Meta = {}> = Omit<
     headerClassName?: string
   }
 
-export type Column<D extends { [key: string]: any } = any, Meta = {}> =
+export type Column<D extends object = any, Meta = {}> =
   | (Omit<ColumnGroup<D>, 'columns'> & ColumnCustom<D, Meta>)
   | (ColumnWithLooseAccessor<D> & ColumnCustom<D, Meta>)
   | (ColumnWithStrictAccessor<D> & ColumnCustom<D, Meta>)
@@ -151,16 +151,15 @@ export interface TableInstance<D extends object = {}>
   columns: ColumnInstance<D>[]
 }
 
-export type ColumnInstance<
-  D extends object = {}
-> = ReactTable.ColumnInstance<D> &
-  ReactTable.UseTableColumnProps<D> &
-  ReactTable.UseFiltersColumnProps<D> &
-  ReactTable.UseSortByColumnProps<D> &
-  ReactTable.UseGroupByColumnProps<D> &
-  UseDensityColumnProps & {
-    getToggleAllRowsSelectedProps: Function
-  } & CustomColumnFields
+export type ColumnInstance<D extends object = {}> =
+  ReactTable.ColumnInstance<D> &
+    ReactTable.UseTableColumnProps<D> &
+    ReactTable.UseFiltersColumnProps<D> &
+    ReactTable.UseSortByColumnProps<D> &
+    ReactTable.UseGroupByColumnProps<D> &
+    UseDensityColumnProps & {
+      getToggleAllRowsSelectedProps: Function
+    } & CustomColumnFields
 
 export interface Cell<D extends object = {}> extends ReactTable.Cell<D> {
   canGroupBy?: boolean

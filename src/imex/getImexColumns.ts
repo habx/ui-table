@@ -20,7 +20,7 @@ export const getImexColumns = <D extends { [key: string]: any } = any>(
   )
   const imexColumns = flatColumns.filter(
     (column) =>
-      !!column.meta?.imex &&
+      !!column?.imex &&
       COLUMN_ENABLED_CONDITION.includes(column.enabled ?? 'always')
   )
 
