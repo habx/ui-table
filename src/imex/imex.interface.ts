@@ -89,6 +89,7 @@ export type IMEXColumn<D extends object = any> = Omit<
   Column<D>,
   'Header' | 'accessor'
 > & {
+  columns?: IMEXColumn<D>[]
   imex?: IMEXOptions
 } & (
     | {
