@@ -57,7 +57,7 @@ const isNotEmptyCell = (cell: any) => cell !== '' && cell != null
 export const parseCell = (
   rawCell: any,
   type: RowValueTypes,
-  options: { format: (value: any) => any; ignoreEmpty: boolean }
+  options: { parse: (value: any) => any; ignoreEmpty: boolean }
 ): string | number | string[] | number[] | undefined => {
   if (options.ignoreEmpty && !isNotEmptyCell(rawCell)) {
     return undefined
@@ -65,22 +65,22 @@ export const parseCell = (
   switch (type) {
     case 'number':
       if (typeof rawCell === 'number') {
-        return Number(options.format(rawCell))
+        return Number(options.parse(rawCell))
       }
-      const newCellValue = Number(options.format(rawCell?.replace(',', '.')))
+      const newCellValue = Number(options.parse(rawCell?.replace(',', '.')))
       if (Number.isNaN(newCellValue)) {
         throw new Error(ParsingErrors[ParseCellError.NOT_A_NUMBER])
       }
       return newCellValue
     case 'number[]':
-      let formattedNumberArrayCell = options.format(rawCell)
-      if (!Array.isArray(formattedNumberArrayCell)) {
-        if (typeof formattedNumberArrayCell !== 'string') {
+      let parsedNumberArrayCell = options.parse(rawCell)
+      if (!Array.isArray(parsedNumberArrayCell)) {
+        if (typeof parsedNumberArrayCell !== 'string') {
           throw new Error(ParsingErrors[ParseCellError.INVALID])
         }
-        formattedNumberArrayCell = formattedNumberArrayCell.split(',')
+        parsedNumberArrayCell = parsedNumberArrayCell.split(',')
       }
-      return formattedNumberArrayCell
+      return parsedNumberArrayCell
         .filter(isNotEmptyCell)
         .map((value: string | number) => {
           const transformedValue = Number(value)
@@ -91,16 +91,16 @@ export const parseCell = (
         })
 
     case 'string[]':
-      let formattedStringArrayCell = options.format(rawCell)
-      if (!Array.isArray(formattedStringArrayCell)) {
-        if (typeof formattedStringArrayCell !== 'string') {
+      let parsedStringArrayCell = options.parse(rawCell)
+      if (!Array.isArray(parsedStringArrayCell)) {
+        if (typeof parsedStringArrayCell !== 'string') {
           throw new Error(ParsingErrors[ParseCellError.INVALID])
         }
-        formattedStringArrayCell = formattedStringArrayCell.split(',')
+        parsedStringArrayCell = parsedStringArrayCell.split(',')
       }
-      return formattedStringArrayCell.filter(isNotEmptyCell)
+      return parsedStringArrayCell.filter(isNotEmptyCell)
     default:
-      return options.format(rawCell)
+      return options.parse(rawCell)
   }
 }
 
@@ -185,8 +185,8 @@ export const parseRawData = async <D extends { id?: string | number }>(
 
       let cellError: string | null = null
 
-      const format = (value: any) =>
-        orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? value
+      const parse = (value: any) =>
+        orderedColumns[index]?.meta?.imex?.parse?.(value, row) ?? value
 
       let newCellValue: string | number | string[] | number[] | undefined =
         rawCell
@@ -197,7 +197,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
         newCellValue = parseCell(
           rawCell,
           orderedColumns[index]!.meta!.imex!.type as RowValueTypes,
-          { format, ignoreEmpty }
+          { parse, ignoreEmpty }
         )
 
         // If parsed value is null, throw if required and ignore if not.

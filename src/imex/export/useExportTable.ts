@@ -43,8 +43,8 @@ export const useExportTable = <D extends { [key: string]: any } = any>(
 
           let value = get(row, column.accessor as string)
 
-          if (meta?.parse) {
-            value = meta.parse(value, Object.values(row))
+          if (meta?.format) {
+            value = meta.format(value, Object.values(row))
           } else if (ARRAY_TYPES.has(valueType!) && Array.isArray(value)) {
             value = value.join(',')
           }
