@@ -60,7 +60,9 @@ export type FooterProps<D extends object> = TableInstance<D> & {
 export type ColumnEnabledCondition = 'always' | 'never' | 'imex-only'
 
 type CustomColumnFields = {
+  /** @default 'left' */
   align?: 'left' | 'right' | 'center'
+  /** @default 'always' */
   enabled?: ColumnEnabledCondition | null
 }
 
@@ -108,7 +110,7 @@ export interface TableOptions<D extends object = {}>
   columns: Array<Column<D> | IMEXColumn<D>>
   defaultColumn?: Partial<Column<D>>
   initialState?: Partial<TableState<D>>
-  data?: D[] | null
+  data: D[] | null | undefined
 }
 
 export interface TableState<D extends object>
