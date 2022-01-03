@@ -35,6 +35,8 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
 ) => {
   const { footer = true, statusColumn = true } = options ?? {}
 
+  // FIXME
+
   // @ts-ignore
   const compareColumns: Column<D>[] = columns
     .filter((column) => !column.imex?.hidden)

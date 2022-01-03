@@ -96,7 +96,7 @@ export type IMEXColumn<D extends object = any> = Omit<
         Header: string
       }
     | {
-        Header?: Exclude<Column<D>['Header'], 'string'>
+        Header?: Exclude<Column<D>['Header'], string>
         imex?: { header: NonNullable<IMEXOptions['header']> }
       }
   ) &
@@ -105,9 +105,25 @@ export type IMEXColumn<D extends object = any> = Omit<
         accessor: string
       }
     | {
-        accessor?: Exclude<Column<D>['accessor'], 'string'>
+        accessor?: Exclude<Column<D>['accessor'], string>
         imex?: { path: NonNullable<IMEXOptions['path']> }
       }
   )
 
 export type IMEXFileExtensionTypes = 'csv' | 'xls'
+
+// Type tests
+
+// @ts-expect-error
+const a: IMEXColumn = { // eslint-disable-line
+  Header: '',
+  accessor: () => '',
+  imex: {},
+}
+
+// @ts-expect-error
+const b: IMEXColumn = { // eslint-disable-line
+  Header: () => '',
+  accessor: '',
+  imex: {},
+}
