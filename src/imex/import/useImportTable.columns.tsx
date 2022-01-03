@@ -6,6 +6,7 @@ import { Tooltip } from '@habx/ui-core'
 
 import { CellProps, Column, FooterProps } from '../../types/Table'
 import { IMEXColumn, ImportedRow } from '../imex.interface'
+import { getPath } from '../imex.utils'
 
 import { IconIndicator } from './DataIndicators'
 import {
@@ -27,13 +28,18 @@ interface GetCompareColumnsFromImexColumnsOptions {
    */
   statusColumn?: boolean
 }
+
 export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
   columns: IMEXColumn<D>[],
   options?: GetCompareColumnsFromImexColumnsOptions
 ) => {
   const { footer = true, statusColumn = true } = options ?? {}
-  const compareColumns = columns
-    .filter((column) => !column.meta?.imex?.hidden)
+
+  // FIXME
+
+  // @ts-ignore
+  const compareColumns: Column<D>[] = columns
+    .filter((column) => !column.imex?.hidden)
     .map((column) => ({
       ...column,
       Footer: footer
@@ -63,27 +69,27 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
           }) as ReactTable.Renderer<FooterProps<ImportedRow<D>>>)
         : undefined,
       Cell: ((rawProps) => {
-        const props = (rawProps as unknown) as CellProps<D>
+        const props = rawProps as unknown as CellProps<D>
         const rowMeta = rawProps.row.original?._rowMeta
 
-        const Cell = (isFunction(column.Cell)
-          ? column.Cell
-          : ({ cell }) => <div>{cell.value}</div>) as React.ComponentType<
-          CellProps<D>
-        >
+        const Cell = (
+          isFunction(column.Cell)
+            ? column.Cell
+            : ({ cell }) => <div>{cell.value}</div>
+        ) as React.ComponentType<CellProps<D>>
 
         // Do not add style on grouped cell
         if (rawProps.row.isGrouped) {
           return <Cell {...props} />
         }
 
-        const cellPrevVal = get(rowMeta?.prevVal, column.accessor as string)
+        const cellPrevVal = get(rowMeta?.prevVal, getPath(column))
 
         const CellContainer: React.FunctionComponent = ({ children }) => {
           if (!Object.values(rowMeta?.errors ?? {}).length) {
             return <React.Fragment>{children}</React.Fragment>
           }
-          const error = get(rowMeta!.errors, column.accessor as string)
+          const error = get(rowMeta!.errors, getPath(column))
 
           return (
             <Tooltip small title={`${error}`} disabled={!error}>
@@ -107,7 +113,7 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
         if (isNil(cellPrevVal)) {
           return (
             <CellContainer>
-              <NewCell data-new-row={!!column.meta?.imex?.identifier}>
+              <NewCell data-new-row={!!column?.imex?.identifier}>
                 <Cell {...props} />
               </NewCell>
             </CellContainer>
@@ -164,5 +170,5 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
     })
   }
 
-  return compareColumns as Column<D>[]
+  return compareColumns
 }

@@ -20,16 +20,26 @@ export const getImexColumns = <D extends { [key: string]: any } = any>(
   )
   const imexColumns = flatColumns.filter(
     (column) =>
-      !!column.meta?.imex &&
+      !!column?.imex &&
       COLUMN_ENABLED_CONDITION.includes(column.enabled ?? 'always')
   )
 
   imexColumns.forEach((column) => {
-    if (typeof column.accessor !== 'string') {
-      throw new Error('Cannot include data with a non-string accessor')
+    if (
+      typeof column.accessor !== 'string' &&
+      typeof column.imex?.path !== 'string'
+    ) {
+      throw new Error(
+        'Cannot include data without a column path or string accessor'
+      )
     }
-    if (typeof column.Header !== 'string') {
-      throw new Error('Cannot include non string Header')
+    if (
+      typeof column.Header !== 'string' &&
+      typeof column.imex?.header !== 'string'
+    ) {
+      throw new Error(
+        'Cannot include data without column header or imex.header'
+      )
     }
   })
 

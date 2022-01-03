@@ -66,43 +66,37 @@ export const RICH_COLUMNS = [
   },
 ] as Column<typeof FAKE_DATA[0]>[]
 
-export const IMEX_COLUMNS = [
+export const IMEX_COLUMNS: IMEXColumn<Faker.Card & { id: number }>[] = [
   {
     Header: 'Username',
     accessor: 'username',
-    meta: {
-      imex: {
-        identifier: true,
-        type: 'string' as const,
-      },
+    imex: {
+      path: 'username',
+      identifier: true,
     },
   },
   {
     Header: 'Name',
     accessor: 'name',
-    meta: {
-      imex: {
-        type: 'string' as const,
-        note: 'This is a comment',
-      },
+    imex: {
+      path: 'name',
+      header: 'Name',
+      note: 'This is a comment',
     },
   },
   {
     Header: 'Email',
     accessor: 'email',
-    meta: {
-      imex: {
-        type: 'string' as const,
-      },
+    imex: {
+      path: 'email',
+      header: 'Email',
     },
   },
   {
     Header: 'City',
-    accessor: 'address.city',
-    meta: {
-      imex: {
-        type: 'string' as const,
-      },
+    accessor: (row) => row.address.city,
+    imex: {
+      path: 'address.city',
     },
   },
-] as IMEXColumn<Faker.Card & { id: number }>[]
+]

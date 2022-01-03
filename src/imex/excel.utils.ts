@@ -5,6 +5,7 @@ import { palette } from '@habx/ui-core'
 
 import { createWorkbook, getCellValueTypes } from './exceljs'
 import { IMEXColumn } from './imex.interface'
+import { getHeader } from './imex.utils'
 
 export const parseExcelFileData = async (file: File): Promise<any[][]> => {
   const CellValueType = await getCellValueTypes()
@@ -43,8 +44,8 @@ export const parseExcelFileData = async (file: File): Promise<any[][]> => {
           break
         case CellValueType.Hyperlink:
           // seems to be badly typed
-          const text = ((cell.value as Excel.CellHyperlinkValue)
-            .text as unknown) as Excel.CellRichTextValue
+          const text = (cell.value as Excel.CellHyperlinkValue)
+            .text as unknown as Excel.CellRichTextValue
           data[rowIndex][cellIndex] =
             text?.richText?.map((t) => t.text).join('') ?? text ?? null
           break
@@ -94,9 +95,9 @@ export const applyValidationRulesAndStyle = <D extends {}>(
   for (const columnIndex in columns) {
     const column = columns[columnIndex]
     const columnNumber = Number(columnIndex) + 1
-    const dataValidation = column.meta?.imex?.dataValidation
-    const isIdentifer = !!column.meta?.imex?.identifier
-    const note = column.meta?.imex?.note
+    const dataValidation = column?.imex?.dataValidation
+    const isIdentifer = !!column?.imex?.identifier
+    const note = column?.imex?.note
 
     if (dataValidation || isIdentifer || note) {
       const worksheetColumn = worksheet.getColumn(columnNumber)
@@ -116,11 +117,10 @@ export const applyValidationRulesAndStyle = <D extends {}>(
               dataValidation.formulae.some((f) => f.length > 255)
             ) {
               const worksheetName = capitalize(
-                snakeCase(escape(`${column.Header}`))
+                snakeCase(escape(getHeader(column)))
               )
-              const validationValuesWorksheet = worksheet.workbook.addWorksheet(
-                worksheetName
-              )
+              const validationValuesWorksheet =
+                worksheet.workbook.addWorksheet(worksheetName)
               dataValidation.formulae.forEach((f, listColumnIndex) => {
                 const list: string[] = f.replace(/"/g, '').split(',')
                 list.forEach((listEl, rowIndex) => {

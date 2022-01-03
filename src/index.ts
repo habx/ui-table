@@ -4,12 +4,6 @@ export { useTable } from './useTable'
 export { Table, TablePagination } from './Table'
 
 /*
- * Filter methods
- */
-export { booleanFilter } from './filterMethod/booleanFilter'
-export { arrayFilter } from './filterMethod/arrayFilter'
-
-/*
  * Filter components
  */
 export { BooleanFilter } from './filter/BooleanFilter'
@@ -52,7 +46,7 @@ export {
 export { selectFilterFactory } from './filterFactory/selectFilterFactory'
 
 // Import / Export
-export { RowValueTypes, IMEXColumn } from './imex/imex.interface'
+export { IMEXColumnType, IMEXColumn } from './imex/imex.interface'
 export {
   useExportTable,
   UseExportTableParams,

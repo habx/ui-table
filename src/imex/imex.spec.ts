@@ -14,17 +14,15 @@ describe('Import/Export (imex)', () => {
       global.navigator.msSaveBlob = jest.fn()
     })
     it('should allow download data in CSV', async () => {
-      const { result } = renderHook(() =>
-        useExportTable({
+      const { result } = renderHook(() => useExportTable())
+
+      await act(() => {
+        const [downloadFile] = result.current
+        return downloadFile('test', {
           data: FAKE_DATA,
           columns: IMEX_COLUMNS,
           type: 'csv',
         })
-      )
-
-      await act(() => {
-        const [downloadFile] = result.current
-        return downloadFile('test')
       })
       // @ts-ignore
       expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
@@ -33,17 +31,15 @@ describe('Import/Export (imex)', () => {
       )
     })
     it('should allow download data in XLS', async () => {
-      const { result } = renderHook(() =>
-        useExportTable({
+      const { result } = renderHook(() => useExportTable())
+
+      await act(() => {
+        const [downloadFile] = result.current
+        return downloadFile('test', {
           data: FAKE_DATA,
           columns: IMEX_COLUMNS,
           type: 'xls',
         })
-      )
-
-      await act(() => {
-        const [downloadFile] = result.current
-        return downloadFile('test')
       })
       // @ts-ignore
       expect(global.navigator.msSaveBlob).toHaveBeenCalledWith(
@@ -54,25 +50,7 @@ describe('Import/Export (imex)', () => {
   })
 
   describe('getImexColumns', () => {
-    it('it needs string accessors only', () => {
-      expect(() =>
-        getImexColumns([
-          {
-            Header: 'header',
-            accessor: (originalRow) => originalRow.id,
-            meta: { imex: {} },
-          },
-        ])
-      ).toThrow()
-    })
-    it('it needs string header only', () => {
-      expect(() =>
-        getImexColumns([
-          { Header: () => null, accessor: 'id', meta: { imex: {} } },
-        ])
-      ).toThrow()
-    })
-    it('it ignore columns without meta.imex field', () => {
+    it('it ignore columns without imex field', () => {
       expect(
         getImexColumns([{ Header: () => null, accessor: 'id' }])
       ).toHaveLength(0)

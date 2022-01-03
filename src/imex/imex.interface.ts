@@ -1,5 +1,4 @@
 import type * as Excel from 'exceljs'
-import { DropEvent } from 'react-dropzone'
 
 import { Column } from '../types/Table'
 
@@ -12,7 +11,7 @@ export interface ImportedRowMeta<D extends {}> {
 
 export type ImportedRow<D extends {}> = D & { _rowMeta: ImportedRowMeta<D> }
 
-export type UseImportTableOptions<D> = {
+export type UseImportTableOptions<D extends object> = {
   columns: IMEXColumn<D>[]
   onUpsertRowError?: (error: Error) => void
   getOriginalData: () => D[] | Promise<D[]>
@@ -40,19 +39,9 @@ export interface _UseImportTableOptions<D> {
   onFinish?: (rows: D[]) => void | Promise<any>
 }
 
-export type UseImportTableParams<D> = {
+export type UseImportTableParams<D extends object> = {
   disabled?: boolean
   accept?: string[]
-  /**
-   * @deprecated
-   */
-  onBeforeDropAccepted?: (
-    onFiles: (
-      files: File[],
-      options?: Partial<UseImportTableOptions<D>>
-    ) => Promise<void>
-  ) => (files: File[], event?: DropEvent) => Promise<void>
-
   /**
    * Defines the number of upsertRow calls parallelized.
    * @default 1
@@ -61,25 +50,80 @@ export type UseImportTableParams<D> = {
   concurrency?: number
 } & UseImportTableOptions<D>
 
-export type RowValueTypes = 'string' | 'number' | 'number[]' | 'string[]'
+export enum IMEXColumnType {
+  'string',
+  'number',
+  'number[]',
+  'string[]',
+}
 
-export type IMEXColumn<D extends { [key: string]: any } = any> = Column<
-  D & { [key: string]: any },
-  {
-    imex?: {
-      identifier?: boolean
-      required?: boolean
-      type?: RowValueTypes
-      format?: (value: any, row: any[]) => any
-      parse?: (value: any, row: any[]) => any
-      width?: number
-      validate?: (value: any, row: any[]) => string | boolean | null
-      dataValidation?: Excel.DataValidation
-      hidden?: boolean
-      note?: string | Excel.Comment
-      ignoreEmpty?: boolean
-    }
-  }
->
+export interface IMEXOptions {
+  /**
+   * path passed to lodash get & set function to access & define data
+   * fallback to column accessor if provided as string
+   *
+   */
+  path?: string
+  /**
+   * header name of the column in the sheet file
+   * fallback to column Header if provided as string
+   *
+   */
+  header?: string
+  /** identify a uniq row **/
+  identifier?: boolean
+  required?: boolean
+  /** @default IMEXColumnType.string **/
+  type?: IMEXColumnType
+  format?: (value: any, row: any[]) => any
+  parse?: (value: any, row: any[]) => any
+  width?: number
+  validate?: (value: any, row: any[]) => string | boolean | null
+  dataValidation?: Excel.DataValidation
+  hidden?: boolean
+  note?: string | Excel.Comment
+  ignoreEmpty?: boolean
+}
+
+export type IMEXColumn<D extends object = any> = Omit<
+  Column<D>,
+  'Header' | 'accessor'
+> & {
+  columns?: IMEXColumn<D>[]
+  imex?: IMEXOptions
+} & (
+    | {
+        Header: string
+      }
+    | {
+        Header?: Exclude<Column<D>['Header'], string>
+        imex?: { header: NonNullable<IMEXOptions['header']> }
+      }
+  ) &
+  (
+    | {
+        accessor: string
+      }
+    | {
+        accessor?: Exclude<Column<D>['accessor'], string>
+        imex?: { path: NonNullable<IMEXOptions['path']> }
+      }
+  )
 
 export type IMEXFileExtensionTypes = 'csv' | 'xls'
+
+// Type tests
+
+// @ts-expect-error
+const a: IMEXColumn = { // eslint-disable-line
+  Header: '',
+  accessor: () => '',
+  imex: {},
+}
+
+// @ts-expect-error
+const b: IMEXColumn = { // eslint-disable-line
+  Header: () => '',
+  accessor: '',
+  imex: {},
+}

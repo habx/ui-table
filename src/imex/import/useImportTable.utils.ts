@@ -12,10 +12,11 @@ import {
   IMEXColumn,
   ImportedRow,
   ImportedRowMeta,
-  RowValueTypes,
+  IMEXColumnType,
   UseImportTableOptions,
   UseImportTableParams,
 } from '../imex.interface'
+import { getHeader, getPath } from '../imex.utils'
 
 export enum ParseCellError {
   NOT_A_NUMBER,
@@ -56,31 +57,31 @@ const isNotEmptyCell = (cell: any) => cell !== '' && cell != null
 
 export const parseCell = (
   rawCell: any,
-  type: RowValueTypes,
-  options: { format: (value: any) => any; ignoreEmpty: boolean }
+  type: IMEXColumnType,
+  options: { parse: (value: any) => any; ignoreEmpty: boolean }
 ): string | number | string[] | number[] | undefined => {
   if (options.ignoreEmpty && !isNotEmptyCell(rawCell)) {
     return undefined
   }
   switch (type) {
-    case 'number':
+    case IMEXColumnType.number:
       if (typeof rawCell === 'number') {
-        return Number(options.format(rawCell))
+        return Number(options.parse(rawCell))
       }
-      const newCellValue = Number(options.format(rawCell?.replace(',', '.')))
+      const newCellValue = Number(options.parse(rawCell?.replace(',', '.')))
       if (Number.isNaN(newCellValue)) {
         throw new Error(ParsingErrors[ParseCellError.NOT_A_NUMBER])
       }
       return newCellValue
-    case 'number[]':
-      let formattedNumberArrayCell = options.format(rawCell)
-      if (!Array.isArray(formattedNumberArrayCell)) {
-        if (typeof formattedNumberArrayCell !== 'string') {
+    case IMEXColumnType['number[]']:
+      let parsedNumberArrayCell = options.parse(rawCell)
+      if (!Array.isArray(parsedNumberArrayCell)) {
+        if (typeof parsedNumberArrayCell !== 'string') {
           throw new Error(ParsingErrors[ParseCellError.INVALID])
         }
-        formattedNumberArrayCell = formattedNumberArrayCell.split(',')
+        parsedNumberArrayCell = parsedNumberArrayCell.split(',')
       }
-      return formattedNumberArrayCell
+      return parsedNumberArrayCell
         .filter(isNotEmptyCell)
         .map((value: string | number) => {
           const transformedValue = Number(value)
@@ -90,17 +91,17 @@ export const parseCell = (
           return transformedValue
         })
 
-    case 'string[]':
-      let formattedStringArrayCell = options.format(rawCell)
-      if (!Array.isArray(formattedStringArrayCell)) {
-        if (typeof formattedStringArrayCell !== 'string') {
+    case IMEXColumnType['string[]']:
+      let parsedStringArrayCell = options.parse(rawCell)
+      if (!Array.isArray(parsedStringArrayCell)) {
+        if (typeof parsedStringArrayCell !== 'string') {
           throw new Error(ParsingErrors[ParseCellError.INVALID])
         }
-        formattedStringArrayCell = formattedStringArrayCell.split(',')
+        parsedStringArrayCell = parsedStringArrayCell.split(',')
       }
-      return formattedStringArrayCell.filter(isNotEmptyCell)
+      return parsedStringArrayCell.filter(isNotEmptyCell)
     default:
-      return options.format(rawCell)
+      return options.parse(rawCell)
   }
 }
 
@@ -112,6 +113,7 @@ interface ParseDataParams<D> {
   originalData: D[]
   columns: IMEXColumn<ImportedRow<D>>[]
 }
+
 export const parseRawData = async <D extends { id?: string | number }>(
   params: ParseDataParams<D>,
   options: Pick<
@@ -126,15 +128,16 @@ export const parseRawData = async <D extends { id?: string | number }>(
   if (!headers) {
     throw new Error('Missing headers row')
   }
+
   const identifierColumn = params.columns.find(
-    (column) => column.meta?.imex?.identifier
+    (column) => column.imex?.identifier
   )
   if (!identifierColumn) {
     throw new Error('Missing identifier column')
   }
   const requiredColumnHeaders = params.columns
-    .filter((column) => column.meta?.imex?.required)
-    .map((column) => cleanHeader(column.Header as string))
+    .filter((column) => column?.imex?.required)
+    .map((column) => cleanHeader(getHeader(column)))
 
   const missingRequiredColumns = difference(
     requiredColumnHeaders as string[],
@@ -147,7 +150,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
   const ignoredColumns = []
   const orderedColumns = headers.map((header) => {
     const column = params.columns.find((imexColumn) => {
-      const searchedHeader = cleanHeader(imexColumn.Header as string)
+      const searchedHeader = cleanHeader(getHeader(imexColumn))
       const cleanedHeader = requiredColumnHeaders.includes(searchedHeader)
         ? header.replace(/\*$/, '')
         : header
@@ -179,38 +182,40 @@ export const parseRawData = async <D extends { id?: string | number }>(
     const rawRowValues = Object.values(row)
     for (let index = 0; index < rawRowValues.length; index++) {
       const rawCell = rawRowValues[index]
-      if (!orderedColumns[index]) {
+      const currentColumn = orderedColumns[index]
+      if (!currentColumn) {
         continue
       }
 
+      const columnDataPath = getPath(currentColumn)
+
       let cellError: string | null = null
 
-      const format = (value: any) =>
-        orderedColumns[index]?.meta?.imex?.format?.(value, row) ?? value
+      const parse = (value: any) =>
+        currentColumn.imex?.parse?.(value, row) ?? value
 
       let newCellValue: string | number | string[] | number[] | undefined =
         rawCell
 
-      const ignoreEmpty = orderedColumns[index]?.meta?.imex?.ignoreEmpty ?? true
+      const ignoreEmpty = currentColumn.imex?.ignoreEmpty ?? true
 
       try {
         newCellValue = parseCell(
           rawCell,
-          orderedColumns[index]!.meta!.imex!.type as RowValueTypes,
-          { format, ignoreEmpty }
+          currentColumn.imex?.type as IMEXColumnType,
+          { parse, ignoreEmpty }
         )
 
         // If parsed value is null, throw if required and ignore if not.
         if (newCellValue == null) {
-          if (orderedColumns[index]?.meta?.imex?.required) {
+          if (currentColumn.imex?.required) {
             throw new Error(ParsingErrors[ParseCellError.REQUIRED])
           } else if (ignoreEmpty) {
             continue
           }
         }
 
-        const validate =
-          orderedColumns[index]?.meta?.imex?.validate ?? (() => true)
+        const validate = currentColumn.imex?.validate ?? (() => true)
         const validateResponse = validate(newCellValue, row)
         const isValid =
           typeof validateResponse === 'string'
@@ -234,18 +239,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
        */
       if (cellError) {
         importedRowMeta.isIgnored = true
-        set(
-          importedRowMeta.errors,
-          orderedColumns[index]?.accessor as string,
-          cellError
-        )
+        set(importedRowMeta.errors, columnDataPath, cellError)
       }
 
-      set(
-        importedRowValue,
-        orderedColumns[index]?.accessor as string,
-        newCellValue
-      )
+      set(importedRowValue, columnDataPath, newCellValue)
     }
 
     /**
@@ -325,7 +322,9 @@ export const parseRawData = async <D extends { id?: string | number }>(
   })
 }
 
-export const validateOptions = <D>(options: UseImportTableParams<D>) => {
+export const validateOptions = <D extends object>(
+  options: UseImportTableParams<D>
+) => {
   if (options.concurrency && options.concurrency < 1) {
     throw new Error('concurrency should be greater than 1')
   }
