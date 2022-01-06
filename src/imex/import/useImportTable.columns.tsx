@@ -120,13 +120,20 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
           )
         }
 
-        if (
-          isNil(props.cell.value) ||
-          softCompare(cellPrevVal, props.cell.value)
-        ) {
+        if (softCompare(cellPrevVal, props.cell.value)) {
           return (
             <CellContainer>
               <Cell {...cellPrevProps} />
+            </CellContainer>
+          )
+        }
+
+        if (isNil(props.cell.value)) {
+          return (
+            <CellContainer>
+              <PrevCell>
+                <Cell {...cellPrevProps} />
+              </PrevCell>
             </CellContainer>
           )
         }
