@@ -176,10 +176,10 @@ export const parseRawData = async <D extends { id?: string | number }>(
       errors: {},
       isIgnored: false,
     }
-
     const importedRowValue: Partial<D> = {}
 
     const rawRowValues = Object.values(row)
+
     for (let index = 0; index < rawRowValues.length; index++) {
       const rawCell = rawRowValues[index]
       const currentColumn = orderedColumns[index]
@@ -199,6 +199,22 @@ export const parseRawData = async <D extends { id?: string | number }>(
 
       const ignoreEmpty = currentColumn.imex?.ignoreEmpty ?? true
 
+      /**
+       * Previous value
+       */
+      const prevValIdentifier = get(importedRowValue, getPath(identifierColumn))
+      const prevValIndex = originalData.findIndex((originalRow) => {
+        if (options.findPrevValPredicate) {
+          return options.findPrevValPredicate(originalRow, importedRowValue)
+        }
+        return (
+          get(originalRow, identifierColumn.accessor as string) ===
+          prevValIdentifier
+        )
+      })
+
+      importedRowMeta.prevVal = originalData[prevValIndex]
+
       try {
         newCellValue = parseCell(
           rawCell,
@@ -215,25 +231,12 @@ export const parseRawData = async <D extends { id?: string | number }>(
           }
         }
 
-        // Get the previous value for validation
-        const prevValIdentifier = get(
-          importedRowValue,
-          identifierColumn.accessor as string
-        )
-        const prevValIndex = originalData.findIndex((originalRow) => {
-          if (options.findPrevValPredicate) {
-            return options.findPrevValPredicate(originalRow, importedRowValue)
-          }
-          return (
-            get(originalRow, identifierColumn.accessor as string) ===
-            prevValIdentifier
-          )
-        })
-
-        const prevVal = originalData[prevValIndex]
-
         const validate = currentColumn.imex?.validate ?? (() => true)
-        const validateResponse = validate(newCellValue, row, prevVal)
+        const validateResponse = validate(
+          newCellValue,
+          row,
+          importedRowMeta.prevVal
+        )
 
         const isValid =
           typeof validateResponse === 'string'
@@ -262,26 +265,6 @@ export const parseRawData = async <D extends { id?: string | number }>(
 
       set(importedRowValue, columnDataPath, newCellValue)
     }
-
-    /**
-     * Previous value
-     */
-    const prevValIdentifier = get(
-      importedRowValue,
-      identifierColumn.accessor as string
-    )
-    const prevValIndex = originalData.findIndex((originalRow) => {
-      if (options.findPrevValPredicate) {
-        return options.findPrevValPredicate(originalRow, importedRowValue)
-      }
-      return (
-        get(originalRow, identifierColumn.accessor as string) ===
-        prevValIdentifier
-      )
-    })
-
-    importedRowMeta.prevVal = originalData[prevValIndex]
-    originalData.splice(prevValIndex, 1) // remove from original array
 
     /**
      * Diff
