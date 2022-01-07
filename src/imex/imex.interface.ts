@@ -78,7 +78,7 @@ export interface IMEXOptions {
   format?: (value: any, row: any[]) => any
   parse?: (value: any, row: any[]) => any
   width?: number
-  validate?: (value: any, row: any[]) => string | boolean | null
+  validate?: (value: any, row: any[], prevVal?: any) => string | boolean | null
   dataValidation?: Excel.DataValidation
   hidden?: boolean
   note?: string | Excel.Comment

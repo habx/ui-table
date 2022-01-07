@@ -215,8 +215,26 @@ export const parseRawData = async <D extends { id?: string | number }>(
           }
         }
 
+        // Get the previous value for validation
+        const prevValIdentifier = get(
+          importedRowValue,
+          identifierColumn.accessor as string
+        )
+        const prevValIndex = originalData.findIndex((originalRow) => {
+          if (options.findPrevValPredicate) {
+            return options.findPrevValPredicate(originalRow, importedRowValue)
+          }
+          return (
+            get(originalRow, identifierColumn.accessor as string) ===
+            prevValIdentifier
+          )
+        })
+
+        const prevVal = originalData[prevValIndex]
+
         const validate = currentColumn.imex?.validate ?? (() => true)
-        const validateResponse = validate(newCellValue, row)
+        const validateResponse = validate(newCellValue, row, prevVal)
+
         const isValid =
           typeof validateResponse === 'string'
             ? !validateResponse.length
