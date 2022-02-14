@@ -23,15 +23,30 @@ export const BasicExample = () => {
     data: FAKE_DATA,
     columns: IMEX_COLUMNS,
   })
-  const [downloadTableData] = useExportTable({
-    data: FAKE_DATA,
-    columns: IMEX_COLUMNS,
-  })
+  const [downloadTableData] = useExportTable()
   return (
     <Container>
       <ActionBar>
-        <Button onClick={() => downloadTableData('export')}>Export CSV</Button>
-        <Button onClick={() => downloadTableData('export', { type: 'xls' })}>
+        <Button
+          onClick={() =>
+            downloadTableData('export', {
+              type: 'csv',
+              data: FAKE_DATA,
+              columns: IMEX_COLUMNS,
+            })
+          }
+        >
+          Export CSV
+        </Button>
+        <Button
+          onClick={() =>
+            downloadTableData('export', {
+              type: 'xls',
+              data: FAKE_DATA,
+              columns: IMEX_COLUMNS,
+            })
+          }
+        >
           Export XLS
         </Button>
       </ActionBar>

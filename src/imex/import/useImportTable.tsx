@@ -318,6 +318,7 @@ export const useImportTable = <D extends { id?: string | number }>(
 
   const dropzone = useDropzone({
     accept: DEFAULT_ACCEPT,
+    useFsAccessApi: false,
     onDropAccepted: onFiles,
     onDropRejected,
   })
