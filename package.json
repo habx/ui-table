@@ -78,7 +78,7 @@
     "@types/react-window-infinite-loader": "^1.0.6",
     "@types/styled-components": "^5.1.24",
     "bili": "^5.0.5",
-    "eslint-plugin-mdx": "^1.16.0",
+    "eslint-plugin-mdx": "^1.17.0",
     "faker": "^5.5.3",
     "husky": "^4.3.8",
     "jest": "^27.5.1",
