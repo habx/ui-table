@@ -8,7 +8,7 @@ import { useImportTable } from './useImportTable'
 import { DropzoneContainer, StyledIMEXDropzone } from './useImportTable.style'
 
 export const ImportTableDropzone: React.FunctionComponent<
-  UseImportTableParams<any>
+  React.PropsWithChildren<UseImportTableParams<any>>
 > = ({ children, ...props }) => {
   const importTable = useImportTable(props)
 

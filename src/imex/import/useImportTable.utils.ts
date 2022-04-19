@@ -207,10 +207,7 @@ export const parseRawData = async <D extends { id?: string | number }>(
         if (options.findPrevValPredicate) {
           return options.findPrevValPredicate(originalRow, importedRowValue)
         }
-        return (
-          get(originalRow, getPath(identifierColumn)) ===
-          prevValIdentifier
-        )
+        return get(originalRow, getPath(identifierColumn)) === prevValIdentifier
       })
 
       importedRowMeta.prevVal = originalData[prevValIndex]

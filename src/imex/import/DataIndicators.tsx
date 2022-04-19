@@ -9,6 +9,7 @@ import { DataInfo, DataInfoContainer } from './useImportTable.style'
 export const IconIndicator: React.FunctionComponent<{
   type: 'addition' | 'edition' | 'ignored'
   label?: string
+  children?: React.ReactNode
 }> = ({ type, label, children }) => {
   const icon = React.useMemo(() => {
     switch (type) {
@@ -30,7 +31,7 @@ export const IconIndicator: React.FunctionComponent<{
   )
 }
 
-export const DataIndicators: React.VoidFunctionComponent<DataInfoProps> = ({
+export const DataIndicators: React.FunctionComponent<DataInfoProps> = ({
   data,
 }) => {
   const dataInfos = React.useMemo(() => {

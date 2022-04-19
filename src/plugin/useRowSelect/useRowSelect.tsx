@@ -1,13 +1,20 @@
 import * as React from 'react'
+import * as ReactTable from 'react-table'
 
 import { Checkbox, Tooltip } from '@habx/ui-core'
 
-import { CellProps, HeaderProps, Hooks, TableInstance } from '../../types/Table'
+import {
+  CellProps,
+  Column,
+  HeaderProps,
+  Hooks,
+  TableInstance,
+} from '../../types/Table'
 
 import { CheckboxContainer } from './useRowSelect.style'
 
 export const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
-  hooks.visibleColumns.push((columns, { instance: _instance }) => {
+  hooks.visibleColumns.push(((columns, { instance: _instance }) => {
     const instance = _instance as TableInstance<D>
     return [
       {
@@ -36,5 +43,5 @@ export const useRowSelect = <D extends object>(hooks: Hooks<D>) => {
       },
       ...columns,
     ]
-  })
+  }) as (allColumns: Array<Column<D>>, meta: ReactTable.Meta<D>) => Array<Column<D>>)
 }

@@ -79,24 +79,22 @@ export const useTable = <D extends object = {}>(
   )
 
   if (plugins.find((plugin) => plugin.pluginName === 'useRowSelect')) {
-    plugins.push((useRowSelect as unknown) as ReactTable.PluginHook<D>)
+    plugins.push(useRowSelect as unknown as ReactTable.PluginHook<D>)
   }
 
   if (options.manualPagination) {
-    plugins.push(
-      (useControlledPagination as unknown) as ReactTable.PluginHook<D>
-    )
+    plugins.push(useControlledPagination as unknown as ReactTable.PluginHook<D>)
   }
 
   if (options.manualFilters) {
-    plugins.push((useControlledFilters as unknown) as ReactTable.PluginHook<D>)
+    plugins.push(useControlledFilters as unknown as ReactTable.PluginHook<D>)
   }
 
   if (options.manualSortBy) {
-    plugins.push((useControlledSortBy as unknown) as ReactTable.PluginHook<D>)
+    plugins.push(useControlledSortBy as unknown as ReactTable.PluginHook<D>)
   }
 
-  return (ReactTable.useTable<D>(
+  return ReactTable.useTable<D>(
     {
       ...restOptions,
       data,
@@ -104,5 +102,5 @@ export const useTable = <D extends object = {}>(
       defaultColumn: defaultColumn as Partial<ReactTable.Column<D>>,
     },
     ...plugins
-  ) as any) as TableInstance<D>
+  ) as any as TableInstance<D>
 }

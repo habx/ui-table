@@ -85,7 +85,9 @@ export const getCompareColumnsFromImexColumns = <D extends ImportedRow<{}>>(
 
         const cellPrevVal = get(rowMeta?.prevVal, getPath(column))
 
-        const CellContainer: React.FunctionComponent = ({ children }) => {
+        const CellContainer: React.FunctionComponent<
+          React.PropsWithChildren<{}>
+        > = ({ children }) => {
           if (!Object.values(rowMeta?.errors ?? {}).length) {
             return <React.Fragment>{children}</React.Fragment>
           }

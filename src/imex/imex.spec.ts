@@ -32,7 +32,6 @@ describe('Import/Export (imex)', () => {
     })
     it('should allow download data in XLS', async () => {
       const { result } = renderHook(() => useExportTable())
-
       await act(() => {
         const [downloadFile] = result.current
         return downloadFile('test', {
