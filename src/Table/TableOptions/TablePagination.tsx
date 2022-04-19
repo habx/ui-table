@@ -86,4 +86,5 @@ export const TablePagination: React.FunctionComponent<PaginationProps> = ({
 
 interface PaginationProps {
   instance: TableInstance<any>
+  children?: React.ReactNode
 }

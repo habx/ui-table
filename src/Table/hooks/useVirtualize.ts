@@ -26,14 +26,16 @@ export const useVirtualize = <D extends object>(
 
   React.useEffect(() => {
     if (!skip && isEmpty(dimensions)) {
-      setDimensions({
-        height: scrollContainerRef.current?.clientHeight,
-        width: scrollContainerRef.current?.clientWidth,
-        itemSize: config.rowsHeight,
-      })
+      React.startTransition(() =>
+        setDimensions({
+          height: scrollContainerRef.current?.clientHeight,
+          width: scrollContainerRef.current?.clientWidth,
+          itemSize: config.rowsHeight,
+        })
+      )
     }
 
-    const handleResize = () => setDimensions({})
+    const handleResize = () => React.startTransition(() => setDimensions({}))
 
     window.addEventListener('resize', handleResize)
 

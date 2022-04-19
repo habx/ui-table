@@ -19,7 +19,7 @@ export const LoadingContainer = styled.div`
   opacity: 0.8;
 `
 
-export const LoadingOverlay: React.VoidFunctionComponent = () => (
+export const LoadingOverlay: React.FunctionComponent = () => (
   <LoadingContainer>
     <Loader size="large" outline />
   </LoadingContainer>

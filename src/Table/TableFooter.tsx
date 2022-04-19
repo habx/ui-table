@@ -12,7 +12,7 @@ export const TableFooter = <D extends {}>({
       {footerGroups.map((group) => {
         if (
           group.headers.every((column) => {
-            const Footer = ((column as unknown) as { Footer: Function }).Footer
+            const Footer = (column as unknown as { Footer: Function }).Footer
             return !Footer || Footer === emptyRenderer
           })
         ) {

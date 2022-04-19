@@ -1,4 +1,3 @@
-import { debounce } from 'lodash'
 import * as React from 'react'
 
 import { Icon, TextInput } from '@habx/ui-core'
@@ -12,12 +11,10 @@ export const TextFilter: React.FunctionComponent<{
     column.filterValue
   )
 
-  const handleSetFilter = React.useMemo(() => {
-    if (!column.setFilter) {
-      return null
-    }
-    return debounce(column.setFilter, 500)
-  }, [column.setFilter])
+  const deferredValue = React.useDeferredValue(liveValue)
+  React.useEffect(() => {
+    column.setFilter?.(deferredValue)
+  }, [column.setFilter, deferredValue])
 
   if (!column.setFilter) {
     return null
@@ -26,7 +23,6 @@ export const TextFilter: React.FunctionComponent<{
   const handleSetValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value || undefined
     setLiveValue(value)
-    handleSetFilter!(value)
   }
 
   return (

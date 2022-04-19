@@ -121,8 +121,8 @@ const a: IMEXColumn = { // eslint-disable-line
   imex: {},
 }
 
-// @ts-expect-error
 const b: IMEXColumn = { // eslint-disable-line
+  // @ts-expect-error
   Header: () => '',
   accessor: '',
   imex: {},
