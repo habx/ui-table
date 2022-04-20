@@ -14,7 +14,7 @@ export const TextFilter: React.FunctionComponent<{
   const deferredValue = React.useDeferredValue(liveValue)
   React.useEffect(() => {
     column.setFilter?.(deferredValue)
-  }, [column.setFilter, deferredValue])
+  }, [deferredValue]) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!column.setFilter) {
     return null
