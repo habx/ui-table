@@ -33,7 +33,9 @@ import {
 } from './useImportTable.style'
 import { parseRawData, validateOptions } from './useImportTable.utils'
 
-const DEFAULT_ACCEPT = ['.csv', '.xls', '.xlsx']
+const DEFAULT_ACCEPT = {
+  '*': ['.csv', '.xls', '.xlsx'],
+}
 const DROPZONE_IGNORED_PROPS = [
   'onClick',
   'onBlur',
