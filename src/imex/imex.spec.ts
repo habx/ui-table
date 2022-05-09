@@ -5,6 +5,9 @@ import { FAKE_DATA, IMEX_COLUMNS } from '../_fakeData/storyFakeData'
 import { useExportTable } from './export/useExportTable'
 import { getImexColumns } from './getImexColumns'
 
+// uuid is now esm only, so we need to mock it
+jest.mock('uuid', () => ({ v4: () => 'fake-uuid' }))
+
 describe('Import/Export (imex)', () => {
   describe('export', () => {
     beforeEach(() => {
