@@ -94,7 +94,7 @@ export const IMEX_COLUMNS: IMEXColumn[] = [
   },
   {
     Header: 'City',
-    accessor: (row) => row.address.city,
+    accessor: (row) => row?.address?.city,
     imex: {
       path: 'address.city',
     },
