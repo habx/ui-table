@@ -65,7 +65,7 @@
     "@storybook/addon-links": "^6.5.3",
     "@storybook/react": "^6.5.3",
     "@storybook/storybook-deployer": "^2.8.11",
-    "@testing-library/react": "^13.2.0",
+    "@testing-library/react": "^13.3.0",
     "@testing-library/react-hooks": "^8.0.0",
     "@types/faker": "^5.5.9",
     "@types/jest": "^27.5.1",
