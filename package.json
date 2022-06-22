@@ -44,7 +44,7 @@
   "peerDependencies": {
     "@habx/ui-core": "^6.2.0",
     "lodash": ">=4.17.21",
-    "react": ">= 18.1.0",
+    "react": ">= 18.2.0",
     "styled-components": ">= 5.3.5"
   },
   "dependencies": {
@@ -87,9 +87,9 @@
     "jest-junit": "^13.2.0",
     "lint-staged": "^13.0.1",
     "lodash": "^4.17.21",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-test-renderer": "^18.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-test-renderer": "^18.2.0",
     "rimraf": "^3.0.2",
     "rollup-plugin-typescript2": "^0.32.1",
     "storybook-dark-mode": "^1.1.0",
