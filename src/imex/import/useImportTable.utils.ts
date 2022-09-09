@@ -108,7 +108,7 @@ export const parseCell = (
 const cleanHeader = (header: string | number | {}) =>
   lowerCase(deburr(`${header}`))
 
-interface ParseDataParams<D> {
+interface ParseDataParams<D extends {}> {
   data: any[][]
   originalData: D[]
   columns: IMEXColumn<ImportedRow<D>>[]
