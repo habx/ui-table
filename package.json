@@ -93,7 +93,7 @@
     "react-dom": "^18.2.0",
     "react-test-renderer": "^18.2.0",
     "rimraf": "^3.0.2",
-    "rollup-plugin-typescript2": "^0.33.0",
+    "rollup-plugin-typescript2": "^0.34.0",
     "storybook-dark-mode": "^1.1.0",
     "styled-components": "^5.3.5",
     "ts-jest": "^28.0.8",
