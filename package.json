@@ -94,7 +94,7 @@
     "react-test-renderer": "^18.2.0",
     "rimraf": "^3.0.2",
     "rollup-plugin-typescript2": "^0.34.0",
-    "storybook-dark-mode": "^1.1.0",
+    "storybook-dark-mode": "^1.1.2",
     "styled-components": "^5.3.5",
     "ts-jest": "^29.0.1",
     "tslib": "^2.4.0",
