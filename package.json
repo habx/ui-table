@@ -47,7 +47,7 @@
     "@habx/ui-core": "^6.12.0",
     "lodash": ">=4.17.21",
     "react": ">= 18.2.0",
-    "styled-components": ">= 5.3.5"
+    "styled-components": ">= 5.3.6"
   },
   "dependencies": {
     "exceljs": "^4.3.0",
@@ -95,7 +95,7 @@
     "rimraf": "^3.0.2",
     "rollup-plugin-typescript2": "^0.34.0",
     "storybook-dark-mode": "^1.1.2",
-    "styled-components": "^5.3.5",
+    "styled-components": "^5.3.6",
     "ts-jest": "^29.0.1",
     "tslib": "^2.4.0",
     "typescript": "^4.8.3"
