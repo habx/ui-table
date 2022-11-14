@@ -7,10 +7,10 @@ import { Column } from '../../index'
 
 export const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
   (props, ref) => {
-    const { options, multi = false, column, ...other } = props
+    const { options, multi = false, column, allValue = 'all', ...other } = props
     const defaultValue = React.useMemo(
-      () => (multi || !other.canSelectAll ? undefined : 'all'),
-      [multi, other.canSelectAll]
+      () => (multi || !other.canSelectAll ? undefined : allValue),
+      [multi, other.canSelectAll, allValue]
     )
     const filter = column.filterValue
     const handleChange = column.setFilter
@@ -25,8 +25,8 @@ export const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
       () =>
         multi || !other.canSelectAll
           ? options
-          : [{ value: 'all', label: 'Tout' }, ...options],
-      [options, multi, other.canSelectAll]
+          : [{ value: allValue, label: 'Tout' }, ...options],
+      [options, multi, other.canSelectAll, allValue]
     )
 
     return (
@@ -49,4 +49,6 @@ export const SelectFilter = React.forwardRef<HTMLDivElement, SelectFilterProps>(
 
 export interface SelectFilterProps extends SelectProps {
   column: Column<any>
+  /** @default all */
+  allValue?: any
 }
