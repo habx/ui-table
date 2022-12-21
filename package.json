@@ -44,7 +44,7 @@
     ]
   },
   "peerDependencies": {
-    "@habx/ui-core": "^6.19.0",
+    "@habx/ui-core": "^6.21.0",
     "lodash": ">=4.17.21",
     "react": ">= 18.2.0",
     "styled-components": ">= 5.3.6"
@@ -61,7 +61,7 @@
   "devDependencies": {
     "@habx/config-ci-front": "^3.8.1",
     "@habx/eslint-config-client": "^6.10.0",
-    "@habx/ui-core": "^6.19.0",
+    "@habx/ui-core": "^6.21.0",
     "@storybook/addon-docs": "^6.5.14",
     "@storybook/addon-essentials": "^6.5.14",
     "@storybook/addon-links": "^6.5.14",
